@@ -1,0 +1,85 @@
+---
+
+run:
+  concurrency: 4
+  timeout: 240s
+  issues-exit-code: 2
+  tests: false
+  go: '1.20'
+
+linters:
+  # start with everything
+  enable-all: true
+
+  disable:
+    # deprecated
+    - golint
+    - interfacer
+    - maligned
+    - scopelint
+    - deadcode
+    - varcheck
+    - structcheck
+
+    # too annoying
+    - cyclop
+    - exhaustive
+    - exhaustivestruct
+    - exhaustruct
+    - forbidigo
+    - funlen
+    - gochecknoglobals
+    - godot
+    - goerr113
+    - gofumpt
+    - gomnd
+    - lll
+    - nakedret
+    - nestif
+    - nlreturn
+    - tagliatelle
+    - varnamelen
+    - wsl
+    - nonamedreturns
+
+    # review later
+    - gofmt
+    - goimports
+
+    # complexity linters
+    - gocognit
+    - gocyclo
+    - maintidx
+
+    # i disagree with these
+    - wrapcheck
+    - nolintlint
+    - errorlint
+    - noctx
+    - gochecknoinits
+
+    # should not block the build
+    - prealloc
+    - godox
+    - dupl
+    - goconst
+    - ifshort
+    - nilerr
+    - ireturn
+    - nosprintfhostport
+
+    # buggy
+    - gci
+
+    # this breaks with proto generation
+    - nosnakecase
+
+    # disabled because of generics
+    - rowserrcheck
+    - sqlclosecheck
+    - structcheck
+    - wastedassign
+
+linters-settings:
+  wsl:
+    allow-cuddle-declarations: true
