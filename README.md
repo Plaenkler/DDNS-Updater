@@ -5,7 +5,7 @@
 [![Linters](https://github.com/Plaenkler/DDNS/actions/workflows/linters.yml/badge.svg)](https://github.com/Plaenkler/DDNS/actions/workflows/linters.yml)
 [![Support me](https://img.shields.io/badge/Support%20me%20%E2%98%95-orange.svg)](https://www.buymeacoffee.com/Plaenkler)
 
-DDNS provides a straightforward way to update dynamic DNS entries without fiddling around in the command line or a file. The easy to use interface allows for uncomplicated setup and management.
+DDNS provides a straightforward way to update dynamic DNS entries without fiddling around in the command-line or a file. The easy to use interface allows for uncomplicated setup and management.
 
 > **Note:** This project is still in development and is not yet ready for production.
 
