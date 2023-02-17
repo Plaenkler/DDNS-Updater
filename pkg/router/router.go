@@ -35,10 +35,8 @@ func GetManager() *Manager {
 func (manager *Manager) Start() {
 	startOnce.Do(func() {
 		manager.Router = http.NewServeMux()
-
 		manager.Router.HandleFunc("/",
 			routes.ProvideIndex)
-
 		err := manager.provideFiles()
 		if err != nil {
 			log.Fatalf("[router-start-1] could not provide files - error: %s", err)
