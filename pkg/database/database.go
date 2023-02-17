@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"sync"
 
+	"github.com/plaenkler/ddns/pkg/model"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -39,8 +40,8 @@ func (manager *Manager) Start() {
 		}
 		manager.DB = db
 		err = manager.DB.AutoMigrate(
-			&User{},
-			&Updater{},
+			&model.User{},
+			&model.Updater{},
 		)
 		if err != nil {
 			log.Fatalf("[start-2] migration failed - error: %s", err.Error())
