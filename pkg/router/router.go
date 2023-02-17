@@ -41,7 +41,7 @@ func (manager *Manager) Start() {
 
 		err := manager.provideFiles()
 		if err != nil {
-			log.Fatalf("[router-1] could not provide files - error: %s", err)
+			log.Fatalf("[router-start-1] could not provide files - error: %s", err)
 		}
 		config := config.GetConfig()
 		server := &http.Server{
@@ -54,7 +54,7 @@ func (manager *Manager) Start() {
 		}
 		err = server.ListenAndServe()
 		if err != nil {
-			log.Fatalf("[router-2] failed starting router - error: %s", err.Error())
+			log.Fatalf("[router-start-2] failed starting router - error: %s", err.Error())
 		}
 	})
 }
