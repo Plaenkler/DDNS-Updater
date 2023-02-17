@@ -38,6 +38,7 @@ func ProvideIndex(writer http.ResponseWriter, request *http.Request) {
 		"static/html/pages/index.html",
 		"static/html/partials/include.html",
 		"static/html/partials/navbar.html",
+		"static/html/partials/modals.html",
 	)
 	if err != nil {
 		fmt.Fprintf(writer, "[provide-index-3] could not provide template - error: %s", err)
