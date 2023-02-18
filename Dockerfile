@@ -9,7 +9,7 @@ COPY . /app
 RUN go mod tidy && go build -o /ddns cmd/main.go
 
 ## Deploy
-FROM gcr.io/distroless/base-debian11:latest
+FROM alpine:3.17.2
 
 WORKDIR /app
 
