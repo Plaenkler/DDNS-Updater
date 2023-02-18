@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"sync"
 
+	"github.com/plaenkler/ddns/pkg/model"
 	"gopkg.in/yaml.v3"
 )
 
@@ -15,14 +16,10 @@ const (
 
 var (
 	configOnce sync.Once
-	instance   *Config
+	instance   *model.Config
 )
 
-type Config struct {
-	Port uint `yaml:"Port"`
-}
-
-func GetConfig() *Config {
+func GetConfig() *model.Config {
 	configOnce.Do(func() {
 		err := initConfig()
 		if err != nil {
@@ -33,7 +30,7 @@ func GetConfig() *Config {
 }
 
 func initConfig() error {
-	instance = &Config{}
+	instance = &model.Config{}
 	if _, err := os.Stat(pathToConfig); err != nil {
 		err = createConfig()
 		if err != nil {
@@ -53,8 +50,9 @@ func initConfig() error {
 }
 
 func createConfig() error {
-	config := Config{
-		Port: 80,
+	config := model.Config{
+		Port:     80,
+		Interval: 60,
 	}
 	data, err := yaml.Marshal(&config)
 	if err != nil {
@@ -70,5 +68,21 @@ func createConfig() error {
 	}
 	log.Println("[create-config-1] created default configuration exiting...")
 	os.Exit(0)
+	return nil
+}
+
+func UpdateConfig(config *model.Config) error {
+	data, err := yaml.Marshal(&config)
+	if err != nil {
+		return err
+	}
+	err = os.WriteFile(pathToConfig, data, 0644)
+	if err != nil {
+		return err
+	}
+	err = initConfig()
+	if err != nil {
+		return err
+	}
 	return nil
 }
