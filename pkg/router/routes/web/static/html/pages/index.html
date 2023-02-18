@@ -12,6 +12,7 @@
         {{template "navbar" .}}
         {{template "config-modal" .}}
         {{template "add-modal" .}}
+        {{template "edit-modal" .}}
         <div class="table-container">
             <table class="table table-dark table-striped">
                 <thead>
@@ -37,6 +38,7 @@
             </table>
         </div>
         {{template "include-body" .}}
+        <script src="/js/index.js"></script>
     </body>
 </html>
 {{end}}

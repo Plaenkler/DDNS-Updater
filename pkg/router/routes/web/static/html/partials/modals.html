@@ -1,13 +1,12 @@
-{{ define "config-modal" }}
+{{define "config-modal"}}
 <div class="modal fade dark-mode" id="configModal" tabindex="-1" aria-labelledby="configModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content bg-dark text-light">
-            <div class="modal-header border-bottom-0">
-                <h5 class="modal-title text-light" id="configModalLabel">Configuration Form</h5>
+            <div class="modal-header">
+                <h5 class="modal-title text-light" id="configModalLabel">Edit Configuration</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <!-- Add entry form  -->
                 <form action="/api/config/update" method="POST">
                     <div class="mb-3">
                         <label for="portInput" class="form-label text-light">Port</label>
@@ -23,9 +22,9 @@
         </div>
     </div>
 </div>
-{{ end }}
+{{end}}
 
-{{ define "add-modal" }}
+{{define "add-modal"}}
 <div class="modal fade dark-mode" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content bg-dark text-light">
@@ -34,7 +33,6 @@
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <!-- Add entry form -->
                 <form id="add-form" action="/api/job/create" method="POST">
                     <div class="mb-3">
                         <label for="provider" class="form-label">Provider</label>
@@ -62,4 +60,51 @@
         </div>
     </div>
 </div>
-{{ end }}
+{{end}}
+
+{{define "edit-modal"}}
+<div class="modal fade dark-mode" id="edit-modal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-dark text-light">
+            <div class="modal-header">
+                <h5 class="modal-title" id="edit-modal-label">Edit Job</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-form" action="/api/job/update" method="POST">
+                    <div class="row">
+                        <div class="col">
+                            <input type="hidden" class="form-control" id="edit-id" name="id" readonly>
+                            <div class="mb-3">
+                                <label for="edit-provider" class="form-label">Provider</label>
+                                <select class="form-select bg-white text-dark" id="edit-provider" name="provider">
+                                    <option value="Strato">Strato</option>
+                                    <option value="DDNSS">DDNSS</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="edit-domain" class="form-label">Domain</label>
+                                <input type="text" class="form-control" id="edit-domain" name="domain" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="edit-user" class="form-label">User</label>
+                                <input type="text" class="form-control" id="edit-user" name="user" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="edit-password" class="form-label">Password</label>
+                                <input type="text" class="form-control" id="edit-password" name="password" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <button type="submit" class="btn btn-primary">Save</button>
+                            <a class="btn btn-danger float-end" id="delete-button">Delete</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{{end}}
