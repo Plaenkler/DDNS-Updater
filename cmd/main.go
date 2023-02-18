@@ -11,6 +11,6 @@ func init() {
 }
 
 func main() {
-	go ddns.Start()
+	go ddns.Run()
 	router.GetManager().Start()
 }
