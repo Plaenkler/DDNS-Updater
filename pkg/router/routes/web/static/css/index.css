@@ -1,0 +1,15 @@
+.btn:hover {
+  background-color: inherit;
+  border-color: #ccc;
+}
+
+.table-container {
+  border: 1px solid #000;
+  border-radius: 0.25rem;
+  overflow: hidden;
+  margin: 10px;
+}
+
+.table-hover tbody tr:hover {
+  cursor: pointer;
+}

@@ -10,11 +10,12 @@ import (
 	"time"
 
 	"github.com/plaenkler/ddns/pkg/config"
-	"github.com/plaenkler/ddns/pkg/router/routes"
+	"github.com/plaenkler/ddns/pkg/router/routes/api"
+	"github.com/plaenkler/ddns/pkg/router/routes/web"
 )
 
 var (
-	//go:embed routes/static
+	//go:embed routes/web/static
 	static      embed.FS
 	managerOnce sync.Once
 	startOnce   sync.Once
@@ -35,13 +36,14 @@ func GetManager() *Manager {
 func (manager *Manager) Start() {
 	startOnce.Do(func() {
 		manager.Router = http.NewServeMux()
-
-		manager.Router.HandleFunc("/",
-			routes.ProvideIndex)
-
+		manager.Router.HandleFunc("/", web.ProvideIndex)
+		manager.Router.HandleFunc("/api/job/create", api.CreateJob)
+		manager.Router.HandleFunc("/api/job/update", api.UpdateJob)
+		manager.Router.HandleFunc("/api/job/delete", api.DeleteJob)
+		manager.Router.HandleFunc("/api/config/update", api.UpdateConfig)
 		err := manager.provideFiles()
 		if err != nil {
-			log.Fatalf("[router-1] could not provide files - error: %s", err)
+			log.Fatalf("[router-start-1] could not provide files - error: %s", err)
 		}
 		config := config.GetConfig()
 		server := &http.Server{
@@ -54,13 +56,13 @@ func (manager *Manager) Start() {
 		}
 		err = server.ListenAndServe()
 		if err != nil {
-			log.Fatalf("[router-2] failed starting router - error: %s", err.Error())
+			log.Fatalf("[router-start-2] failed starting router - error: %s", err.Error())
 		}
 	})
 }
 
 func (manager *Manager) provideFiles() error {
-	fs, err := fs.Sub(static, "routes/static")
+	fs, err := fs.Sub(static, "routes/web/static")
 	if err != nil {
 		return err
 	}

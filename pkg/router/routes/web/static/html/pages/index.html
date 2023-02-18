@@ -1,0 +1,44 @@
+<!-- htmlhint doctype-first:false -->
+{{define "index"}}
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        {{template "include-head" .}}
+        <title>DDNS</title>
+    </head>
+    <body class="bg-dark">
+        {{template "navbar" .}}
+        {{template "config-modal" .}}
+        {{template "add-modal" .}}
+        {{template "edit-modal" .}}
+        <div class="table-container">
+            <table class="table table-dark table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Provider</th>
+                        <th>Domain</th>
+                        <th>User</th>
+                        <th>Updated</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{range .Jobs}}
+                    <tr>
+                        <td>{{.ID}}</td>
+                        <td>{{.Provider}}</td>
+                        <td>{{.Domain}}</td>
+                        <td>{{.User}}</td>
+                        <td>{{.UpdatedAt.Format "02.01.2006 15:04"}}</td>
+                    </tr>
+                    {{end}}
+                </tbody>
+            </table>
+        </div>
+        {{template "include-body" .}}
+        <script src="/js/index.js"></script>
+    </body>
+</html>
+{{end}}

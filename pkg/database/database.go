@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"sync"
 
+	"github.com/plaenkler/ddns/pkg/model"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -33,14 +34,14 @@ func GetManager() *Manager {
 
 func (manager *Manager) Start() {
 	startOnce.Do(func() {
-		db, err := instance.connect()
+		db, err := manager.connect()
 		if err != nil {
 			log.Fatalf("[start-1] connection failed - error: %s", err.Error())
 		}
 		manager.DB = db
 		err = manager.DB.AutoMigrate(
-			&User{},
-			&Updater{},
+			&model.SyncJob{},
+			&model.IPAddress{},
 		)
 		if err != nil {
 			log.Fatalf("[start-2] migration failed - error: %s", err.Error())
