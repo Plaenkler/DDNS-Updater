@@ -1,63 +1,58 @@
 package ddns
 
 import (
-	"io"
 	"log"
-	"net/http"
+	"sync"
 	"time"
 
+	"github.com/plaenkler/ddns/pkg/config"
 	"github.com/plaenkler/ddns/pkg/database"
 	"github.com/plaenkler/ddns/pkg/model"
+	"github.com/plaenkler/ddns/pkg/util"
 )
 
-type ResolverFunc func(job model.Updater, ipAddr string) error
+var start sync.Once
 
 func Start() {
-	// Register all DDNS providers
-	resolvers := map[string]ResolverFunc{
-		"Strato": updateStrato,
-		"DDNSS":  updateDDNSS,
-	}
-	ticker := time.NewTicker(time.Minute)
-	for range ticker.C {
-		var jobs []model.Updater
-		err := database.GetManager().DB.Find(&jobs).Error
-		if err != nil {
-			log.Printf("[service-start-1] failed to get DDNS update jobs: %v\n", err)
-			continue
-		}
-		ipAddr, err := getPublicIP()
-		if err != nil {
-			log.Printf("[service-start-2] failed to get public IP address: %v\n", err)
-			continue
-		}
-		for _, job := range jobs {
-			if job.LastIPAddr == ipAddr {
-				log.Printf("[service-start-3] IP address for %q has not changed\n", job.Domain)
-				continue
-			}
-			resolver, ok := resolvers[job.Provider]
-			if !ok {
-				log.Printf("[service-start-4] no resolver found for provider %q\n", job.Provider)
-				continue
-			}
-			err = resolver(job, ipAddr)
+	start.Do(func() {
+		ticker := time.NewTicker(time.Second * time.Duration(config.GetConfig().Interval))
+		defer ticker.Stop()
+		for range ticker.C {
+			address, err := util.GetPublicIP()
 			if err != nil {
-				log.Printf("[service-start-5] failed to update DDNS entry for %q: %v\n", job.Domain, err)
+				log.Printf("[service-start-1] failed to get public IP address - error: %v", err)
+				continue
+			}
+			newAddress := model.IPAddress{
+				Address: address,
+			}
+			err = database.GetManager().DB.FirstOrCreate(&newAddress).Error
+			if err != nil {
+				log.Printf("[service-start-2] failed to save new IP address - error: %v", err)
+				continue
+			}
+			jobs := []model.SyncJob{}
+			err = database.GetManager().DB.Where("NOT ip_address_id = ? or ip_address_id IS NULL", newAddress.ID).Find(&jobs).Error
+			if err != nil {
+				log.Printf("[service-start-3] failed to get DDNS update jobs - error: %v", err)
+				continue
+			}
+			for _, job := range jobs {
+				resolver, ok := updaters[job.Provider]
+				if !ok {
+					log.Printf("[service-start-4] no updater found for job %v", job.ID)
+					continue
+				}
+				err = resolver(job, address)
+				if err != nil {
+					log.Printf("[service-start-5] failed to update DDNS entry for %q: %v", job.Domain, err)
+					continue
+				}
+				err = database.GetManager().DB.Model(&job).Update("ip_address_id", newAddress.ID).Error
+				if err != nil {
+					log.Printf("[service-start-6] failed to update IP address for job %v", job.ID)
+				}
 			}
 		}
-	}
-}
-
-func getPublicIP() (string, error) {
-	resp, err := http.Get("https://api.ipify.org")
-	if err != nil {
-		return "", err
-	}
-	defer resp.Body.Close()
-	ipBytes, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return "", err
-	}
-	return string(ipBytes), nil
+	})
 }
