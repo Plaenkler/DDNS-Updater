@@ -1,0 +1,12 @@
+<!-- htmlhint doctype-first:false -->
+{{ define "navbar" }}
+<nav class="navbar navbar-dark bg-dark">
+    <div class="container-fluid">
+        <p class="navbar-brand text-white text-center my-auto">IP-Address: {{.IPAddress}}</p>
+        <div class="d-flex">
+            <button type="button" class="btn btn-outline-danger text-danger me-2" data-bs-toggle="modal" data-bs-target="#configModal">Config</button>
+            <button type="button" class="btn btn-outline-success text-success" data-bs-toggle="modal" data-bs-target="#addModal">Add</button>
+        </div>
+    </div>
+</nav>
+{{ end }}

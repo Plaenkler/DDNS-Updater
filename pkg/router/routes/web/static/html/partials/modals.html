@@ -1,0 +1,65 @@
+{{ define "config-modal" }}
+<div class="modal fade dark-mode" id="configModal" tabindex="-1" aria-labelledby="configModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-dark text-light">
+            <div class="modal-header border-bottom-0">
+                <h5 class="modal-title text-light" id="configModalLabel">Configuration Form</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Add entry form  -->
+                <form action="/api/config/update" method="POST">
+                    <div class="mb-3">
+                        <label for="portInput" class="form-label text-light">Port</label>
+                        <input type="number" class="form-control bg-white text-dark" id="portInput" name="port" min="1" max="65535" value="{{.Config.Port}}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="intervalInput" class="form-label text-light">Interval (in seconds)</label>
+                        <input type="number" class="form-control bg-white text-dark" id="intervalInput" name="interval" min="10" value="{{.Config.Interval}}" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{{ end }}
+
+{{ define "add-modal" }}
+<div class="modal fade dark-mode" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-dark text-light">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addModalLabel">Add Job</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Add entry form -->
+                <form id="add-form" action="/api/job/create" method="POST">
+                    <div class="mb-3">
+                        <label for="provider" class="form-label">Provider</label>
+                        <select class="form-select bg-white text-dark" id="provider" name="provider">
+                            <option selected disabled>Bitte auswählen</option>
+                            <option value="Strato">Strato</option>
+                            <option value="DDNSS">DDNSS</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="domain" class="form-label">Domain</label>
+                        <input type="text" class="form-control bg-white text-dark" id="domain" name="domain">
+                    </div>
+                    <div class="mb-3">
+                        <label for="user" class="form-label">User</label>
+                        <input type="text" class="form-control bg-white text-dark" id="user" name="user">
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control bg-white text-dark" id="password" name="password">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{{ end }}
