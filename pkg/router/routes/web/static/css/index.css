@@ -9,3 +9,7 @@
   overflow: hidden;
   margin: 10px;
 }
+
+.table-hover tbody tr:hover {
+  cursor: pointer;
+}
