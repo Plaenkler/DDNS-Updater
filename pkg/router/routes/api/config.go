@@ -20,26 +20,20 @@ func UpdateConfig(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	// 1 - 65535
-	if len(r.FormValue("port")) < 1 || len(r.FormValue("port")) > 5 {
-		log.Printf("[api-handleConfig-2] port is not valid")
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
 	if len(r.FormValue("interval")) < 1 {
-		log.Printf("[api-handleConfig-3] interval is not valid")
+		log.Printf("[api-handleConfig-2] interval is not valid")
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 	port, err := strconv.ParseUint(r.FormValue("port"), 10, 16)
 	if err != nil {
-		log.Printf("[api-handleConfig-4] port is not valid - error: %s", err)
+		log.Printf("[api-handleConfig-3] port is not valid - error: %s", err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 	interval, err := strconv.ParseUint(r.FormValue("interval"), 10, 16)
 	if err != nil {
-		log.Printf("[api-handleConfig-5] interval is not valid - error: %s", err)
+		log.Printf("[api-handleConfig-4] interval is not valid - error: %s", err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
