@@ -52,7 +52,7 @@ func initConfig() error {
 func createConfig() error {
 	config := model.Config{
 		Port:     80,
-		Interval: 60,
+		Interval: 300,
 	}
 	data, err := yaml.Marshal(&config)
 	if err != nil {
