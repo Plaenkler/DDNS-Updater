@@ -12,6 +12,18 @@ import (
 	"github.com/plaenkler/ddns/pkg/model"
 )
 
+type Update func(job model.SyncJob, ipAddr string) error
+
+var updaters = map[string]Update{
+	"Strato": updateStrato,
+	"DDNSS":  updateDDNSS,
+}
+
+func IsUpdaterSupported(updater string) bool {
+	_, ok := updaters[updater]
+	return ok
+}
+
 func sendHTTPRequest(method string, url string, auth *url.Userinfo) (*http.Response, error) {
 	httpClient := &http.Client{
 		Timeout: time.Second * 10,
@@ -31,8 +43,11 @@ func sendHTTPRequest(method string, url string, auth *url.Userinfo) (*http.Respo
 	return resp, nil
 }
 
-func updateStrato(job model.Updater, ipAddr string) error {
-	u, _ := url.Parse(fmt.Sprintf("https://dyndns.strato.com/nic/update?system=dyndns&hostname=%s&myip=%s", job.Domain, ipAddr))
+func updateStrato(job model.SyncJob, ipAddr string) error {
+	u, err := url.Parse(fmt.Sprintf("https://dyndns.strato.com/nic/update?system=dyndns&hostname=%s&myip=%s", job.Domain, ipAddr))
+	if err != nil {
+		return fmt.Errorf("failed to parse URL: %v", err)
+	}
 	resp, err := sendHTTPRequest(http.MethodGet, u.String(), url.UserPassword(job.User, job.Password))
 	if err != nil {
 		return err
@@ -49,8 +64,11 @@ func updateStrato(job model.Updater, ipAddr string) error {
 	return nil
 }
 
-func updateDDNSS(job model.Updater, ipAddr string) error {
-	u, _ := url.Parse(fmt.Sprintf("https://www.ddnss.de/upd.php?key=%s&host=%s&ip=%s", job.Password, job.Domain, ipAddr))
+func updateDDNSS(job model.SyncJob, ipAddr string) error {
+	u, err := url.Parse(fmt.Sprintf("https://www.ddnss.de/upd.php?key=%s&host=%s&ip=%s", job.Password, job.Domain, ipAddr))
+	if err != nil {
+		return fmt.Errorf("failed to parse URL: %v", err)
+	}
 	resp, err := sendHTTPRequest(http.MethodGet, u.String(), nil)
 	if err != nil {
 		return err
