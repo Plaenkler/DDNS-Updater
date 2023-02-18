@@ -38,6 +38,8 @@ func (manager *Manager) Start() {
 		manager.Router = http.NewServeMux()
 		manager.Router.HandleFunc("/", web.ProvideIndex)
 		manager.Router.HandleFunc("/api/job/create", api.CreateJob)
+		manager.Router.HandleFunc("/api/job/update", api.UpdateJob)
+		manager.Router.HandleFunc("/api/job/delete", api.DeleteJob)
 		manager.Router.HandleFunc("/api/config/update", api.UpdateConfig)
 		err := manager.provideFiles()
 		if err != nil {
