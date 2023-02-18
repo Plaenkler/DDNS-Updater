@@ -6,7 +6,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
-	"regexp"
+	"strings"
 	"time"
 
 	"github.com/plaenkler/ddns/pkg/model"
@@ -44,28 +44,8 @@ func sendHTTPRequest(method string, url string, auth *url.Userinfo) (*http.Respo
 }
 
 func updateStrato(job model.SyncJob, ipAddr string) error {
-	u, err := url.Parse(fmt.Sprintf("https://dyndns.strato.com/nic/update?system=dyndns&hostname=%s&myip=%s", job.Domain, ipAddr))
-	if err != nil {
-		return fmt.Errorf("failed to parse URL: %v", err)
-	}
-	resp, err := sendHTTPRequest(http.MethodGet, u.String(), url.UserPassword(job.User, job.Password))
-	if err != nil {
-		return err
-	}
-	defer resp.Body.Close()
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return fmt.Errorf("failed to read HTTP response body: %v", err)
-	}
-	response := string(bytes.TrimSpace(body))
-	if !regexp.MustCompile("^good|^nochg").MatchString(response) {
-		return fmt.Errorf("failed to update DDNS entry: %s", response)
-	}
-	return nil
-}
-
-func updateDDNSS(job model.SyncJob, ipAddr string) error {
-	u, err := url.Parse(fmt.Sprintf("https://www.ddnss.de/upd.php?key=%s&host=%s&ip=%s", job.Password, job.Domain, ipAddr))
+	urlStr := fmt.Sprintf("https://%s:%s@dyndns.strato.com/nic/update?hostname=%s&myip=%s", job.User, job.Password, job.Domain, ipAddr)
+	u, err := url.Parse(urlStr)
 	if err != nil {
 		return fmt.Errorf("failed to parse URL: %v", err)
 	}
@@ -74,12 +54,44 @@ func updateDDNSS(job model.SyncJob, ipAddr string) error {
 		return err
 	}
 	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("failed to update DDNS entry: %s", resp.Status)
+	}
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return fmt.Errorf("failed to read HTTP response body: %v", err)
 	}
 	response := string(bytes.TrimSpace(body))
-	if !regexp.MustCompile("^good|^nochg").MatchString(response) {
+	switch {
+	case strings.HasPrefix(response, "good "):
+		return nil
+	case strings.HasPrefix(response, "nochg "):
+		return nil
+	default:
+		return fmt.Errorf("failed to update DDNS entry: %s", response)
+	}
+}
+
+func updateDDNSS(job model.SyncJob, ipAddr string) error {
+	urlStr := fmt.Sprintf("https://www.ddnss.de/upd.php?user=%s&pwd=%s&host=%s&ip=%s&ip6=%s", job.User, job.Password, job.Domain, ipAddr, "")
+	u, err := url.Parse(urlStr)
+	if err != nil {
+		return fmt.Errorf("failed to parse URL: %v", err)
+	}
+	resp, err := sendHTTPRequest(http.MethodGet, u.String(), nil)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("failed to update DDNS entry: %s", resp.Status)
+	}
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return fmt.Errorf("failed to read HTTP response body: %v", err)
+	}
+	response := string(bytes.TrimSpace(body))
+	if strings.Contains(response, "Error Occurred While Processing Request") {
 		return fmt.Errorf("failed to update DDNS entry: %s", response)
 	}
 	return nil
