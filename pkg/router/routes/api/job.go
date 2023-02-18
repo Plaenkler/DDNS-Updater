@@ -47,12 +47,13 @@ func CreateJob(w http.ResponseWriter, r *http.Request) {
 		User:     user,
 		Password: password,
 	}
-	if err := database.GetManager().DB.FirstOrCreate(&job).Error; err != nil {
+	if err := database.GetManager().DB.Create(&job).Error; err != nil {
 		log.Printf("[api-CreateJob-5] could not create job - error: %s", err)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}
 	http.Redirect(w, r, r.Header.Get("Referer"), http.StatusSeeOther)
+	log.Printf("[api-CreateJob-6] created job with ID %d", job.ID)
 }
 
 func UpdateJob(w http.ResponseWriter, r *http.Request) {
@@ -104,6 +105,7 @@ func UpdateJob(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	http.Redirect(w, r, r.Header.Get("Referer"), http.StatusSeeOther)
+	log.Printf("[api-UpdateJob-7] updated job with ID %d", job.ID)
 }
 
 func DeleteJob(w http.ResponseWriter, r *http.Request) {
@@ -119,15 +121,16 @@ func DeleteJob(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 		return
 	}
-	syncJob := model.SyncJob{
+	job := model.SyncJob{
 		Model: gorm.Model{
 			ID: uint(id),
 		},
 	}
-	if err := database.GetManager().DB.Delete(&syncJob).Error; err != nil {
+	if err := database.GetManager().DB.Delete(&job).Error; err != nil {
 		log.Printf("[api-DeleteJob-4] could not delete job - error: %s", err)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}
 	http.Redirect(w, r, r.Header.Get("Referer"), http.StatusSeeOther)
+	log.Printf("[api-DeleteJob-5] deleted job with ID %d", job.ID)
 }

@@ -7,11 +7,65 @@
 
 DDNS provides a straightforward way to update dynamic DNS entries without fiddling around in the command-line or a file. The easy to use interface allows for uncomplicated setup and management.
 
-> **Note:** This project is still in development and is not yet ready for production.
+> **Note:** If your DynDNS provider is not listed open an issue and I will integrate it.
 
-<table style="border:none;">
+<table>
   <tr>
-    <td><img src="https://mvz-bietigheim.de/wp-content/uploads/2017/10/placeholder-image4.jpg" width="480"/></td>
-    <td><img src="https://mvz-bietigheim.de/wp-content/uploads/2017/10/placeholder-image4.jpg" width="480"/></td>
+    <td><img src="https://user-images.githubusercontent.com/60503970/219900612-b4d7d3c4-7e0a-4dca-bc73-63c4822c5133.png" width="480"/></td>
+    <td><img src="https://user-images.githubusercontent.com/60503970/219900611-dfaa9c4b-13ac-4fc4-b7ca-1cdae47961a9.png" width="480"/></td>
   </tr>
 </table>
+
+## 🎯 Project goals
+
+- [x] Scheduled update service
+- [x] Database for DDNS Jobs
+- [x] Consistent configuration
+- [x] Simple & User friendly UI
+- [x] Deploy as Docker Container
+- [ ] Deploy as Windows Service
+- [ ] Secure authentication
+- [ ] Additional support for IPv6
+
+## 🏷️ Supported providers
+
+`Strato` `DDNSS`
+
+## 📜 Installation guide
+
+### Deploy with Docker
+
+It is recommended to use [docker-compose](https://docs.docker.com/compose/) as it is very convenient. The following example shows a simple deployment without a proxy.
+
+```yaml
+version: '3.9'
+
+services:
+  ddns:
+    image: plaenkler/ddns:latest
+    container_name: ddns
+    restart: unless-stopped
+    ports:
+      - 80:80
+    volumes:
+      - ./ddns:/app/data
+```
+
+### Build from source
+
+From the root of the source tree, run:
+
+```text
+go build -o ddns.exe cmd/main.go
+```
+
+> Make sure that CGO is operational!
+
+### Configuration
+
+At the first start the program creates a config file. The settings can be adjusted both in the user interface and in the file. By default, the following values are set:
+
+```yaml
+Port: 80
+Interval: 600
+```
