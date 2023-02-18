@@ -52,6 +52,7 @@ func Run() {
 				if err != nil {
 					log.Printf("[service-run-6] failed to update IP address for job %v", job.ID)
 				}
+				log.Printf("[service-run-7] updated DDNS entry for %s", job.Domain)
 			}
 		}
 	})
