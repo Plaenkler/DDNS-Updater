@@ -1,0 +1,25 @@
+---
+
+# Standalone example for ddns
+
+version: "3.9"
+
+services:
+  ddns:
+    image: plaenkler/ddns
+    container_name: ddns
+    restart: always
+    networks:
+      - web
+    ports:
+      - 80:80
+    volumes:
+      - data:/app/data
+
+volumes:
+  data:
+    driver: local
+
+networks:
+  web:
+    external: false
