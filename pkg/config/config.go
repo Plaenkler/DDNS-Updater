@@ -11,19 +11,21 @@ import (
 )
 
 const (
-	pathToConfig = "./data/config.yaml"
+	pathToConfig   = "./data/config.yaml"
+	configDirPerm  = 0755
+	configFilePerm = 0644
 )
 
 var (
-	configOnce sync.Once
-	instance   *model.Config
+	once     sync.Once
+	instance *model.Config
 )
 
 func GetConfig() *model.Config {
-	configOnce.Do(func() {
+	once.Do(func() {
 		err := initConfig()
 		if err != nil {
-			log.Fatalf("[get-config-1] initialization failed - error: %s", err.Error())
+			log.Fatalf("[config-GetConfig-1] initialization failed - error: %s", err.Error())
 		}
 	})
 	return instance
@@ -58,16 +60,15 @@ func createConfig() error {
 	if err != nil {
 		return err
 	}
-	err = os.MkdirAll(filepath.Dir(pathToConfig), 0755)
+	err = os.MkdirAll(filepath.Dir(pathToConfig), configDirPerm)
 	if err != nil {
 		return err
 	}
-	err = os.WriteFile(pathToConfig, data, 0644)
+	err = os.WriteFile(pathToConfig, data, configFilePerm)
 	if err != nil {
 		return err
 	}
-	log.Println("[create-config-1] created default configuration exiting...")
-	os.Exit(0)
+	log.Println("[config-createConfig-1] created default configuration")
 	return nil
 }
 
@@ -76,13 +77,10 @@ func UpdateConfig(config *model.Config) error {
 	if err != nil {
 		return err
 	}
-	err = os.WriteFile(pathToConfig, data, 0644)
+	err = os.WriteFile(pathToConfig, data, configFilePerm)
 	if err != nil {
 		return err
 	}
-	err = initConfig()
-	if err != nil {
-		return err
-	}
+	instance = config
 	return nil
 }
