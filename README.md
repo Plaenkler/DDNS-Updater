@@ -63,7 +63,7 @@ go build -o ddns.exe cmd/main.go
 
 ### Configuration
 
-At the first start the program creates a config file. The settings can be adjusted both in the user interface and in the file. By default, the following values are set:
+At the first program start DDNS creates a configuration file and exits. The settings can be adjusted in the file or at runtime in the user interface. By default, the following values are set:
 
 ```yaml
 Port: 80
