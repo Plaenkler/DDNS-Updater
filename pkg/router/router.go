@@ -52,7 +52,17 @@ func (manager *Manager) Start() {
 			ReadHeaderTimeout: 3 * time.Second,
 			WriteTimeout:      3 * time.Second,
 			IdleTimeout:       120 * time.Second,
-			Handler:           manager.Router,
+			Handler: http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				// Read X-Forwarded-For-Header for proxying
+				remoteIP := r.Header.Get("X-Forwarded-For")
+				remotePort := r.Header.Get("X-Forwarded-Port")
+				if remotePort == "" {
+					remotePort = "80"
+				}
+				r.URL.Scheme = "http"
+				r.URL.Host = fmt.Sprintf("%s:%s", remoteIP, remotePort)
+				manager.Router.ServeHTTP(w, r)
+			}),
 		}
 		err = server.ListenAndServe()
 		if err != nil {

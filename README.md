@@ -35,7 +35,7 @@ DDNS provides a straightforward way to update dynamic DNS entries without fiddli
 
 ### Deploy with Docker
 
-It is recommended to use [docker-compose](https://docs.docker.com/compose/) as it is very convenient. The following example shows a simple deployment without a proxy.
+It is recommended to use [docker-compose](https://docs.docker.com/compose/) as it is very convenient. The following example shows a simple deployment:
 
 ```yaml
 ---
@@ -59,6 +59,8 @@ networks:
     external: false
 ```
 
+> **Note:** DDNS can also be operated behind a proxy like [Traefik](https://doc.traefik.io/traefik/).
+
 ### Build from source
 
 From the root of the source tree, run:
@@ -67,7 +69,7 @@ From the root of the source tree, run:
 go build -o ddns.exe cmd/main.go
 ```
 
-> Make sure that CGO is operational!
+> **Note:** Make sure that CGO is operational!
 
 ### Configuration
 
