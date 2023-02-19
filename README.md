@@ -38,17 +38,25 @@ DDNS provides a straightforward way to update dynamic DNS entries without fiddli
 It is recommended to use [docker-compose](https://docs.docker.com/compose/) as it is very convenient. The following example shows a simple deployment without a proxy.
 
 ```yaml
+---
+
 version: '3.9'
 
 services:
   ddns:
     image: plaenkler/ddns:latest
     container_name: ddns
-    restart: unless-stopped
+    restart: always
+    networks:
+      - web
     ports:
       - 80:80
     volumes:
       - ./ddns:/app/data
+
+networks:
+  web:
+    external: false
 ```
 
 ### Build from source
