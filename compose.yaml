@@ -14,11 +14,7 @@ services:
     ports:
       - 80:80
     volumes:
-      - data:/app/data
-
-volumes:
-  data:
-    driver: local
+      - ./ddns:/app/data
 
 networks:
   web:
