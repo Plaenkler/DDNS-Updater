@@ -15,6 +15,9 @@ WORKDIR /app
 
 COPY --from=build /ddns /app/ddns
 
+RUN apt-get update && \
+    apt-get install -y ca-certificates
+
 EXPOSE 80
 
 ENTRYPOINT ["./ddns"]

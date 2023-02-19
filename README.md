@@ -38,17 +38,25 @@ DDNS provides a straightforward way to update dynamic DNS entries without fiddli
 It is recommended to use [docker-compose](https://docs.docker.com/compose/) as it is very convenient. The following example shows a simple deployment without a proxy.
 
 ```yaml
+---
+
 version: '3.9'
 
 services:
   ddns:
     image: plaenkler/ddns:latest
     container_name: ddns
-    restart: unless-stopped
+    restart: always
+    networks:
+      - web
     ports:
       - 80:80
     volumes:
       - ./ddns:/app/data
+
+networks:
+  web:
+    external: false
 ```
 
 ### Build from source
@@ -63,7 +71,8 @@ go build -o ddns.exe cmd/main.go
 
 ### Configuration
 
-At the first start the program creates a config file. The settings can be adjusted both in the user interface and in the file. By default, the following values are set:
+The program creates, if not existing, a config.yaml file in which all settings are stored. The settings can be adjusted in the user interface or the file. Changes to the configuration will only take effect after a restart.
+By default, the following values are set:
 
 ```yaml
 Port: 80
