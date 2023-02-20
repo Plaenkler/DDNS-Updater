@@ -48,9 +48,9 @@ func (manager *Manager) Start() {
 		config := config.GetConfig()
 		server := &http.Server{
 			Addr:              fmt.Sprintf(":%v", config.Port),
-			ReadTimeout:       3 * time.Second,
-			ReadHeaderTimeout: 3 * time.Second,
-			WriteTimeout:      3 * time.Second,
+			ReadTimeout:       15 * time.Second,
+			ReadHeaderTimeout: 5 * time.Second,
+			WriteTimeout:      15 * time.Second,
 			IdleTimeout:       120 * time.Second,
 			Handler: http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				// Read X-Forwarded-For-Header for proxying

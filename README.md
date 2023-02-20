@@ -59,7 +59,7 @@ networks:
     external: false
 ```
 
-> **Note:** DDNS can also be operated behind a proxy like [Traefik](https://doc.traefik.io/traefik/).
+> **Note:** DDNS can also be deployed behind a proxy like [Traefik](https://doc.traefik.io/traefik/).
 
 ### Build from source
 
