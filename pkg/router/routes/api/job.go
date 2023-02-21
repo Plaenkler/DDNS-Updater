@@ -53,7 +53,7 @@ func CreateJob(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	http.Redirect(w, r, r.Header.Get("Referer"), http.StatusSeeOther)
-	log.Printf("[api-CreateJob-6] created job with ID %d for domain %s", job.ID, job.Domain)
+	log.Printf("[api-CreateJob-6] created job with ID %d", job.ID)
 }
 
 func UpdateJob(w http.ResponseWriter, r *http.Request) {
