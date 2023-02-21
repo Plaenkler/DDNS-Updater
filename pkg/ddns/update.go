@@ -17,6 +17,7 @@ type Update func(job model.SyncJob, ipAddr string) error
 var updaters = map[string]Update{
 	"Strato": updateStrato,
 	"DDNSS":  updateDDNSS,
+	"Dynu":   updateDynu,
 }
 
 func IsUpdaterSupported(updater string) bool {
@@ -58,9 +59,9 @@ func updateStrato(job model.SyncJob, ipAddr string) error {
 		return err
 	}
 	switch {
-	case strings.HasPrefix(resp, "good "):
+	case strings.Contains(resp, "good"):
 		return nil
-	case strings.HasPrefix(resp, "nochg "):
+	case strings.Contains(resp, "nochg"):
 		return nil
 	default:
 		return fmt.Errorf("failed to update DDNS entry: %s", resp)
@@ -77,4 +78,20 @@ func updateDDNSS(job model.SyncJob, ipAddr string) error {
 		return fmt.Errorf("failed to update DDNS entry: %s", resp)
 	}
 	return nil
+}
+
+func updateDynu(job model.SyncJob, ipAddr string) error {
+	urlStr := fmt.Sprintf("https://%s:%s@api.dynu.com/nic/update?myip=%s&myipv6=", job.User, job.Password, ipAddr)
+	resp, err := sendHTTPRequest(http.MethodGet, urlStr, nil)
+	if err != nil {
+		return err
+	}
+	switch {
+	case strings.HasPrefix(resp, "good"):
+		return nil
+	case strings.HasPrefix(resp, "nochg"):
+		return nil
+	default:
+		return fmt.Errorf("failed to update DDNS entry: %s", resp)
+	}
 }

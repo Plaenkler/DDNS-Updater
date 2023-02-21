@@ -29,7 +29,7 @@ DDNS provides a straightforward way to update dynamic DNS entries without fiddli
 
 ## 🏷️ Supported providers
 
-`Strato` `DDNSS`
+`Strato` `DDNSS` `Dynu`
 
 ## 📜 Installation guide
 
