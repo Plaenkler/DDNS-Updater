@@ -53,7 +53,7 @@ func CreateJob(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	http.Redirect(w, r, r.Header.Get("Referer"), http.StatusSeeOther)
-	log.Printf("[api-CreateJob-6] created job with ID %d", job.ID)
+	log.Printf("[api-CreateJob-6] created job with ID %d for domain %s", job.ID, job.Domain)
 }
 
 func UpdateJob(w http.ResponseWriter, r *http.Request) {
@@ -126,7 +126,7 @@ func DeleteJob(w http.ResponseWriter, r *http.Request) {
 			ID: uint(id),
 		},
 	}
-	if err := database.GetManager().DB.Delete(&job).Error; err != nil {
+	if err := database.GetManager().DB.Unscoped().Delete(&job).Error; err != nil {
 		log.Printf("[api-DeleteJob-4] could not delete job - error: %s", err)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
