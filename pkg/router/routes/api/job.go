@@ -126,7 +126,7 @@ func DeleteJob(w http.ResponseWriter, r *http.Request) {
 			ID: uint(id),
 		},
 	}
-	if err := database.GetManager().DB.Delete(&job).Error; err != nil {
+	if err := database.GetManager().DB.Unscoped().Delete(&job).Error; err != nil {
 		log.Printf("[api-DeleteJob-4] could not delete job - error: %s", err)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
