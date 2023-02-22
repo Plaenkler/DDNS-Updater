@@ -15,9 +15,40 @@ import (
 type Update func(job model.SyncJob, ipAddr string) error
 
 var updaters = map[string]Update{
-	"Strato": updateStrato,
-	"DDNSS":  updateDDNSS,
-	"Dynu":   updateDynu,
+	"Strato":       updateStrato,
+	"DDNSS":        updateDDNSS,
+	"Dynu":         updateDynu,
+	"Aliyun":       updateAliyun,
+	"AllInkl":      updateAllInkl,
+	"Cloudflare":   updateCloudflare,
+	"DD24":         updateDD24,
+	"DigitalOcean": updateDigitalOcean,
+	"DonDominio":   updateDonDominio,
+	"DNSOMatic":    updateDNSOMatic,
+	"DNSPod":       updateDNSPod,
+	"Dreamhost":    updateDreamhost,
+	"DuckDNS":      updateDuckDNS,
+	"DynDNS":       updateDynDNS,
+	"FreeDNS":      updateFreeDNS,
+	"Gandi":        updateGandi,
+	"GCP":          updateGCP,
+	"GoDaddy":      updateGoDaddy,
+	"Google":       updateGoogle,
+	"He":           updateHe,
+	"Infomaniak":   updateInfomaniak,
+	"INWX":         updateINWX,
+	"Linode":       updateLinode,
+	"LuaDNS":       updateLuaDNS,
+	"Namecheap":    updateNamecheap,
+	"NoIP":         updateNoIP,
+	"Njalla":       updateNjalla,
+	"OpenDNS":      updateOpenDNS,
+	"OVH":          updateOVH,
+	"Porkbun":      updatePorkbun,
+	"Selfhost":     updateSelfhost,
+	"Servercow":    updateServercow,
+	"Spdyn":        updateSpdyn,
+	"Variomedia":   updateVariomedia,
 }
 
 func IsUpdaterSupported(updater string) bool {
@@ -94,4 +125,128 @@ func updateDynu(job model.SyncJob, ipAddr string) error {
 	default:
 		return fmt.Errorf("failed to update DDNS entry: %s", resp)
 	}
+}
+
+func updateAliyun(job model.SyncJob, ipAddr string) error {
+	return nil
+}
+
+func updateAllInkl(job model.SyncJob, ipAddr string) error {
+	return nil
+}
+
+func updateCloudflare(job model.SyncJob, ipAddr string) error {
+	return nil
+}
+
+func updateDD24(job model.SyncJob, ipAddr string) error {
+	return nil
+}
+
+func updateDigitalOcean(job model.SyncJob, ipAddr string) error {
+	return nil
+}
+
+func updateDonDominio(job model.SyncJob, ipAddr string) error {
+	return nil
+}
+
+func updateDNSOMatic(job model.SyncJob, ipAddr string) error {
+	return nil
+}
+
+func updateDNSPod(job model.SyncJob, ipAddr string) error {
+	return nil
+}
+
+func updateDreamhost(job model.SyncJob, ipAddr string) error {
+	return nil
+}
+
+func updateDuckDNS(job model.SyncJob, ipAddr string) error {
+	return nil
+}
+
+func updateDynDNS(job model.SyncJob, ipAddr string) error {
+	return nil
+}
+
+func updateFreeDNS(job model.SyncJob, ipAddr string) error {
+	return nil
+}
+
+func updateGandi(job model.SyncJob, ipAddr string) error {
+	return nil
+}
+
+func updateGCP(job model.SyncJob, ipAddr string) error {
+	return nil
+}
+
+func updateGoDaddy(job model.SyncJob, ipAddr string) error {
+	return nil
+}
+
+func updateGoogle(job model.SyncJob, ipAddr string) error {
+	return nil
+}
+
+func updateHe(job model.SyncJob, ipAddr string) error {
+	return nil
+}
+
+func updateInfomaniak(job model.SyncJob, ipAddr string) error {
+	return nil
+}
+
+func updateINWX(job model.SyncJob, ipAddr string) error {
+	return nil
+}
+
+func updateLinode(job model.SyncJob, ipAddr string) error {
+	return nil
+}
+
+func updateLuaDNS(job model.SyncJob, ipAddr string) error {
+	return nil
+}
+
+func updateNamecheap(job model.SyncJob, ipAddr string) error {
+	return nil
+}
+
+func updateNoIP(job model.SyncJob, ipAddr string) error {
+	return nil
+}
+
+func updateNjalla(job model.SyncJob, ipAddr string) error {
+	return nil
+}
+
+func updateOpenDNS(job model.SyncJob, ipAddr string) error {
+	return nil
+}
+
+func updateOVH(job model.SyncJob, ipAddr string) error {
+	return nil
+}
+
+func updatePorkbun(job model.SyncJob, ipAddr string) error {
+	return nil
+}
+
+func updateSelfhost(job model.SyncJob, ipAddr string) error {
+	return nil
+}
+
+func updateServercow(job model.SyncJob, ipAddr string) error {
+	return nil
+}
+
+func updateSpdyn(job model.SyncJob, ipAddr string) error {
+	return nil
+}
+
+func updateVariomedia(job model.SyncJob, ipAddr string) error {
+	return nil
 }
