@@ -29,7 +29,8 @@ DDNS provides a straightforward way to update dynamic DNS entries without fiddli
 
 ## 🏷️ Supported providers
 
-`Strato` `DDNSS` `Dynu`
+`Strato` `DDNSS` `Dynu` ~~`Aliyun`~~ ~~`AllInkl`~~ ~~`Cloudflare`~~ ~~`DD24`~~ ~~`DigitalOcean`~~ ~~`DonDominio`~~ ~~`DNSOMatic`~~ ~~`DNSPod`~~ ~~`Dreamhost`~~ ~~`DuckDNS`~~ ~~`DynDNS`~~ ~~`FreeDNS`~~ ~~`Gandi`~~ ~~`GCP`~~ ~~`GoDaddy`~~ 
+~~`Google`~~ ~~`He.net`~~ ~~`Infomaniak`~~ ~~`INWX`~~ ~~`Linode`~~ ~~`LuaDNS`~~ ~~`Namecheap`~~ ~~`NoIP`~~ ~~`Njalla`~~ ~~`OpenDNS`~~ ~~`OVH`~~ ~~`Porkbun`~~ ~~`Selfhost.de`~~ ~~`Servercow.de`~~ ~~`Spdyn`~~ ~~`Variomedia.de`~~
 
 ## 📜 Installation guide
 
