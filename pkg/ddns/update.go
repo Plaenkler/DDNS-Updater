@@ -2,14 +2,14 @@ package ddns
 
 import "github.com/plaenkler/ddns/pkg/ddns/providers"
 
-type Updater func(request interface{}) error
+type updater func(request interface{}, ipAddr string) error
 
-type Provider struct {
-	Updater Updater
+type provider struct {
+	Updater updater
 	Request interface{}
 }
 
-var updaters = map[string]Provider{
+var updaters = map[string]provider{
 	"Strato":       {Updater: providers.UpdateStrato, Request: providers.UpdateStratoRequest{}},
 	"DDNSS":        {Updater: providers.UpdateDDNSS, Request: providers.UpdateDDNSSRequest{}},
 	"Dynu":         {Updater: providers.UpdateDynu, Request: providers.UpdateDynuRequest{}},
@@ -57,4 +57,8 @@ func GetProviders() []string {
 		p = append(p, k)
 	}
 	return p
+}
+
+func GetUpdaters() map[string]provider {
+	return updaters
 }

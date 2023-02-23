@@ -6,7 +6,6 @@ import (
 	"strconv"
 
 	"github.com/plaenkler/ddns/pkg/config"
-	"github.com/plaenkler/ddns/pkg/model"
 )
 
 func UpdateConfig(w http.ResponseWriter, r *http.Request) {
@@ -37,7 +36,7 @@ func UpdateConfig(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	config.UpdateConfig(&model.Config{
+	config.UpdateConfig(&config.Config{
 		Port:     port,
 		Interval: interval,
 	})
