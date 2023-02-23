@@ -48,7 +48,7 @@ func Run() {
 					log.Printf("[service-run-5] no updater found for job %v", job.ID)
 					continue
 				}
-				request := updater.Request()
+				request := updater.Request
 				err := json.Unmarshal([]byte(job.Params), request)
 				if err != nil {
 					log.Printf("[service-run-6] failed to unmarshal job params for job %v", job.ID)
