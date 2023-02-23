@@ -38,9 +38,9 @@
                         <label for="provider" class="form-label">Provider</label>
                         <select class="form-select bg-white text-dark" id="provider" name="provider" required>
                             <option selected disabled>Please select</option>
-                            <option value="Strato">Strato</option>
-                            <option value="DDNSS">DDNSS</option>
-                            <option value="Dynu">Dynu</option>
+                            {{range .Providers}}
+                            <option value="{{.}}">{{.}}</option>
+                            {{end}}
                         </select>
                     </div>
                     <div class="mb-3">

@@ -51,7 +51,7 @@ func IsSupported(p string) bool {
 	return ok
 }
 
-func GetUpdaters() []string {
+func GetProviders() []string {
 	var p []string
 	for k := range updaters {
 		p = append(p, k)
