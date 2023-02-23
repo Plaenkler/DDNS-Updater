@@ -7,9 +7,7 @@ import (
 type SyncJob struct {
 	gorm.Model
 	Provider    string    `gorm:"not null"`
-	Domain      string    `gorm:"not null;unique"`
-	User        string    `gorm:"not null"`
-	Password    string    `gorm:"not null"`
+	Params      string    `gorm:"not null"`
 	IPAddress   IPAddress `gorm:"foreignKey:IPAddressID"`
 	IPAddressID *uint64
 }
