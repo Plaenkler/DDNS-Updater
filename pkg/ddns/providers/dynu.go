@@ -11,15 +11,14 @@ import (
 type UpdateDynuRequest struct {
 	User     string `json:"user"`
 	Password string `json:"password"`
-	IPAddr   string `json:"ipAddr"`
 }
 
-func UpdateDynu(request interface{}) error {
+func UpdateDynu(request interface{}, ipAddr string) error {
 	r, ok := request.(UpdateDynuRequest)
 	if !ok {
 		return fmt.Errorf("invalid request type: %T", request)
 	}
-	urlStr := fmt.Sprintf("https://%s:%s@api.dynu.com/nic/update?myip=%s&myipv6=", r.User, r.Password, r.IPAddr)
+	urlStr := fmt.Sprintf("https://%s:%s@api.dynu.com/nic/update?myip=%s&myipv6=", r.User, r.Password, ipAddr)
 	resp, err := util.SendHTTPRequest(http.MethodGet, urlStr, nil)
 	if err != nil {
 		return err

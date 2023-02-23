@@ -12,15 +12,14 @@ type UpdateStratoRequest struct {
 	User     string `json:"user"`
 	Password string `json:"password"`
 	Domain   string `json:"domain"`
-	IPAddr   string `json:"ipAddr"`
 }
 
-func UpdateStrato(request interface{}) error {
+func UpdateStrato(request interface{}, ipAddr string) error {
 	r, ok := request.(UpdateStratoRequest)
 	if !ok {
 		return fmt.Errorf("invalid request type: %T", request)
 	}
-	urlStr := fmt.Sprintf("https://%s:%s@dyndns.strato.com/nic/update?hostname=%s&myip=%s", r.User, r.Password, r.Domain, r.IPAddr)
+	urlStr := fmt.Sprintf("https://%s:%s@dyndns.strato.com/nic/update?hostname=%s&myip=%s", r.User, r.Password, r.Domain, ipAddr)
 	resp, err := util.SendHTTPRequest(http.MethodGet, urlStr, nil)
 	if err != nil {
 		return err

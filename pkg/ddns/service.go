@@ -8,8 +8,7 @@ import (
 
 	"github.com/plaenkler/ddns/pkg/config"
 	"github.com/plaenkler/ddns/pkg/database"
-	"github.com/plaenkler/ddns/pkg/model"
-	"github.com/plaenkler/ddns/pkg/util"
+	"github.com/plaenkler/ddns/pkg/database/model"
 )
 
 var run sync.Once
@@ -19,7 +18,7 @@ func Run() {
 		ticker := time.NewTicker(time.Second * time.Duration(config.GetConfig().Interval))
 		defer ticker.Stop()
 		for range ticker.C {
-			address, err := util.GetPublicIP()
+			address, err := GetPublicIP()
 			if err != nil {
 				log.Printf("[service-run-1] failed to get public IP address - error: %v", err)
 				continue
@@ -54,7 +53,7 @@ func Run() {
 					log.Printf("[service-run-6] failed to unmarshal job params for job %v", job.ID)
 					continue
 				}
-				err = updater.Updater(request)
+				err = updater.Updater(request, address)
 				if err != nil {
 					log.Printf("[service-run-7] failed to update DDNS entry for job %v", job.ID)
 					continue
