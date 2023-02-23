@@ -43,18 +43,7 @@
                             {{end}}
                         </select>
                     </div>
-                    <div class="mb-3">
-                        <label for="domain" class="form-label">Domain</label>
-                        <input type="text" class="form-control bg-white text-dark" id="domain" name="domain" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="user" class="form-label">User</label>
-                        <input type="text" class="form-control bg-white text-dark" id="user" name="user" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control bg-white text-dark" id="password" name="password" required>
-                    </div>
+                    <div id="inputs-add-container"></div>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
             </div>
@@ -79,22 +68,12 @@
                             <div class="mb-3">
                                 <label for="edit-provider" class="form-label">Provider</label>
                                 <select class="form-select bg-white text-dark" id="edit-provider" name="provider" required>
-                                    <option value="Strato">Strato</option>
-                                    <option value="DDNSS">DDNSS</option>
+                                    {{range .Providers}}
+                                    <option value="{{.}}">{{.}}</option>
+                                    {{end}}
                                 </select>
                             </div>
-                            <div class="mb-3">
-                                <label for="edit-domain" class="form-label">Domain</label>
-                                <input type="text" class="form-control" id="edit-domain" name="domain" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="edit-user" class="form-label">User</label>
-                                <input type="text" class="form-control" id="edit-user" name="user" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="edit-password" class="form-label">Password</label>
-                                <input type="text" class="form-control" id="edit-password" name="password" required>
-                            </div>
+                            <div id="inputs-edit-container"></div>
                         </div>
                     </div>
                     <div class="row">

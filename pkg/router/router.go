@@ -37,6 +37,7 @@ func (manager *Manager) Start() {
 	startOnce.Do(func() {
 		manager.Router = http.NewServeMux()
 		manager.Router.HandleFunc("/", web.ProvideIndex)
+		manager.Router.HandleFunc("/api/inputs", api.GetInputs)
 		manager.Router.HandleFunc("/api/job/create", api.CreateJob)
 		manager.Router.HandleFunc("/api/job/update", api.UpdateJob)
 		manager.Router.HandleFunc("/api/job/delete", api.DeleteJob)

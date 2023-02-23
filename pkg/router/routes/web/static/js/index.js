@@ -1,3 +1,4 @@
+// Load input`s values for edit job modal
 document.querySelectorAll('table tbody tr').forEach((row) => {
   row.addEventListener('click', (event) => {
     const [id, provider, domain, user] = event.target.parentNode.children
@@ -11,3 +12,25 @@ document.querySelectorAll('table tbody tr').forEach((row) => {
     new bootstrap.Modal(document.querySelector('#edit-modal')).show()
   })
 })
+
+// Add inputs to form create job
+document.addEventListener("DOMContentLoaded", function() {
+  const providerDropdown = document.getElementById("provider");
+  const contentContainer = document.getElementById("inputs-add-container");
+  providerDropdown.addEventListener("change", function() {
+    const selectedProvider = providerDropdown.value;
+    if (selectedProvider === "Please select") {
+      contentContainer.innerHTML = "";
+      return
+    }
+    fetch(`/api/inputs?provider=${selectedProvider}`)
+    .then(response => response.text())
+    .then(data => {
+      contentContainer.innerHTML = data;
+      console.log(data);
+    })
+    .catch(error => {
+      console.error(error);
+    });
+  });
+});
