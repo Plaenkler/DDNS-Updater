@@ -37,7 +37,7 @@
                     <div class="mb-3">
                         <label for="provider" class="form-label">Provider</label>
                         <select class="form-select bg-white text-dark" id="provider" name="provider" required>
-                            <option selected disabled>Please select</option>
+                            <option selected disabled hidden>Please select</option>
                             {{range .Providers}}
                             <option value="{{.}}">{{.}}</option>
                             {{end}}
