@@ -5,9 +5,9 @@ import (
 )
 
 type UpdateVariomediaRequest struct {
-	IPAddr string `json:"ipAddr"`
+	// TODO implement
 }
 
-func UpdateVariomedia(request interface{}) error {
+func UpdateVariomedia(request interface{}, ipAddr string) error {
 	return fmt.Errorf("not implemented")
 }

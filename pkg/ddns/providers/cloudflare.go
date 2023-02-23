@@ -5,9 +5,9 @@ import (
 )
 
 type UpdateCloudflareRequest struct {
-	IPAddr string `json:"ipAddr"`
+	// TODO implement
 }
 
-func UpdateCloudflare(request interface{}) error {
+func UpdateCloudflare(request interface{}, ipAddr string) error {
 	return fmt.Errorf("not implemented")
 }

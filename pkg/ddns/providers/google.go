@@ -3,9 +3,9 @@ package providers
 import "fmt"
 
 type UpdateGoogleRequest struct {
-	IPAddr string `json:"ipAddr"`
+	// TODO implement
 }
 
-func UpdateGoogle(request interface{}) error {
+func UpdateGoogle(request interface{}, ipAddr string) error {
 	return fmt.Errorf("not implemented")
 }

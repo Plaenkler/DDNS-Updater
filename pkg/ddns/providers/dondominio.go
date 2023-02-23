@@ -5,9 +5,9 @@ import (
 )
 
 type UpdateDonDominioRequest struct {
-	IPAddr string `json:"ipAddr"`
+	// TODO implement
 }
 
-func UpdateDonDominio(request interface{}) error {
+func UpdateDonDominio(request interface{}, ipAddr string) error {
 	return fmt.Errorf("not implemented")
 }

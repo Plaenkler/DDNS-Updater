@@ -5,9 +5,9 @@ import (
 )
 
 type UpdateOpenDNSRequest struct {
-	IPAddr string `json:"ipAddr"`
+	// TODO implement
 }
 
-func UpdateOpenDNS(request interface{}) error {
+func UpdateOpenDNS(request interface{}, ipAddr string) error {
 	return fmt.Errorf("not implemented")
 }

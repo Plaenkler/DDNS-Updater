@@ -5,9 +5,9 @@ import (
 )
 
 type UpdateGCPRequest struct {
-	IPAddr string `json:"ipAddr"`
+	// TODO implement
 }
 
-func UpdateGCP(request interface{}) error {
+func UpdateGCP(request interface{}, ipAddr string) error {
 	return fmt.Errorf("not implemented")
 }

@@ -5,9 +5,9 @@ import (
 )
 
 type UpdateServercowRequest struct {
-	IPAddr string `json:"ipAddr"`
+	// TODO implement
 }
 
-func UpdateServercow(request interface{}) error {
+func UpdateServercow(request interface{}, ipAddr string) error {
 	return fmt.Errorf("not implemented")
 }

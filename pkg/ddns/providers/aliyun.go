@@ -5,9 +5,9 @@ import (
 )
 
 type UpdateAliyunRequest struct {
-	IPAddr string `json:"ipAddr"`
+	// TODO implement
 }
 
-func UpdateAliyun(request interface{}) error {
+func UpdateAliyun(request interface{}, ipAddr string) error {
 	return fmt.Errorf("not implemented")
 }

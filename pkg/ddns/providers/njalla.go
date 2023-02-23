@@ -5,9 +5,9 @@ import (
 )
 
 type UpdateNjallaRequest struct {
-	IPAddr string `json:"ipAddr"`
+	// TODO implement
 }
 
-func UpdateNjalla(request interface{}) error {
+func UpdateNjalla(request interface{}, ipAddr string) error {
 	return fmt.Errorf("not implemented")
 }

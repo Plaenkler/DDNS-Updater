@@ -5,9 +5,9 @@ import (
 )
 
 type UpdateDreamhostRequest struct {
-	IPAddr string `json:"ipAddr"`
+	// TODO implement
 }
 
-func UpdateDreamhost(request interface{}) error {
+func UpdateDreamhost(request interface{}, ipAddr string) error {
 	return fmt.Errorf("not implemented")
 }

@@ -5,9 +5,9 @@ import (
 )
 
 type UpdateINWXRequest struct {
-	IPAddr string `json:"ipAddr"`
+	// TODO implement
 }
 
-func UpdateINWX(request interface{}) error {
+func UpdateINWX(request interface{}, ipAddr string) error {
 	return fmt.Errorf("not implemented")
 }

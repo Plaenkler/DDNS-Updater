@@ -5,9 +5,9 @@ import (
 )
 
 type UpdateGandiRequest struct {
-	IPAddr string `json:"ipAddr"`
+	// TODO implement
 }
 
-func UpdateGandi(request interface{}) error {
+func UpdateGandi(request interface{}, ipAddr string) error {
 	return fmt.Errorf("not implemented")
 }

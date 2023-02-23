@@ -5,9 +5,9 @@ import (
 )
 
 type UpdateSelfhostRequest struct {
-	IPAddr string `json:"ipAddr"`
+	// TODO implement
 }
 
-func UpdateSelfhost(request interface{}) error {
+func UpdateSelfhost(request interface{}, ipAddr string) error {
 	return fmt.Errorf("not implemented")
 }

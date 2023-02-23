@@ -5,9 +5,9 @@ import (
 )
 
 type UpdateInfomaniakRequest struct {
-	IPAddr string `json:"ipAddr"`
+	// TODO implement
 }
 
-func UpdateInfomaniak(request interface{}) error {
+func UpdateInfomaniak(request interface{}, ipAddr string) error {
 	return fmt.Errorf("not implemented")
 }

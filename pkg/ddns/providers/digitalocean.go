@@ -5,9 +5,9 @@ import (
 )
 
 type UpdateDigitalOceanRequest struct {
-	IPAddr string `json:"ipAddr"`
+	// TODO implement
 }
 
-func UpdateDigitalOcean(request interface{}) error {
+func UpdateDigitalOcean(request interface{}, ipAddr string) error {
 	return fmt.Errorf("not implemented")
 }

@@ -5,9 +5,9 @@ import (
 )
 
 type UpdateGoDaddyRequest struct {
-	IPAddr string `json:"ipAddr"`
+	// TODO implement
 }
 
-func UpdateGoDaddy(request interface{}) error {
+func UpdateGoDaddy(request interface{}, ipAddr string) error {
 	return fmt.Errorf("not implemented")
 }

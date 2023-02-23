@@ -5,9 +5,9 @@ import (
 )
 
 type UpdatePorkbunRequest struct {
-	IPAddr string `json:"ipAddr"`
+	// TODO implement
 }
 
-func UpdatePorkbun(request interface{}) error {
+func UpdatePorkbun(request interface{}, ipAddr string) error {
 	return fmt.Errorf("not implemented")
 }

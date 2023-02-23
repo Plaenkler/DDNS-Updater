@@ -5,9 +5,9 @@ import (
 )
 
 type UpdateDuckDNSRequest struct {
-	IPAddr string `json:"ipAddr"`
+	// TODO implement
 }
 
-func UpdateDuckDNS(request interface{}) error {
+func UpdateDuckDNS(request interface{}, ipAddr string) error {
 	return fmt.Errorf("not implemented")
 }

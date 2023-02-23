@@ -5,9 +5,9 @@ import (
 )
 
 type UpdateLinodeRequest struct {
-	IPAddr string `json:"ipAddr"`
+	// TODO implement
 }
 
-func UpdateLinode(request interface{}) error {
+func UpdateLinode(request interface{}, ipAddr string) error {
 	return fmt.Errorf("not implemented")
 }

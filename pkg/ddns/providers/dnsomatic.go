@@ -5,9 +5,9 @@ import (
 )
 
 type UpdateDNSOMaticRequest struct {
-	IPAddr string `json:"ipAddr"`
+	// TODO implement
 }
 
-func UpdateDNSOMatic(request interface{}) error {
+func UpdateDNSOMatic(request interface{}, ipAddr string) error {
 	return fmt.Errorf("not implemented")
 }

@@ -5,9 +5,9 @@ import (
 )
 
 type UpdateAllInklRequest struct {
-	IPAddr string `json:"ipAddr"`
+	// TODO implement
 }
 
-func UpdateAllInkl(request interface{}) error {
+func UpdateAllInkl(request interface{}, ipAddr string) error {
 	return fmt.Errorf("not implemented")
 }

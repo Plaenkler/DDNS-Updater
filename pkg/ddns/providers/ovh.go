@@ -5,9 +5,9 @@ import (
 )
 
 type UpdateOVHRequest struct {
-	IPAddr string `json:"ipAddr"`
+	// TODO implement
 }
 
-func UpdateOVH(request interface{}) error {
+func UpdateOVH(request interface{}, ipAddr string) error {
 	return fmt.Errorf("not implemented")
 }

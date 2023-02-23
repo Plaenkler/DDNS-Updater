@@ -5,9 +5,9 @@ import (
 )
 
 type UpdateHeRequest struct {
-	IPAddr string `json:"ipAddr"`
+	// TODO implement
 }
 
-func UpdateHe(request interface{}) error {
+func UpdateHe(request interface{}, ipAddr string) error {
 	return fmt.Errorf("not implemented")
 }

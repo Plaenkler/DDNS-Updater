@@ -5,9 +5,9 @@ import (
 )
 
 type UpdateNamecheapRequest struct {
-	IPAddr string `json:"ipAddr"`
+	// TODO implement
 }
 
-func UpdateNamecheap(request interface{}) error {
+func UpdateNamecheap(request interface{}, ipAddr string) error {
 	return fmt.Errorf("not implemented")
 }

@@ -5,9 +5,9 @@ import (
 )
 
 type UpdateDD24Request struct {
-	IPAddr string `json:"ipAddr"`
+	// TODO implement
 }
 
-func UpdateDD24(request interface{}) error {
+func UpdateDD24(request interface{}, ipAddr string) error {
 	return fmt.Errorf("not implemented")
 }

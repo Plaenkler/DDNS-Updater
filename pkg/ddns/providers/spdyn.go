@@ -5,9 +5,9 @@ import (
 )
 
 type UpdateSpdynRequest struct {
-	IPAddr string `json:"ipAddr"`
+	// TODO implement
 }
 
-func UpdateSpdyn(request interface{}) error {
+func UpdateSpdyn(request interface{}, ipAddr string) error {
 	return fmt.Errorf("not implemented")
 }
