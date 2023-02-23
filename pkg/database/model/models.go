@@ -1,8 +1,6 @@
 package model
 
-import (
-	"gorm.io/gorm"
-)
+import "gorm.io/gorm"
 
 type SyncJob struct {
 	gorm.Model
@@ -15,9 +13,4 @@ type SyncJob struct {
 type IPAddress struct {
 	gorm.Model
 	Address string `gorm:"not null;unique"`
-}
-
-type Config struct {
-	Port     uint64 `yaml:"Port"`
-	Interval uint64 `yaml:"Interval"`
 }
