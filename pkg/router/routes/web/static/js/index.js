@@ -49,5 +49,5 @@ document.getElementById("add-form").addEventListener("submit", handleForm);
 document.getElementById("edit-form").addEventListener("submit", handleForm);
 document.addEventListener("DOMContentLoaded", onLoad);
 document.querySelectorAll('table tbody tr').forEach((row) => {
-  row.addEventListener('click', loadTable)
+  row.addEventListener('click', loadEdit)
 })
