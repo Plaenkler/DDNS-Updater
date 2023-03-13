@@ -15,7 +15,7 @@ func SendHTTPRequest(method string, url string, auth *url.Userinfo) (string, err
 	}
 	req, err := http.NewRequest(method, url, nil)
 	if err != nil {
-		return "", fmt.Errorf("failed to create HTTP request: %v", err)
+		return "", fmt.Errorf("[util-SendHTTPRequest-1] failed to create HTTP request: %v", err)
 	}
 	if auth != nil {
 		password, _ := auth.Password()
@@ -23,15 +23,15 @@ func SendHTTPRequest(method string, url string, auth *url.Userinfo) (string, err
 	}
 	resp, err := httpClient.Do(req)
 	if err != nil {
-		return "", fmt.Errorf("failed to send HTTP request: %v", err)
+		return "", fmt.Errorf("[util-SendHTTPRequest-2] failed to send HTTP request: %v", err)
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusOK {
-		return "", fmt.Errorf("failed to update DDNS entry: %s", resp.Status)
+		return "", fmt.Errorf("[util-SendHTTPRequest-3] HTTP request returned status code %d", resp.StatusCode)
 	}
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return "", fmt.Errorf("failed to read HTTP response body: %v", err)
+		return "", fmt.Errorf("[util-SendHTTPRequest-4] failed to read HTTP response body: %v", err)
 	}
 	return string(bytes.TrimSpace(body)), nil
 }

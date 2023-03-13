@@ -50,17 +50,17 @@ func Run() {
 				request := updater.Request
 				err := json.Unmarshal([]byte(job.Params), request)
 				if err != nil {
-					log.Printf("[service-run-6] failed to unmarshal job params for job %v", job.ID)
+					log.Printf("[service-run-6] failed to unmarshal job params for job %v - error: %s", job.ID, err)
 					continue
 				}
 				err = updater.Updater(request, address)
 				if err != nil {
-					log.Printf("[service-run-7] failed to update DDNS entry for job %v", job.ID)
+					log.Printf("[service-run-7] failed to update DDNS entry for job %v - error: %s", job.ID, err)
 					continue
 				}
 				err = database.GetManager().DB.Model(&job).Update("ip_address_id", newAddress.ID).Error
 				if err != nil {
-					log.Printf("[service-run-8] failed to update IP address for job %v", job.ID)
+					log.Printf("[service-run-8] failed to update IP address for job %v - error: %s", job.ID, err)
 				}
 				log.Printf("[service-run-9] updated DDNS entry for ID: %v Provider: %s Params: %+v", job.ID, job.Provider, job.Params)
 			}
