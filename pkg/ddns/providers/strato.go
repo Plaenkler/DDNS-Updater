@@ -9,9 +9,9 @@ import (
 )
 
 type UpdateStratoRequest struct {
-	User     string `json:"user"`
-	Password string `json:"password"`
-	Domain   string `json:"domain"`
+	User     string `json:"User"`
+	Password string `json:"Password"`
+	Domain   string `json:"Domain"`
 }
 
 func UpdateStrato(request interface{}, ipAddr string) error {

@@ -9,8 +9,8 @@ import (
 )
 
 type UpdateDynuRequest struct {
-	User     string `json:"user"`
-	Password string `json:"password"`
+	User     string `json:"User"`
+	Password string `json:"Password"`
 }
 
 func UpdateDynu(request interface{}, ipAddr string) error {
