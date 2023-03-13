@@ -46,11 +46,6 @@ var updaters = map[string]provider{
 	"Variomedia":   {Updater: providers.UpdateVariomedia, Request: providers.UpdateVariomediaRequest{}},
 }
 
-func IsSupported(p string) bool {
-	_, ok := updaters[p]
-	return ok
-}
-
 func GetProviders() []string {
 	var p []string
 	for k := range updaters {
