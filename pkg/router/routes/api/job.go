@@ -24,13 +24,14 @@ func CreateJob(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	provider := r.FormValue("provider")
-	if !ddns.IsSupported(provider) {
-		log.Printf("[api-CreateJob-2] provider is not valid")
-		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+	updater, ok := ddns.GetUpdaters()[provider]
+	if !ok {
+		http.Error(w, "Invalid provider", http.StatusBadRequest)
+		log.Printf("[api-UpdateJob-3] provider is not valid")
 		return
 	}
+	jobModel := &updater.Request
 	params := r.FormValue("params")
-	jobModel := ddns.GetUpdaters()[provider].Request
 	err = json.Unmarshal([]byte(params), &jobModel)
 	if err != nil {
 		log.Printf("[api-CreateJob-3] could not unmarshal params - error: %s", err)
@@ -62,20 +63,20 @@ func UpdateJob(w http.ResponseWriter, r *http.Request) {
 		log.Printf("[api-UpdateJob-1] could not parse form - error: %s", err.Error())
 		return
 	}
-	strID := r.FormValue("ID")
-	id, err := strconv.ParseUint(strID, 10, 32)
+	id, err := strconv.ParseUint(r.FormValue("ID"), 10, 32)
 	if err != nil {
 		http.Error(w, "ID is not valid", http.StatusBadRequest)
 		log.Printf("[api-UpdateJob-2] ID is not valid - error: %s", err.Error())
 		return
 	}
 	provider := r.FormValue("provider")
-	if !ddns.IsSupported(provider) {
+	updater, ok := ddns.GetUpdaters()[provider]
+	if !ok {
 		http.Error(w, "Invalid provider", http.StatusBadRequest)
 		log.Printf("[api-UpdateJob-3] provider is not valid")
 		return
 	}
-	jobModel := ddns.GetUpdaters()[provider].Request
+	jobModel := &updater.Request
 	params := r.FormValue("params")
 	err = json.Unmarshal([]byte(params), &jobModel)
 	if err != nil {
@@ -87,8 +88,8 @@ func UpdateJob(w http.ResponseWriter, r *http.Request) {
 		Model: gorm.Model{
 			ID: uint(id),
 		},
-		Provider: r.FormValue("provider"),
-		Params:   r.FormValue("params"),
+		Provider: provider,
+		Params:   params,
 	}
 	err = database.GetManager().DB.Save(&job).Error
 	if err != nil {
