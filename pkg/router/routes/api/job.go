@@ -47,6 +47,7 @@ func CreateJob(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}
+	http.Redirect(w, r, r.Header.Get("Referer"), http.StatusSeeOther)
 	log.Printf("[api-CreateJob-5] created job with ID %d", job.ID)
 }
 

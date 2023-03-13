@@ -19,9 +19,8 @@
                     <tr>
                         <th class="d-none">ID</th>
                         <th>Provider</th>
-                        <th>Domain</th>
-                        <th>User</th>
                         <th>Updated</th>
+                        <th>Params</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -29,9 +28,8 @@
                     <tr>
                         <td class="d-none">{{.ID}}</td>
                         <td>{{.Provider}}</td>
-                        <td>{{.Domain}}</td>
-                        <td>{{.User}}</td>
                         <td>{{.UpdatedAt.Format "02.01.2006 15:04"}}</td>
+                        <td>{{.Params}}</td>
                     </tr>
                     {{end}}
                 </tbody>
