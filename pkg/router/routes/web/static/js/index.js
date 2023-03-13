@@ -1,74 +1,72 @@
 // Append inputs to form create job
-const addProviderSelect = document.getElementById('add-provider-select');
-const addInputsContainer = document.getElementById('add-inputs-container');
-addProviderSelect.addEventListener('change', async (e) => {
+document.getElementById('add-provider-select').addEventListener('change', async (e) => {
   try {
-    addInputsContainer.innerHTML = await (await fetch(`/api/inputs?provider=${e.target.value}`)).text();
-  } catch (error) {
-    console.error(error);
-  }
-});
-
-// Handle submit for form create job
-const addJobForm = document.getElementById('add-form');
-addJobForm.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  let data = {};
-  e.target.querySelectorAll('input').forEach(input => {
-    data[input.name] = input.value;
-  });
-  const provider = e.target.querySelector('select').value;
-  try {
-    await fetch(`/api/job/create?provider=${provider}&params=${JSON.stringify(data)}`, {
-      method: 'POST',
-    });
-    window.location.reload();
+    const inputs = await (await fetch(`/api/inputs?provider=${e.target.value}`)).json();
+    let html = '';
+    for (const key in inputs) {
+      html += `
+        <div class="mb-3">
+          <label for="add-input-${key}" class="form-label">${key}</label>
+          <input type="text" class="form-control" id="add-input-${key}" name="${key}" value="${inputs[key]}">
+        </div>
+      `;
+    }
+    document.getElementById('add-inputs-container').innerHTML = html;
   } catch (error) {
     console.error(error);
   }
 });
 
 // Add inputs & values to form edit
-const editProviderSelect = document.getElementById('edit-provider-select');
-const editModal = document.getElementById('edit-modal');
-const deleteButton = document.getElementById('delete-button');
-const editInputsContainer = document.getElementById('edit-inputs-container');
-const table = document.querySelector('table tbody');
-table.addEventListener('click', function(event) {
+document.querySelector('table tbody').addEventListener('click', function(event) {
   const row = event.target.closest('tr');
   if (!row) return;
-  deleteButton.href = `/api/job/delete?ID=${row.querySelector('td:nth-child(1)').textContent}`
-  editProviderSelect.value = row.querySelector('td:nth-child(2)').textContent
-  const params = JSON.parse(row.querySelector('td:nth-child(4)').textContent)
-  let html = ''
+  document.getElementById('edit-id').value = row.querySelector('td:nth-child(1)').textContent;
+  document.getElementById('delete-button').href = `/api/job/delete?ID=${row.querySelector('td:nth-child(1)').textContent}`;
+  document.getElementById('edit-provider-select').value = row.querySelector('td:nth-child(2)').textContent;
+  const params = JSON.parse(row.querySelector('td:nth-child(4)').textContent);
+  let html = '';
   for (const key in params) {
-    html += 
-    `
-    <div class="mb-3">
-      <label for="edit-${key}" class="form-label">${key}</label>
-      <input type="text" class="form-control" id="edit-${key}" name="${key}" value="${params[key]}">
-    </div>
-    `
+    html += `
+      <div class="mb-3">
+        <label for="edit-input-${key}" class="form-label">${key}</label>
+        <input type="text" class="form-control" id="edit-input-${key}" name="${key}" value="${params[key]}">
+      </div>
+    `;
   }
-  editInputsContainer.innerHTML = html
-  new bootstrap.Modal(editModal).show()
-})
+  document.getElementById('edit-inputs-container').innerHTML = html;
+  new bootstrap.Modal(document.getElementById('edit-modal')).show();
+});
 
-// Handle submit for form edit
-// const editJobForm = document.getElementById('edit-form');
-// editJobForm.addEventListener('submit', async (e) => {
-//   e.preventDefault();
-//   let data = {};
-//   e.target.querySelectorAll('input').forEach(input => {
-//     data[input.name] = input.value;
-//   });
-//   const provider = e.target.querySelector('select').value;
-//   try {
-//     await fetch(`/api/job/update?provider=${provider}&params=${JSON.stringify(data)}`, {
-//       method: 'POST',
-//     });
-//     window.location.reload();
-//   } catch (error) {
-//     console.error(error);
-//   }
-// });
+// Send request to job api endpoint
+async function sendRequest(url, method) {
+  try {
+    await fetch(url, {
+      method: method
+    });
+    window.location.reload();
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Handle submit for form create job
+document.getElementById('add-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const formData = new FormData(e.target);
+  const data = Object.fromEntries(formData.entries());
+  const provider = document.getElementById('add-provider-select').value;
+  const url = `/api/job/create?provider=${provider}&params=${JSON.stringify(data)}`;
+  await sendRequest(url, 'POST');
+});
+
+// Handle submit for form edit job
+document.getElementById('edit-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const formData = new FormData(e.target);
+  const data = Object.fromEntries(formData.entries());
+  const provider = document.getElementById('edit-provider-select').value;
+  const id = document.getElementById('edit-id').value;
+  const url = `/api/job/update?ID=${id}&provider=${provider}&params=${JSON.stringify(data)}`;
+  await sendRequest(url, 'POST');
+});
