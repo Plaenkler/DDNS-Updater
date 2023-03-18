@@ -5,9 +5,16 @@ import (
 )
 
 type UpdateLuaDNSRequest struct {
-	// TODO implement
+	Domain string
+	Host   string
+	EMail  string
+	Token  string
 }
 
 func UpdateLuaDNS(request interface{}, ipAddr string) error {
-	return fmt.Errorf("not implemented")
+	r, ok := request.(UpdateLuaDNSRequest)
+	if !ok {
+		return fmt.Errorf("invalid request type: %T", request)
+	}
+	return fmt.Errorf("not implemented %s", r.Domain)
 }

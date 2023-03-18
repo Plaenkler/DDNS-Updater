@@ -5,9 +5,15 @@ import (
 )
 
 type UpdateDreamhostRequest struct {
-	// TODO implement
+	Domain string
+	Host   string
+	Key    string
 }
 
 func UpdateDreamhost(request interface{}, ipAddr string) error {
-	return fmt.Errorf("not implemented")
+	r, ok := request.(UpdateDreamhostRequest)
+	if !ok {
+		return fmt.Errorf("invalid request type: %T", request)
+	}
+	return fmt.Errorf("not implemented %s", r.Domain)
 }

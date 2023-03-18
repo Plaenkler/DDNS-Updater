@@ -5,9 +5,17 @@ import (
 )
 
 type UpdateDynDNSRequest struct {
-	// TODO implement
+	Domain        string
+	Host          string
+	Username      string
+	ClientKey     string
+	UseProviderIP bool
 }
 
 func UpdateDynDNS(request interface{}, ipAddr string) error {
-	return fmt.Errorf("not implemented")
+	r, ok := request.(UpdateDynDNSRequest)
+	if !ok {
+		return fmt.Errorf("invalid request type: %T", request)
+	}
+	return fmt.Errorf("not implemented %s", r.Domain)
 }

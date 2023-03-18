@@ -5,9 +5,16 @@ import (
 )
 
 type UpdateNjallaRequest struct {
-	// TODO implement
+	Domain        string
+	Host          string
+	Key           string
+	UseProviderIP bool
 }
 
 func UpdateNjalla(request interface{}, ipAddr string) error {
-	return fmt.Errorf("not implemented")
+	r, ok := request.(UpdateNjallaRequest)
+	if !ok {
+		return fmt.Errorf("invalid request type: %T", request)
+	}
+	return fmt.Errorf("not implemented %s", r.Domain)
 }

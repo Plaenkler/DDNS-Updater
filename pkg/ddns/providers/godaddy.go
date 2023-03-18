@@ -5,9 +5,16 @@ import (
 )
 
 type UpdateGoDaddyRequest struct {
-	// TODO implement
+	Domain string
+	Host   string
+	Key    string
+	Secret string
 }
 
 func UpdateGoDaddy(request interface{}, ipAddr string) error {
-	return fmt.Errorf("not implemented")
+	r, ok := request.(UpdateGoDaddyRequest)
+	if !ok {
+		return fmt.Errorf("invalid request type: %T", request)
+	}
+	return fmt.Errorf("not implemented %s", r.Domain)
 }

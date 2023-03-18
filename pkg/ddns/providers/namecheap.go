@@ -5,9 +5,16 @@ import (
 )
 
 type UpdateNamecheapRequest struct {
-	// TODO implement
+	Domain        string
+	Host          string
+	Password      string
+	UseProviderIP bool
 }
 
 func UpdateNamecheap(request interface{}, ipAddr string) error {
-	return fmt.Errorf("not implemented")
+	r, ok := request.(UpdateNamecheapRequest)
+	if !ok {
+		return fmt.Errorf("invalid request type: %T", request)
+	}
+	return fmt.Errorf("not implemented %s", r.Domain)
 }

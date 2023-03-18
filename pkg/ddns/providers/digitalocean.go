@@ -5,9 +5,15 @@ import (
 )
 
 type UpdateDigitalOceanRequest struct {
-	// TODO implement
+	Domain string
+	Host   string
+	Token  string
 }
 
 func UpdateDigitalOcean(request interface{}, ipAddr string) error {
-	return fmt.Errorf("not implemented")
+	r, ok := request.(UpdateDigitalOceanRequest)
+	if !ok {
+		return fmt.Errorf("invalid request type: %T", request)
+	}
+	return fmt.Errorf("not implemented %s", r.Domain)
 }

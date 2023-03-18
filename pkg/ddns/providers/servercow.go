@@ -5,9 +5,18 @@ import (
 )
 
 type UpdateServercowRequest struct {
-	// TODO implement
+	Username      string
+	Host          string
+	Domain        string
+	Password      string
+	UseProviderIP bool
+	TTL           uint
 }
 
 func UpdateServercow(request interface{}, ipAddr string) error {
-	return fmt.Errorf("not implemented")
+	r, ok := request.(UpdateServercowRequest)
+	if !ok {
+		return fmt.Errorf("invalid request type: %T", request)
+	}
+	return fmt.Errorf("not implemented %s", r.Domain)
 }

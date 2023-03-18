@@ -5,9 +5,17 @@ import (
 )
 
 type UpdatePorkbunRequest struct {
-	// TODO implement
+	Domain       string
+	Host         string
+	TTL          uint
+	APIKey       string
+	SecretAPIKey string
 }
 
 func UpdatePorkbun(request interface{}, ipAddr string) error {
-	return fmt.Errorf("not implemented")
+	r, ok := request.(UpdatePorkbunRequest)
+	if !ok {
+		return fmt.Errorf("invalid request type: %T", request)
+	}
+	return fmt.Errorf("not implemented %s", r.Domain)
 }
