@@ -4,7 +4,7 @@ import "fmt"
 
 type UpdateGoogleRequest struct {
 	Domain        string
-	host          string
+	Host          string
 	Username      string
 	Password      string
 	UseProviderIP bool
