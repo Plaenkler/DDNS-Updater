@@ -11,7 +11,7 @@ type UpdateGoogleRequest struct {
 }
 
 func UpdateGoogle(request interface{}, ipAddr string) error {
-	r, ok := request.(UpdateGoogleRequest)
+	r, ok := request.(*UpdateGoogleRequest)
 	if !ok {
 		return fmt.Errorf("invalid request type: %T", request)
 	}

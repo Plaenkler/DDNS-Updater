@@ -13,7 +13,7 @@ type UpdateSelfhostRequest struct {
 }
 
 func UpdateSelfhost(request interface{}, ipAddr string) error {
-	r, ok := request.(UpdateSelfhostRequest)
+	r, ok := request.(*UpdateSelfhostRequest)
 	if !ok {
 		return fmt.Errorf("invalid request type: %T", request)
 	}

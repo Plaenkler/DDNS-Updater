@@ -11,7 +11,7 @@ type UpdateDigitalOceanRequest struct {
 }
 
 func UpdateDigitalOcean(request interface{}, ipAddr string) error {
-	r, ok := request.(UpdateDigitalOceanRequest)
+	r, ok := request.(*UpdateDigitalOceanRequest)
 	if !ok {
 		return fmt.Errorf("invalid request type: %T", request)
 	}

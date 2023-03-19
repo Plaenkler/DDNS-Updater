@@ -13,7 +13,7 @@ type UpdateDonDominioRequest struct {
 }
 
 func UpdateDonDominio(request interface{}, ipAddr string) error {
-	r, ok := request.(UpdateDonDominioRequest)
+	r, ok := request.(*UpdateDonDominioRequest)
 	if !ok {
 		return fmt.Errorf("invalid request type: %T", request)
 	}

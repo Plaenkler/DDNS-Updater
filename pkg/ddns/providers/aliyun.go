@@ -16,7 +16,7 @@ type UpdateAliyunRequest struct {
 }
 
 func UpdateAliyun(request interface{}, ipAddr string) error {
-	r, ok := request.(UpdateAliyunRequest)
+	r, ok := request.(*UpdateAliyunRequest)
 	if !ok {
 		return fmt.Errorf("invalid request type: %T", request)
 	}

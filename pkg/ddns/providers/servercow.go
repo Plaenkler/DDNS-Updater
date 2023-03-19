@@ -14,7 +14,7 @@ type UpdateServercowRequest struct {
 }
 
 func UpdateServercow(request interface{}, ipAddr string) error {
-	r, ok := request.(UpdateServercowRequest)
+	r, ok := request.(*UpdateServercowRequest)
 	if !ok {
 		return fmt.Errorf("invalid request type: %T", request)
 	}

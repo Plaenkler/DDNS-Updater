@@ -12,7 +12,7 @@ type UpdateHeRequest struct {
 }
 
 func UpdateHe(request interface{}, ipAddr string) error {
-	r, ok := request.(UpdateHeRequest)
+	r, ok := request.(*UpdateHeRequest)
 	if !ok {
 		return fmt.Errorf("invalid request type: %T", request)
 	}

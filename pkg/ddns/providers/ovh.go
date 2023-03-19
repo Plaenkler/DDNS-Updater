@@ -19,7 +19,7 @@ type UpdateOVHRequest struct {
 }
 
 func UpdateOVH(request interface{}, ipAddr string) error {
-	r, ok := request.(UpdateOVHRequest)
+	r, ok := request.(*UpdateOVHRequest)
 	if !ok {
 		return fmt.Errorf("invalid request type: %T", request)
 	}

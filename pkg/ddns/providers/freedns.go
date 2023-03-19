@@ -11,7 +11,7 @@ type UpdateFreeDNSRequest struct {
 }
 
 func UpdateFreeDNS(request interface{}, ipAddr string) error {
-	r, ok := request.(UpdateFreeDNSRequest)
+	r, ok := request.(*UpdateFreeDNSRequest)
 	if !ok {
 		return fmt.Errorf("invalid request type: %T", request)
 	}

@@ -12,7 +12,7 @@ type UpdateLuaDNSRequest struct {
 }
 
 func UpdateLuaDNS(request interface{}, ipAddr string) error {
-	r, ok := request.(UpdateLuaDNSRequest)
+	r, ok := request.(*UpdateLuaDNSRequest)
 	if !ok {
 		return fmt.Errorf("invalid request type: %T", request)
 	}

@@ -13,7 +13,7 @@ type UpdateDNSOMaticRequest struct {
 }
 
 func UpdateDNSOMatic(request interface{}, ipAddr string) error {
-	r, ok := request.(UpdateDNSOMaticRequest)
+	r, ok := request.(*UpdateDNSOMaticRequest)
 	if !ok {
 		return fmt.Errorf("invalid request type: %T", request)
 	}

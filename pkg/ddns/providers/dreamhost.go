@@ -11,7 +11,7 @@ type UpdateDreamhostRequest struct {
 }
 
 func UpdateDreamhost(request interface{}, ipAddr string) error {
-	r, ok := request.(UpdateDreamhostRequest)
+	r, ok := request.(*UpdateDreamhostRequest)
 	if !ok {
 		return fmt.Errorf("invalid request type: %T", request)
 	}

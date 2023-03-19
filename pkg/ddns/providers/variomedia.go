@@ -13,7 +13,7 @@ type UpdateVariomediaRequest struct {
 }
 
 func UpdateVariomedia(request interface{}, ipAddr string) error {
-	r, ok := request.(UpdateVariomediaRequest)
+	r, ok := request.(*UpdateVariomediaRequest)
 	if !ok {
 		return fmt.Errorf("invalid request type: %T", request)
 	}

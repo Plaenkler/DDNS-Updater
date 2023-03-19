@@ -14,7 +14,7 @@ type UpdateSpdynRequest struct {
 }
 
 func UpdateSpdyn(request interface{}, ipAddr string) error {
-	r, ok := request.(UpdateSpdynRequest)
+	r, ok := request.(*UpdateSpdynRequest)
 	if !ok {
 		return fmt.Errorf("invalid request type: %T", request)
 	}

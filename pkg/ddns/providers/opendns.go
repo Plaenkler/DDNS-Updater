@@ -13,7 +13,7 @@ type UpdateOpenDNSRequest struct {
 }
 
 func UpdateOpenDNS(request interface{}, ipAddr string) error {
-	r, ok := request.(UpdateOpenDNSRequest)
+	r, ok := request.(*UpdateOpenDNSRequest)
 	if !ok {
 		return fmt.Errorf("invalid request type: %T", request)
 	}

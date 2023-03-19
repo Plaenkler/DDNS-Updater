@@ -13,7 +13,7 @@ type UpdateAllInklRequest struct {
 }
 
 func UpdateAllInkl(request interface{}, ipAddr string) error {
-	r, ok := request.(UpdateAllInklRequest)
+	r, ok := request.(*UpdateAllInklRequest)
 	if !ok {
 		return fmt.Errorf("invalid request type: %T", request)
 	}

@@ -17,7 +17,7 @@ type UpdateCloudflareRequest struct {
 }
 
 func UpdateCloudflare(request interface{}, ipAddr string) error {
-	r, ok := request.(UpdateCloudflareRequest)
+	r, ok := request.(*UpdateCloudflareRequest)
 	if !ok {
 		return fmt.Errorf("invalid request type: %T", request)
 	}

@@ -13,7 +13,7 @@ type UpdateNoIPRequest struct {
 }
 
 func UpdateNoIP(request interface{}, ipAddr string) error {
-	r, ok := request.(UpdateNoIPRequest)
+	r, ok := request.(*UpdateNoIPRequest)
 	if !ok {
 		return fmt.Errorf("invalid request type: %T", request)
 	}

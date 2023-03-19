@@ -12,7 +12,7 @@ type UpdateNamecheapRequest struct {
 }
 
 func UpdateNamecheap(request interface{}, ipAddr string) error {
-	r, ok := request.(UpdateNamecheapRequest)
+	r, ok := request.(*UpdateNamecheapRequest)
 	if !ok {
 		return fmt.Errorf("invalid request type: %T", request)
 	}

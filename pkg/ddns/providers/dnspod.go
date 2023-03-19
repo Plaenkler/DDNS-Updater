@@ -11,7 +11,7 @@ type UpdateDNSPodRequest struct {
 }
 
 func UpdateDNSPod(request interface{}, ipAddr string) error {
-	r, ok := request.(UpdateDNSPodRequest)
+	r, ok := request.(*UpdateDNSPodRequest)
 	if !ok {
 		return fmt.Errorf("invalid request type: %T", request)
 	}

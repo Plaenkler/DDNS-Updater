@@ -13,7 +13,7 @@ type UpdateDynDNSRequest struct {
 }
 
 func UpdateDynDNS(request interface{}, ipAddr string) error {
-	r, ok := request.(UpdateDynDNSRequest)
+	r, ok := request.(*UpdateDynDNSRequest)
 	if !ok {
 		return fmt.Errorf("invalid request type: %T", request)
 	}

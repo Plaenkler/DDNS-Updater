@@ -12,7 +12,7 @@ type UpdateNjallaRequest struct {
 }
 
 func UpdateNjalla(request interface{}, ipAddr string) error {
-	r, ok := request.(UpdateNjallaRequest)
+	r, ok := request.(*UpdateNjallaRequest)
 	if !ok {
 		return fmt.Errorf("invalid request type: %T", request)
 	}

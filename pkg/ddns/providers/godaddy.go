@@ -12,7 +12,7 @@ type UpdateGoDaddyRequest struct {
 }
 
 func UpdateGoDaddy(request interface{}, ipAddr string) error {
-	r, ok := request.(UpdateGoDaddyRequest)
+	r, ok := request.(*UpdateGoDaddyRequest)
 	if !ok {
 		return fmt.Errorf("invalid request type: %T", request)
 	}

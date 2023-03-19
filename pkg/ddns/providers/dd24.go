@@ -9,13 +9,13 @@ import (
 )
 
 type UpdateDD24Request struct {
-	Domain   string
-	Host     string
-	Password string
+	Domain   string `json:"Domain"`
+	Host     string `json:"Host"`
+	Password string `json:"Password"`
 }
 
 func UpdateDD24(request interface{}, ipAddr string) error {
-	r, ok := request.(UpdateDD24Request)
+	r, ok := request.(*UpdateDD24Request)
 	if !ok {
 		return fmt.Errorf("invalid request type: %T", request)
 	}

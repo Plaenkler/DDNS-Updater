@@ -15,7 +15,7 @@ type UpdateDDNSSRequest struct {
 }
 
 func UpdateDDNSS(request interface{}, ipAddr string) error {
-	r, ok := request.(UpdateDDNSSRequest)
+	r, ok := request.(*UpdateDDNSSRequest)
 	if !ok {
 		return fmt.Errorf("invalid request type: %T", request)
 	}

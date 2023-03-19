@@ -13,7 +13,7 @@ type UpdateInfomaniakRequest struct {
 }
 
 func UpdateInfomaniak(request interface{}, ipAddr string) error {
-	r, ok := request.(UpdateInfomaniakRequest)
+	r, ok := request.(*UpdateInfomaniakRequest)
 	if !ok {
 		return fmt.Errorf("invalid request type: %T", request)
 	}

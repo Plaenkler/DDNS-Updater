@@ -14,7 +14,7 @@ type UpdateGCPRequest struct {
 }
 
 func UpdateGCP(request interface{}, ipAddr string) error {
-	r, ok := request.(UpdateGCPRequest)
+	r, ok := request.(*UpdateGCPRequest)
 	if !ok {
 		return fmt.Errorf("invalid request type: %T", request)
 	}

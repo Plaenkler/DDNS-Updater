@@ -12,7 +12,7 @@ type UpdateINWXRequest struct {
 }
 
 func UpdateINWX(request interface{}, ipAddr string) error {
-	r, ok := request.(UpdateINWXRequest)
+	r, ok := request.(*UpdateINWXRequest)
 	if !ok {
 		return fmt.Errorf("invalid request type: %T", request)
 	}

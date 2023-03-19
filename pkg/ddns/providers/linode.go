@@ -11,7 +11,7 @@ type UpdateLinodeRequest struct {
 }
 
 func UpdateLinode(request interface{}, ipAddr string) error {
-	r, ok := request.(UpdateLinodeRequest)
+	r, ok := request.(*UpdateLinodeRequest)
 	if !ok {
 		return fmt.Errorf("invalid request type: %T", request)
 	}

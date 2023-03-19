@@ -15,7 +15,7 @@ type UpdateStratoRequest struct {
 }
 
 func UpdateStrato(request interface{}, ipAddr string) error {
-	r, ok := request.(UpdateStratoRequest)
+	r, ok := request.(*UpdateStratoRequest)
 	if !ok {
 		return fmt.Errorf("invalid request type: %T", request)
 	}

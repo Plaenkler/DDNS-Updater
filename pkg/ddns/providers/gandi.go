@@ -12,7 +12,7 @@ type UpdateGandiRequest struct {
 }
 
 func UpdateGandi(request interface{}, ipAddr string) error {
-	r, ok := request.(UpdateGandiRequest)
+	r, ok := request.(*UpdateGandiRequest)
 	if !ok {
 		return fmt.Errorf("invalid request type: %T", request)
 	}
