@@ -8,8 +8,8 @@ import (
 
 	"github.com/plaenkler/ddns/pkg/config"
 	"github.com/plaenkler/ddns/pkg/database"
-	"github.com/plaenkler/ddns/pkg/model"
-	"github.com/plaenkler/ddns/pkg/util"
+	"github.com/plaenkler/ddns/pkg/database/model"
+	"github.com/plaenkler/ddns/pkg/ddns"
 )
 
 var (
@@ -20,7 +20,8 @@ var (
 type structIndex struct {
 	Jobs      []model.SyncJob
 	IPAddress string
-	Config    *model.Config
+	Config    *config.Config
+	Providers []string
 }
 
 func ProvideIndex(writer http.ResponseWriter, request *http.Request) {
@@ -40,9 +41,10 @@ func ProvideIndex(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 	structIndex := structIndex{
-		Config: config.GetConfig(),
+		Config:    config.GetConfig(),
+		Providers: ddns.GetProviders(),
 	}
-	structIndex.IPAddress, err = util.GetPublicIP()
+	structIndex.IPAddress, err = ddns.GetPublicIP()
 	if err != nil {
 		fmt.Fprintf(writer, "[provide-index-3] could not get public IP address - error: %s", err)
 		return
