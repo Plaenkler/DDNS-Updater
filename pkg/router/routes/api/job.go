@@ -27,7 +27,7 @@ func CreateJob(w http.ResponseWriter, r *http.Request) {
 	updater, ok := ddns.GetUpdaters()[provider]
 	if !ok {
 		http.Error(w, "Invalid provider", http.StatusBadRequest)
-		log.Printf("[api-UpdateJob-3] provider is not valid")
+		log.Printf("[api-CreateJob-3] provider is not valid")
 		return
 	}
 	jobModel := &updater.Request
@@ -60,13 +60,13 @@ func UpdateJob(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
 		http.Error(w, "Could not parse form", http.StatusBadRequest)
-		log.Printf("[api-UpdateJob-1] could not parse form - error: %s", err.Error())
+		log.Printf("[api-UpdateJob-1] could not parse form - error: %s", err)
 		return
 	}
 	id, err := strconv.ParseUint(r.FormValue("ID"), 10, 32)
 	if err != nil {
 		http.Error(w, "ID is not valid", http.StatusBadRequest)
-		log.Printf("[api-UpdateJob-2] ID is not valid - error: %s", err.Error())
+		log.Printf("[api-UpdateJob-2] ID is not valid - error: %s", err)
 		return
 	}
 	provider := r.FormValue("provider")
@@ -81,7 +81,7 @@ func UpdateJob(w http.ResponseWriter, r *http.Request) {
 	err = json.Unmarshal([]byte(params), &jobModel)
 	if err != nil {
 		http.Error(w, "Could not unmarshal params", http.StatusBadRequest)
-		log.Printf("[api-UpdateJob-4] could not unmarshal params - error: %s", err.Error())
+		log.Printf("[api-UpdateJob-4] could not unmarshal params - error: %s", err)
 		return
 	}
 	job := model.SyncJob{
