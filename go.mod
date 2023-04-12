@@ -3,13 +3,13 @@ module github.com/plaenkler/ddns
 go 1.20
 
 require (
+	github.com/aliyun/alibaba-cloud-sdk-go v1.62.246
 	gopkg.in/yaml.v3 v3.0.1
 	gorm.io/driver/sqlite v1.4.4
-	gorm.io/gorm v1.24.6
+	gorm.io/gorm v1.25.0
 )
 
 require (
-	github.com/aliyun/alibaba-cloud-sdk-go v1.62.246 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
