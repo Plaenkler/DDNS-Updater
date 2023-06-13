@@ -3,7 +3,7 @@ module github.com/plaenkler/ddns
 go 1.20
 
 require (
-	github.com/aliyun/alibaba-cloud-sdk-go v1.62.362
+	github.com/aliyun/alibaba-cloud-sdk-go v1.62.371
 	gopkg.in/yaml.v3 v3.0.1
 	gorm.io/driver/sqlite v1.5.1
 	gorm.io/gorm v1.25.1
