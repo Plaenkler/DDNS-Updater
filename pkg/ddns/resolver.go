@@ -25,7 +25,7 @@ func GetPublicIP() (string, error) {
 			log.Printf("[resolver-2] %s failed: %s", r, err)
 			continue
 		}
-		log.Printf("[resolver-3] %s succeeded: %s", r, string(ipBytes))
+		log.Printf("[resolver-3] %s resolved public IP address: %s", r, string(ipBytes))
 		return string(ipBytes), nil
 	}
 	return "", fmt.Errorf("[resolver-4] all resolvers failed")
