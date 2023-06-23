@@ -54,7 +54,7 @@ func (manager *Manager) Start() {
 			WriteTimeout:      15 * time.Second,
 			IdleTimeout:       120 * time.Second,
 			Handler: http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-				// Read X-Forwarded-For-Header for proxying
+				// Read X-Forwarded-For-Header for proxy requests
 				remoteIP := r.Header.Get("X-Forwarded-For")
 				remotePort := r.Header.Get("X-Forwarded-Port")
 				if remotePort == "" {

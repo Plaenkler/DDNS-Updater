@@ -6,14 +6,20 @@ import (
 	"strconv"
 
 	"github.com/plaenkler/ddns/pkg/config"
+	"github.com/plaenkler/ddns/pkg/util/limit"
 )
 
 func UpdateConfig(w http.ResponseWriter, r *http.Request) {
+	err := limit.IsOverLimit(r)
+	if err != nil {
+		w.WriteHeader(http.StatusTooManyRequests)
+		return
+	}
 	if r.Method != http.MethodPost {
 		w.WriteHeader(http.StatusMethodNotAllowed)
 		return
 	}
-	err := r.ParseForm()
+	err = r.ParseForm()
 	if err != nil {
 		log.Printf("[api-handleConfig-1] could not parse form err: %s", err.Error())
 		w.WriteHeader(http.StatusBadRequest)
