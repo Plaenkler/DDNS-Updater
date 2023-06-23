@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"net"
 	"net/http"
 )
 
@@ -20,13 +21,38 @@ func GetPublicIP() (string, error) {
 			continue
 		}
 		defer resp.Body.Close()
-		ipBytes, err := io.ReadAll(resp.Body)
+		bytes, err := io.ReadAll(resp.Body)
 		if err != nil {
 			log.Printf("[resolver-2] %s failed: %s", r, err)
 			continue
 		}
-		log.Printf("[resolver-3] %s succeeded: %s", r, string(ipBytes))
-		return string(ipBytes), nil
+		addr := string(bytes)
+		if !isValidIPAddress(addr) {
+			log.Printf("[resolver-3] %s failed: %s", r, addr)
+			continue
+		}
+		log.Printf("[resolver-4] %s succeeded: %s", r, addr)
+		return addr, nil
 	}
-	return "", fmt.Errorf("[resolver-4] all resolvers failed")
+	return "", fmt.Errorf("[resolver-5] all resolvers failed")
+}
+
+func isValidIPAddress(ip string) bool {
+	addr := net.ParseIP(ip)
+	if addr == nil {
+		return false
+	}
+	if addr.IsUnspecified() {
+		return false
+	}
+	if addr.IsPrivate() {
+		return false
+	}
+	if addr.IsLoopback() {
+		return false
+	}
+	if addr.IsMulticast() {
+		return false
+	}
+	return true
 }
