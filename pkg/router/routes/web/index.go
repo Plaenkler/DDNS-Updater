@@ -10,7 +10,7 @@ import (
 	"github.com/plaenkler/ddns/pkg/database"
 	"github.com/plaenkler/ddns/pkg/database/model"
 	"github.com/plaenkler/ddns/pkg/ddns"
-	"github.com/plaenkler/ddns/pkg/util/limit"
+	"github.com/plaenkler/ddns/pkg/router/limiter"
 )
 
 var (
@@ -26,7 +26,7 @@ type structIndex struct {
 }
 
 func ProvideIndex(writer http.ResponseWriter, request *http.Request) {
-	err := limit.IsOverLimit(request)
+	err := limiter.IsOverLimit(request)
 	if err != nil {
 		writer.WriteHeader(http.StatusTooManyRequests)
 		fmt.Fprintf(writer, "[provide-index-1] too many requests")

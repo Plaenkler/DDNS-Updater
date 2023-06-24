@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/plaenkler/ddns/pkg/util/shttpr"
+	"github.com/plaenkler/ddns/pkg/util"
 )
 
 type UpdateDynuRequest struct {
@@ -19,7 +19,7 @@ func UpdateDynu(request interface{}, ipAddr string) error {
 		return fmt.Errorf("invalid request type: %T", request)
 	}
 	urlStr := fmt.Sprintf("https://%s:%s@api.dynu.com/nic/update?myip=%s&myipv6=", r.User, r.Password, ipAddr)
-	resp, err := shttpr.SendHTTPRequest(http.MethodGet, urlStr, nil)
+	resp, err := util.SendHTTPRequest(http.MethodGet, urlStr, nil)
 	if err != nil {
 		return err
 	}

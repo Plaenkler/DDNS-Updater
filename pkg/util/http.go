@@ -1,4 +1,4 @@
-package shttpr
+package util
 
 import (
 	"bytes"

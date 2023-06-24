@@ -6,11 +6,11 @@ import (
 	"strconv"
 
 	"github.com/plaenkler/ddns/pkg/config"
-	"github.com/plaenkler/ddns/pkg/util/limit"
+	"github.com/plaenkler/ddns/pkg/router/limiter"
 )
 
 func UpdateConfig(w http.ResponseWriter, r *http.Request) {
-	err := limit.IsOverLimit(r)
+	err := limiter.IsOverLimit(r)
 	if err != nil {
 		w.WriteHeader(http.StatusTooManyRequests)
 		return

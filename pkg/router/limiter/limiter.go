@@ -1,4 +1,4 @@
-package limit
+package limiter
 
 import (
 	"fmt"
@@ -44,7 +44,7 @@ func getRealClientIP(request *http.Request) (string, error) {
 func IsOverLimit(request *http.Request) error {
 	addr, err := getRealClientIP(request)
 	if err != nil {
-		return fmt.Errorf("[util-IsOverLimit-1] could not get client ip address")
+		return fmt.Errorf("[limiter-IsOverLimit-1] could not get client ip address")
 	}
 	iplm, ok := ipLimiters[addr]
 	if !ok {
@@ -55,7 +55,7 @@ func IsOverLimit(request *http.Request) error {
 		ipLimiters[addr] = iplm
 	}
 	if !iplm.limiter.Allow() {
-		return fmt.Errorf("[util-IsOverLimit-2] ip address %s is over limit", addr)
+		return fmt.Errorf("[limiter-IsOverLimit-2] ip address %s is over limit", addr)
 	}
 	return nil
 }

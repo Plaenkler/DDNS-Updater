@@ -9,12 +9,12 @@ import (
 	"github.com/plaenkler/ddns/pkg/database"
 	"github.com/plaenkler/ddns/pkg/database/model"
 	"github.com/plaenkler/ddns/pkg/ddns"
-	"github.com/plaenkler/ddns/pkg/util/limit"
+	"github.com/plaenkler/ddns/pkg/router/limiter"
 	"gorm.io/gorm"
 )
 
 func CreateJob(w http.ResponseWriter, r *http.Request) {
-	err := limit.IsOverLimit(r)
+	err := limiter.IsOverLimit(r)
 	if err != nil {
 		w.WriteHeader(http.StatusTooManyRequests)
 		return
@@ -59,7 +59,7 @@ func CreateJob(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdateJob(w http.ResponseWriter, r *http.Request) {
-	err := limit.IsOverLimit(r)
+	err := limiter.IsOverLimit(r)
 	if err != nil {
 		w.WriteHeader(http.StatusTooManyRequests)
 		return
@@ -113,7 +113,7 @@ func UpdateJob(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeleteJob(w http.ResponseWriter, r *http.Request) {
-	err := limit.IsOverLimit(r)
+	err := limiter.IsOverLimit(r)
 	if err != nil {
 		w.WriteHeader(http.StatusTooManyRequests)
 		return
