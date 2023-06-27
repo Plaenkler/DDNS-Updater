@@ -5,15 +5,9 @@ import (
 	"net/http"
 
 	"github.com/plaenkler/ddns/pkg/ddns"
-	"github.com/plaenkler/ddns/pkg/router/limiter"
 )
 
 func GetInputs(w http.ResponseWriter, r *http.Request) {
-	err := limiter.IsOverLimit(r)
-	if err != nil {
-		w.WriteHeader(http.StatusTooManyRequests)
-		return
-	}
 	provider := r.URL.Query().Get("provider")
 	if provider == "" {
 		http.Error(w, "[api-GetInputs-1] missing provider", http.StatusBadRequest)

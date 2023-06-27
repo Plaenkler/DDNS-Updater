@@ -5,16 +5,16 @@ import (
 
 	"github.com/plaenkler/ddns/pkg/database"
 	"github.com/plaenkler/ddns/pkg/ddns"
-	"github.com/plaenkler/ddns/pkg/router"
+	"github.com/plaenkler/ddns/pkg/server"
 )
 
 func init() {
 	database.GetManager().Start()
-	log.Printf("[main-init-1] database started")
+	log.Printf("[main-init-1] initialized database")
 }
 
 func main() {
 	go ddns.Run()
-	log.Printf("[main-main-1] ddns service started")
-	router.GetManager().Start()
+	log.Printf("[main-main-1] started ddns service")
+	server.GetManager().Start()
 }

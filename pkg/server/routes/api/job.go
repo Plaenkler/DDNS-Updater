@@ -9,21 +9,15 @@ import (
 	"github.com/plaenkler/ddns/pkg/database"
 	"github.com/plaenkler/ddns/pkg/database/model"
 	"github.com/plaenkler/ddns/pkg/ddns"
-	"github.com/plaenkler/ddns/pkg/router/limiter"
 	"gorm.io/gorm"
 )
 
 func CreateJob(w http.ResponseWriter, r *http.Request) {
-	err := limiter.IsOverLimit(r)
-	if err != nil {
-		w.WriteHeader(http.StatusTooManyRequests)
-		return
-	}
 	if r.Method != http.MethodPost {
 		w.WriteHeader(http.StatusMethodNotAllowed)
 		return
 	}
-	err = r.ParseForm()
+	err := r.ParseForm()
 	if err != nil {
 		log.Printf("[api-CreateJob-1] could not parse form - error: %s", err)
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
@@ -59,16 +53,11 @@ func CreateJob(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdateJob(w http.ResponseWriter, r *http.Request) {
-	err := limiter.IsOverLimit(r)
-	if err != nil {
-		w.WriteHeader(http.StatusTooManyRequests)
-		return
-	}
 	if r.Method != http.MethodPost {
 		w.WriteHeader(http.StatusMethodNotAllowed)
 		return
 	}
-	err = r.ParseForm()
+	err := r.ParseForm()
 	if err != nil {
 		http.Error(w, "Could not parse form", http.StatusBadRequest)
 		log.Printf("[api-UpdateJob-1] could not parse form - error: %s", err)
@@ -113,11 +102,6 @@ func UpdateJob(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeleteJob(w http.ResponseWriter, r *http.Request) {
-	err := limiter.IsOverLimit(r)
-	if err != nil {
-		w.WriteHeader(http.StatusTooManyRequests)
-		return
-	}
 	strID := r.URL.Query().Get("ID")
 	if len(strID) == 0 {
 		log.Printf("[api-DeleteJob-1] ID is not set")

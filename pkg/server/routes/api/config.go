@@ -6,39 +6,33 @@ import (
 	"strconv"
 
 	"github.com/plaenkler/ddns/pkg/config"
-	"github.com/plaenkler/ddns/pkg/router/limiter"
 )
 
 func UpdateConfig(w http.ResponseWriter, r *http.Request) {
-	err := limiter.IsOverLimit(r)
-	if err != nil {
-		w.WriteHeader(http.StatusTooManyRequests)
-		return
-	}
 	if r.Method != http.MethodPost {
 		w.WriteHeader(http.StatusMethodNotAllowed)
 		return
 	}
-	err = r.ParseForm()
+	err := r.ParseForm()
 	if err != nil {
-		log.Printf("[api-handleConfig-1] could not parse form err: %s", err.Error())
+		log.Printf("[api-UpdateConfig-1] could not parse form err: %s", err.Error())
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 	if len(r.FormValue("interval")) < 1 {
-		log.Printf("[api-handleConfig-2] interval is not valid")
+		log.Printf("[api-UpdateConfig-2] interval is not valid")
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 	port, err := strconv.ParseUint(r.FormValue("port"), 10, 16)
 	if err != nil {
-		log.Printf("[api-handleConfig-3] port is not valid - error: %s", err)
+		log.Printf("[api-UpdateConfig-3] port is not valid - error: %s", err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 	interval, err := strconv.ParseUint(r.FormValue("interval"), 10, 64)
 	if err != nil {
-		log.Printf("[api-handleConfig-4] interval is not valid - error: %s", err)
+		log.Printf("[api-UpdateConfig-4] interval is not valid - error: %s", err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
