@@ -38,7 +38,7 @@ func Run() {
 				continue
 			}
 			if len(jobs) == 0 {
-				log.Printf("[ddns-Run-4] no DDNS job to update current IP address %s", address)
+				log.Println("[ddns-Run-4] no dynamic DNS record needs to be updated")
 				continue
 			}
 			for _, job := range jobs {
