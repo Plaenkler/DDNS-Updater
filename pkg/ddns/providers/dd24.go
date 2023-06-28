@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
-
-	"github.com/plaenkler/ddns/pkg/util"
 )
 
 type UpdateDD24Request struct {
@@ -20,7 +18,7 @@ func UpdateDD24(request interface{}, ipAddr string) error {
 		return fmt.Errorf("invalid request type: %T", request)
 	}
 	urlStr := fmt.Sprintf("https://dynamicdns.key-systems.net/update.php?hostname=%s&password=%s&ip=%s", r.Host, r.Password, ipAddr)
-	resp, err := util.SendHTTPRequest(http.MethodGet, urlStr, nil)
+	resp, err := SendHTTPRequest(http.MethodGet, urlStr, nil)
 	if err != nil {
 		return err
 	}

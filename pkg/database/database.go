@@ -36,7 +36,7 @@ func (manager *Manager) Start() {
 	startOnce.Do(func() {
 		db, err := manager.connect()
 		if err != nil {
-			log.Fatalf("[start-1] connection failed - error: %s", err.Error())
+			log.Fatalf("[database-Start-1] connection failed - error: %s", err.Error())
 		}
 		manager.DB = db
 		err = manager.DB.AutoMigrate(
@@ -44,7 +44,7 @@ func (manager *Manager) Start() {
 			&model.IPAddress{},
 		)
 		if err != nil {
-			log.Fatalf("[start-2] migration failed - error: %s", err.Error())
+			log.Fatalf("[database-Start-2] migration failed - error: %s", err.Error())
 		}
 	})
 }

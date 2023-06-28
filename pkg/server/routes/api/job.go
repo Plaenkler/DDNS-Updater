@@ -27,7 +27,7 @@ func CreateJob(w http.ResponseWriter, r *http.Request) {
 	updater, ok := ddns.GetUpdaters()[provider]
 	if !ok {
 		http.Error(w, "Invalid provider", http.StatusBadRequest)
-		log.Printf("[api-CreateJob-3] provider is not valid")
+		log.Printf("[api-CreateJob-2] provider is not valid")
 		return
 	}
 	jobModel := &updater.Request

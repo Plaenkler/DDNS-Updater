@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"net"
 	"net/http"
 )
 
@@ -16,17 +17,42 @@ func GetPublicIP() (string, error) {
 	for r := range resolvers {
 		resp, err := http.Get(resolvers[r])
 		if err != nil {
-			log.Printf("[resolver-1] %s failed: %s", r, err)
+			log.Printf("[ddns-GetPublicIP-1] %s failed: %s", r, err)
 			continue
 		}
 		defer resp.Body.Close()
-		ipBytes, err := io.ReadAll(resp.Body)
+		bytes, err := io.ReadAll(resp.Body)
 		if err != nil {
-			log.Printf("[resolver-2] %s failed: %s", r, err)
+			log.Printf("[ddns-GetPublicIP-2] %s failed: %s", r, err)
 			continue
 		}
-		log.Printf("[resolver-3] %s resolved public IP address: %s", r, string(ipBytes))
-		return string(ipBytes), nil
+		addr := string(bytes)
+		if !isValidIPAddress(addr) {
+			log.Printf("[ddns-GetPublicIP-3] %s failed: %s", r, addr)
+			continue
+		}
+		log.Printf("[ddns-GetPublicIP-4] %s succeeded: %s", r, addr)
+		return addr, nil
 	}
-	return "", fmt.Errorf("[resolver-4] all resolvers failed")
+	return "", fmt.Errorf("[ddns-GetPublicIP-5] all resolvers failed")
+}
+
+func isValidIPAddress(ip string) bool {
+	addr := net.ParseIP(ip)
+	if addr == nil {
+		return false
+	}
+	if addr.IsUnspecified() {
+		return false
+	}
+	if addr.IsPrivate() {
+		return false
+	}
+	if addr.IsLoopback() {
+		return false
+	}
+	if addr.IsMulticast() {
+		return false
+	}
+	return true
 }

@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
-
-	"github.com/plaenkler/ddns/pkg/util"
 )
 
 type UpdateStratoRequest struct {
@@ -20,7 +18,7 @@ func UpdateStrato(request interface{}, ipAddr string) error {
 		return fmt.Errorf("invalid request type: %T", request)
 	}
 	urlStr := fmt.Sprintf("https://%s:%s@dyndns.strato.com/nic/update?hostname=%s&myip=%s", r.User, r.Password, r.Domain, ipAddr)
-	resp, err := util.SendHTTPRequest(http.MethodGet, urlStr, nil)
+	resp, err := SendHTTPRequest(http.MethodGet, urlStr, nil)
 	if err != nil {
 		return err
 	}
