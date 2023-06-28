@@ -41,7 +41,7 @@ func (m *Manager) Start() {
 		if err != nil {
 			log.Fatalf("[server-Start-1] could not provide files - error: %s", err)
 		}
-		m.startServer()
+		m.initializeServer()
 	})
 }
 
@@ -57,7 +57,7 @@ func (m *Manager) initializeRouter() {
 	m.Router = r.ServeMux
 }
 
-func (m *Manager) startServer() {
+func (m *Manager) initializeServer() {
 	config := config.GetConfig()
 	server := &http.Server{
 		Addr:              fmt.Sprintf(":%v", config.Port),
@@ -79,7 +79,7 @@ func (m *Manager) startServer() {
 	}
 	err := server.ListenAndServe()
 	if err != nil {
-		log.Fatalf("[server-startServer-1] failed starting router - error: %s", err.Error())
+		log.Fatalf("[server-initializeServer-1] failed starting router - error: %s", err.Error())
 	}
 }
 
