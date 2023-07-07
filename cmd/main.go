@@ -16,5 +16,5 @@ func init() {
 func main() {
 	go ddns.Run()
 	log.Printf("[main-main-1] started ddns service")
-	server.GetManager().Start()
+	server.StartService()
 }
