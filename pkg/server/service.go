@@ -15,7 +15,8 @@ import (
 )
 
 var (
-	lock   sync.Mutex
+	lock sync.Mutex
+	//go:embed routes/web/static
 	static embed.FS
 	router *http.ServeMux
 )
