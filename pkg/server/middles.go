@@ -7,7 +7,7 @@ import (
 
 func limitRequests(handler http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		err := IsOverLimit(r)
+		err := isOverLimit(r)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusTooManyRequests)
 			return
@@ -30,5 +30,12 @@ func forwardToProxy(handler http.Handler) http.Handler {
 		}
 		r.URL.Host = fmt.Sprintf("%s:%s", addr, port)
 		handler.ServeHTTP(w, r)
+	})
+}
+
+func controlCache(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Cache-Control", "public, max-age=86400")
+		next.ServeHTTP(w, r)
 	})
 }
