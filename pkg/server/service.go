@@ -23,26 +23,16 @@ var (
 func StartService() {
 	lock.Lock()
 	defer lock.Unlock()
-	err := initializeRouter()
-	if err != nil {
-		log.Fatalf("[server-StartService-1] could not initialize router: %v", err)
-	}
-	err = initializeServer()
-	if err != nil {
-		log.Fatalf("[server-StartService-2] could not initialize server: %v", err)
-	}
+	initializeRouter()
+	initializeServer()
 }
 
-func initializeRouter() error {
+func initializeRouter() {
 	r := NewRouter()
 	registerMiddlewares(r)
 	registerAPIRoutes(r)
+	registerStaticFiles(r)
 	router = r.ServeMux
-	err := registerStaticFiles(router)
-	if err != nil {
-		return err
-	}
-	return nil
 }
 
 func registerMiddlewares(r *Router) {
@@ -59,21 +49,23 @@ func registerAPIRoutes(r *Router) {
 	r.HandleFunc("/api/config/update", api.UpdateConfig)
 }
 
-func registerStaticFiles(router *http.ServeMux) error {
-	fs, err := fs.Sub(static, "routes/web/static")
-	if err != nil {
-		return err
-	}
-	router.Handle("/js/", http.FileServer(http.FS(fs)))
-	router.Handle("/css/", http.FileServer(http.FS(fs)))
-	router.Handle("/img/", http.FileServer(http.FS(fs)))
-	return nil
+func registerStaticFiles(r *Router) {
+	staticHandler := createStaticHandler()
+	r.Handle("/js/", staticHandler)
+	r.Handle("/css/", staticHandler)
 }
 
-func initializeServer() error {
-	config := config.GetConfig()
+func createStaticHandler() http.Handler {
+	fs, err := fs.Sub(static, "routes/web/static")
+	if err != nil {
+		log.Fatalf("[server-createStaticHandler-1] could not create static handler: %v", err)
+	}
+	return controlCache(http.FileServer(http.FS(fs)))
+}
+
+func initializeServer() {
 	server := &http.Server{
-		Addr:              fmt.Sprintf(":%v", config.Port),
+		Addr:              fmt.Sprintf(":%v", config.GetConfig().Port),
 		ReadTimeout:       15 * time.Second,
 		ReadHeaderTimeout: 5 * time.Second,
 		WriteTimeout:      15 * time.Second,
@@ -82,7 +74,6 @@ func initializeServer() error {
 	}
 	err := server.ListenAndServe()
 	if err != nil {
-		return err
+		log.Fatalf("[server-initializeServer-1] could not initialize server: %v", err)
 	}
-	return nil
 }
