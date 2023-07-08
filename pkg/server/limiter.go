@@ -14,7 +14,7 @@ type ipLimiter struct {
 
 var ipLimiters = map[string]ipLimiter{}
 
-func IsOverLimit(r *http.Request) error {
+func isOverLimit(r *http.Request) error {
 	addr, err := getRealClientIP(r)
 	if err != nil {
 		return fmt.Errorf("[server-IsOverLimit-1] could not get client ip address")
@@ -22,7 +22,7 @@ func IsOverLimit(r *http.Request) error {
 	iplm, ok := ipLimiters[addr]
 	if !ok {
 		iplm = ipLimiter{
-			limiter: rate.NewLimiter(1, 3),
+			limiter: rate.NewLimiter(1, 8),
 			address: addr,
 		}
 		ipLimiters[addr] = iplm
