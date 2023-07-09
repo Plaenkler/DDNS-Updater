@@ -1,11 +1,11 @@
-# 🌐 DDNS
+# 🌐 DDNS Updater
 
 [![License](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 [![Release](https://img.shields.io/badge/Calver-YY.WW.REVISION-22bfda.svg)](https://calver.org/)
-[![Linters](https://github.com/Plaenkler/DDNS/actions/workflows/linters.yml/badge.svg)](https://github.com/Plaenkler/DDNS/actions/workflows/linters.yml)
+[![Linters](https://github.com/plaenkler/ddns-updater/actions/workflows/linters.yml/badge.svg)](https://github.com/plaenkler/ddns-updater/actions/workflows/linters.yml)
 [![Support me](https://img.shields.io/badge/Support%20me%20%E2%98%95-orange.svg)](https://www.buymeacoffee.com/Plaenkler)
 
-DDNS provides a straightforward way to update dynamic DNS entries without fiddling around in the command-line or a file. The easy to use interface allows for uncomplicated setup and management.
+DDNS Updater provides a straightforward way to update dynamic DNS entries without fiddling around in the command-line or a file. The easy to use interface allows for uncomplicated setup and management.
 
 > **Note:** If your DynDNS provider is not listed open an issue and I will integrate it.
 
@@ -60,14 +60,14 @@ networks:
     external: false
 ```
 
-> **Note:** DDNS can also be deployed behind a proxy like [Traefik](https://doc.traefik.io/traefik/).
+> **Note:** DDNS Updater can also be deployed behind a proxy like [Traefik](https://doc.traefik.io/traefik/).
 
 ### Build from source
 
 From the root of the source tree, run:
 
 ```text
-go build -o ddns.exe cmd/main.go
+go build -o ddns-updater.exe cmd/main.go
 ```
 
 > **Note:** Make sure that CGO is operational!
