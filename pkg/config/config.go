@@ -55,6 +55,27 @@ func loadConfig() error {
 	return nil
 }
 
+func createConfig() error {
+	config := Config{
+		Port:     80,
+		Interval: 600,
+	}
+	err := os.MkdirAll(filepath.Dir(pathToConfig), configDirPerm)
+	if err != nil {
+		return err
+	}
+	data, err := yaml.Marshal(&config)
+	if err != nil {
+		return err
+	}
+	err = os.WriteFile(pathToConfig, data, configFilePerm)
+	if err != nil {
+		return err
+	}
+	log.Println("[config-createConfig-1] created default configuration")
+	return nil
+}
+
 func loadConfigFromEnv() {
 	port, err := parseUintEnv("APP_PORT")
 	if err == nil {
@@ -76,27 +97,6 @@ func parseUintEnv(envName string) (uint64, error) {
 		return 0, err
 	}
 	return value, nil
-}
-
-func createConfig() error {
-	config := Config{
-		Port:     80,
-		Interval: 600,
-	}
-	err := os.MkdirAll(filepath.Dir(pathToConfig), configDirPerm)
-	if err != nil {
-		return err
-	}
-	data, err := yaml.Marshal(&config)
-	if err != nil {
-		return err
-	}
-	err = os.WriteFile(pathToConfig, data, configFilePerm)
-	if err != nil {
-		return err
-	}
-	log.Println("[config-createConfig-1] created default configuration")
-	return nil
 }
 
 func UpdateConfig(updatedConfig *Config) error {
