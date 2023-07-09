@@ -4,7 +4,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"sync"
+	"strconv"
 
 	"gopkg.in/yaml.v3"
 )
@@ -20,24 +20,21 @@ const (
 	configFilePerm = 0644
 )
 
-var (
-	once     sync.Once
-	instance *Config
-)
+var config *Config
 
 func GetConfig() *Config {
-	once.Do(func() {
-		err := initConfig()
+	if config == nil {
+		err := loadConfig()
 		if err != nil {
 			log.Fatalf("[config-GetConfig-1] initialization failed - error: %s", err.Error())
 		}
-	})
-	return instance
+	}
+	return config
 }
 
-func initConfig() error {
-	instance = &Config{}
-	if _, err := os.Stat(pathToConfig); err != nil {
+func loadConfig() error {
+	_, err := os.Stat(pathToConfig)
+	if os.IsNotExist(err) {
 		err = createConfig()
 		if err != nil {
 			return err
@@ -48,11 +45,37 @@ func initConfig() error {
 		return err
 	}
 	defer file.Close()
-	err = yaml.NewDecoder(file).Decode(&instance)
+	instance := &Config{}
+	err = yaml.NewDecoder(file).Decode(instance)
 	if err != nil {
 		return err
 	}
+	config = instance
+	loadConfigFromEnv()
 	return nil
+}
+
+func loadConfigFromEnv() {
+	port, err := parseUintEnv("APP_PORT")
+	if err == nil {
+		config.Port = port
+	}
+	interval, err := parseUintEnv("APP_INTERVAL")
+	if err == nil {
+		config.Interval = interval
+	}
+}
+
+func parseUintEnv(envName string) (uint64, error) {
+	valueStr := os.Getenv(envName)
+	if valueStr == "" {
+		return 0, nil
+	}
+	value, err := strconv.ParseUint(valueStr, 10, 64)
+	if err != nil {
+		return 0, err
+	}
+	return value, nil
 }
 
 func createConfig() error {
@@ -60,11 +83,11 @@ func createConfig() error {
 		Port:     80,
 		Interval: 600,
 	}
-	data, err := yaml.Marshal(&config)
+	err := os.MkdirAll(filepath.Dir(pathToConfig), configDirPerm)
 	if err != nil {
 		return err
 	}
-	err = os.MkdirAll(filepath.Dir(pathToConfig), configDirPerm)
+	data, err := yaml.Marshal(&config)
 	if err != nil {
 		return err
 	}
@@ -76,8 +99,8 @@ func createConfig() error {
 	return nil
 }
 
-func UpdateConfig(config *Config) error {
-	data, err := yaml.Marshal(&config)
+func UpdateConfig(updatedConfig *Config) error {
+	data, err := yaml.Marshal(updatedConfig)
 	if err != nil {
 		return err
 	}
@@ -85,6 +108,6 @@ func UpdateConfig(config *Config) error {
 	if err != nil {
 		return err
 	}
-	instance = config
+	config = updatedConfig
 	return nil
 }
