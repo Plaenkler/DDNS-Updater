@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"sync"
 
-	"github.com/plaenkler/ddns/pkg/database/model"
+	"github.com/plaenkler/ddns-updater/pkg/database/model"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )

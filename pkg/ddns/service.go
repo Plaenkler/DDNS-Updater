@@ -6,9 +6,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/plaenkler/ddns/pkg/config"
-	"github.com/plaenkler/ddns/pkg/database"
-	"github.com/plaenkler/ddns/pkg/database/model"
+	"github.com/plaenkler/ddns-updater/pkg/config"
+	"github.com/plaenkler/ddns-updater/pkg/database"
+	"github.com/plaenkler/ddns-updater/pkg/database/model"
 )
 
 var run sync.Once

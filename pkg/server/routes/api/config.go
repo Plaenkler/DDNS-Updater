@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/plaenkler/ddns/pkg/config"
+	"github.com/plaenkler/ddns-updater/pkg/config"
 )
 
 func UpdateConfig(w http.ResponseWriter, r *http.Request) {

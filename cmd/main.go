@@ -3,9 +3,9 @@ package main
 import (
 	"log"
 
-	"github.com/plaenkler/ddns/pkg/database"
-	"github.com/plaenkler/ddns/pkg/ddns"
-	"github.com/plaenkler/ddns/pkg/server"
+	"github.com/plaenkler/ddns-updater/pkg/database"
+	"github.com/plaenkler/ddns-updater/pkg/ddns"
+	"github.com/plaenkler/ddns-updater/pkg/server"
 )
 
 func init() {
