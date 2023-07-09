@@ -51,7 +51,10 @@ func loadConfig() error {
 		return err
 	}
 	config = instance
-	loadConfigFromEnv()
+	err = loadConfigFromEnv()
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -76,15 +79,22 @@ func createConfig() error {
 	return nil
 }
 
-func loadConfigFromEnv() {
+func loadConfigFromEnv() error {
 	port, err := parseUintEnv("APP_PORT")
-	if err == nil {
+	if err != nil {
+		return err
+	}
+	if port != 0 {
 		config.Port = port
 	}
 	interval, err := parseUintEnv("APP_INTERVAL")
 	if err == nil {
+		return err
+	}
+	if interval != 0 {
 		config.Interval = interval
 	}
+	return nil
 }
 
 func parseUintEnv(envName string) (uint64, error) {
