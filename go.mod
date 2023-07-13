@@ -1,4 +1,4 @@
-module github.com/plaenkler/ddns
+module github.com/plaenkler/ddns-updater
 
 go 1.20
 

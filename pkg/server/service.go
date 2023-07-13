@@ -9,9 +9,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/plaenkler/ddns/pkg/config"
-	"github.com/plaenkler/ddns/pkg/server/routes/api"
-	"github.com/plaenkler/ddns/pkg/server/routes/web"
+	"github.com/plaenkler/ddns-updater/pkg/config"
+	"github.com/plaenkler/ddns-updater/pkg/server/routes/api"
+	"github.com/plaenkler/ddns-updater/pkg/server/routes/web"
 )
 
 var (

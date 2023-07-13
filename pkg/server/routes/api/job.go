@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/plaenkler/ddns/pkg/database"
-	"github.com/plaenkler/ddns/pkg/database/model"
-	"github.com/plaenkler/ddns/pkg/ddns"
+	"github.com/plaenkler/ddns-updater/pkg/database"
+	"github.com/plaenkler/ddns-updater/pkg/database/model"
+	"github.com/plaenkler/ddns-updater/pkg/ddns"
 	"gorm.io/gorm"
 )
 

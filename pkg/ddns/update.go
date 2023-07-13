@@ -1,6 +1,6 @@
 package ddns
 
-import "github.com/plaenkler/ddns/pkg/ddns/providers"
+import "github.com/plaenkler/ddns-updater/pkg/ddns/providers"
 
 type updater func(request interface{}, ipAddr string) error
 

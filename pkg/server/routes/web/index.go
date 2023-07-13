@@ -6,10 +6,10 @@ import (
 	"html/template"
 	"net/http"
 
-	"github.com/plaenkler/ddns/pkg/config"
-	"github.com/plaenkler/ddns/pkg/database"
-	"github.com/plaenkler/ddns/pkg/database/model"
-	"github.com/plaenkler/ddns/pkg/ddns"
+	"github.com/plaenkler/ddns-updater/pkg/config"
+	"github.com/plaenkler/ddns-updater/pkg/database"
+	"github.com/plaenkler/ddns-updater/pkg/database/model"
+	"github.com/plaenkler/ddns-updater/pkg/ddns"
 )
 
 var (
