@@ -1,12 +1,12 @@
 package database
 
 import (
-	"log"
 	"os"
 	"path/filepath"
 	"sync"
 
 	"github.com/plaenkler/ddns-updater/pkg/database/model"
+	log "github.com/plaenkler/ddns-updater/pkg/logging"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -16,47 +16,76 @@ const (
 )
 
 var (
-	managerOnce sync.Once
-	startOnce   sync.Once
-	instance    *Manager
+	mu sync.Mutex
+	db *gorm.DB
 )
 
-type Manager struct {
-	DB *gorm.DB
+func StartService() {
+	mu.Lock()
+	defer mu.Unlock()
+	if db != nil {
+		return
+	}
+	err := createDBDir()
+	if err != nil {
+		log.Fatalf("[database-StartService-1] failed to create database directory: %s", err.Error())
+	}
+	db, err = openDBConnection()
+	if err != nil {
+		log.Fatalf("[database-StartService-2] failed to open database connection: %s", err.Error())
+	}
+	err = migrateDBSchema(db)
+	if err != nil {
+		log.Fatalf("[database-StartService-3] failed to migrate database schema: %s", err.Error())
+	}
 }
 
-func GetManager() *Manager {
-	managerOnce.Do(func() {
-		instance = &Manager{}
-	})
-	return instance
-}
-
-func (manager *Manager) Start() {
-	startOnce.Do(func() {
-		db, err := manager.connect()
-		if err != nil {
-			log.Fatalf("[database-Start-1] connection failed - error: %s", err.Error())
-		}
-		manager.DB = db
-		err = manager.DB.AutoMigrate(
-			&model.SyncJob{},
-			&model.IPAddress{},
-		)
-		if err != nil {
-			log.Fatalf("[database-Start-2] migration failed - error: %s", err.Error())
-		}
-	})
-}
-
-func (m *Manager) connect() (*gorm.DB, error) {
+func createDBDir() error {
 	err := os.MkdirAll(filepath.Dir(pathToDB), 0755)
 	if err != nil {
-		return nil, err
+		return err
 	}
+	return nil
+}
+
+func openDBConnection() (*gorm.DB, error) {
 	db, err := gorm.Open(sqlite.Open(pathToDB))
 	if err != nil {
 		return nil, err
 	}
 	return db, nil
+}
+
+func migrateDBSchema(db *gorm.DB) error {
+	err := db.AutoMigrate(
+		&model.SyncJob{},
+		&model.IPAddress{},
+	)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func StopService() {
+	if db == nil {
+		return
+	}
+	sqlDB, err := db.DB()
+	if err != nil {
+		log.Errorf("[database-StopService-1] failed to get underlying DB connection - error: %s", err.Error())
+		return
+	}
+	err = sqlDB.Close()
+	if err != nil {
+		log.Errorf("[database-StopService-2] failed to close DB connection - error: %s", err.Error())
+	}
+	db = nil
+}
+
+func GetDatabase() *gorm.DB {
+	if db == nil {
+		return nil
+	}
+	return db
 }
