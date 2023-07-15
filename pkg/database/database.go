@@ -84,8 +84,5 @@ func StopService() {
 }
 
 func GetDatabase() *gorm.DB {
-	if db == nil {
-		return nil
-	}
 	return db
 }
