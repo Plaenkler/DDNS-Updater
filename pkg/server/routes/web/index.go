@@ -52,16 +52,22 @@ func ProvideIndex(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "[web-ProvideIndex-3] could not get public IP address - error: %s", err)
 		return
 	}
-	err = database.GetManager().DB.Find(&data.Jobs).Error
+	db := database.GetDatabase()
+	if db == nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprintf(w, "[web-ProvideIndex-4] could not get database connection")
+		return
+	}
+	err = db.Find(&data.Jobs).Error
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintf(w, "[web-ProvideIndex-4] could not find jobs - error: %s", err)
+		fmt.Fprintf(w, "[web-ProvideIndex-5] could not find jobs - error: %s", err)
 		return
 	}
 	w.Header().Add("Content-Type", "text/html")
 	err = template.Execute(w, data)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintf(w, "[web-ProvideIndex-5] could not execute parsed template - error: %v", err)
+		fmt.Fprintf(w, "[web-ProvideIndex-6] could not execute parsed template - error: %v", err)
 	}
 }
