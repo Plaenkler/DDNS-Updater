@@ -1,15 +1,16 @@
 package server
 
 import (
+	"context"
 	"embed"
 	"fmt"
 	"io/fs"
-	"log"
 	"net/http"
 	"sync"
 	"time"
 
 	"github.com/plaenkler/ddns-updater/pkg/config"
+	log "github.com/plaenkler/ddns-updater/pkg/logging"
 	"github.com/plaenkler/ddns-updater/pkg/server/routes/api"
 	"github.com/plaenkler/ddns-updater/pkg/server/routes/web"
 )
@@ -19,6 +20,7 @@ var (
 	//go:embed routes/web/static
 	static embed.FS
 	router *http.ServeMux
+	server *http.Server
 )
 
 func StartService() {
@@ -65,7 +67,7 @@ func createStaticHandler() http.Handler {
 }
 
 func initializeServer() {
-	server := &http.Server{
+	server = &http.Server{
 		Addr:              fmt.Sprintf(":%v", config.GetConfig().Port),
 		ReadTimeout:       15 * time.Second,
 		ReadHeaderTimeout: 5 * time.Second,
@@ -74,7 +76,17 @@ func initializeServer() {
 		Handler:           router,
 	}
 	err := server.ListenAndServe()
-	if err != nil {
+	if err != nil && err != http.ErrServerClosed {
 		log.Fatalf("[server-initializeServer-1] could not initialize server: %v", err)
+	}
+}
+
+func StopService() {
+	if server == nil {
+		return
+	}
+	err := server.Shutdown(context.Background())
+	if err != nil {
+		log.Errorf("could not shutdown server: %v", err)
 	}
 }

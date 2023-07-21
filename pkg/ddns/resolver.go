@@ -3,9 +3,10 @@ package ddns
 import (
 	"fmt"
 	"io"
-	"log"
 	"net"
 	"net/http"
+
+	log "github.com/plaenkler/ddns-updater/pkg/logging"
 )
 
 var resolvers = map[string]string{
@@ -17,21 +18,21 @@ func GetPublicIP() (string, error) {
 	for r := range resolvers {
 		resp, err := http.Get(resolvers[r])
 		if err != nil {
-			log.Printf("[ddns-GetPublicIP-1] %s failed: %s", r, err)
+			log.Errorf("[ddns-GetPublicIP-1] %s failed: %s", r, err)
 			continue
 		}
 		defer resp.Body.Close()
 		bytes, err := io.ReadAll(resp.Body)
 		if err != nil {
-			log.Printf("[ddns-GetPublicIP-2] %s failed: %s", r, err)
+			log.Errorf("[ddns-GetPublicIP-2] %s failed: %s", r, err)
 			continue
 		}
 		addr := string(bytes)
 		if !isValidIPAddress(addr) {
-			log.Printf("[ddns-GetPublicIP-3] %s failed: %s", r, addr)
+			log.Errorf("[ddns-GetPublicIP-3] %s failed: %s", r, addr)
 			continue
 		}
-		log.Printf("[ddns-GetPublicIP-4] %s succeeded: %s", r, addr)
+		log.Infof("[ddns-GetPublicIP-4] %s succeeded: %s", r, addr)
 		return addr, nil
 	}
 	return "", fmt.Errorf("[ddns-GetPublicIP-5] all resolvers failed")

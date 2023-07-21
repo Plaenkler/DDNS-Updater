@@ -1,11 +1,11 @@
 package config
 
 import (
-	"log"
 	"os"
 	"path/filepath"
 	"strconv"
 
+	log "github.com/plaenkler/ddns-updater/pkg/logging"
 	"gopkg.in/yaml.v3"
 )
 
@@ -75,7 +75,7 @@ func createConfig() error {
 	if err != nil {
 		return err
 	}
-	log.Println("[config-createConfig-1] created default configuration")
+	log.Infof("[config-createConfig-1] created default configuration")
 	return nil
 }
 
