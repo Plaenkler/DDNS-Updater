@@ -22,14 +22,11 @@ const (
 
 var config *Config
 
-func GetConfig() *Config {
-	if config == nil {
-		err := loadConfig()
-		if err != nil {
-			log.Fatalf("[config-GetConfig-1] initialization failed - error: %s", err.Error())
-		}
+func init() {
+	err := loadConfig()
+	if err != nil {
+		log.Fatalf("[config-init-1] initialization failed - error: %s", err.Error())
 	}
-	return config
 }
 
 func loadConfig() error {
@@ -98,7 +95,10 @@ func loadConfigFromEnv() error {
 }
 
 func parseUintEnv(envName string) (uint64, error) {
-	valueStr := os.Getenv(envName)
+	valueStr, ok := os.LookupEnv(envName)
+	if !ok {
+		return 0, nil
+	}
 	if valueStr == "" {
 		return 0, nil
 	}
@@ -120,4 +120,8 @@ func UpdateConfig(updatedConfig *Config) error {
 	}
 	config = updatedConfig
 	return nil
+}
+
+func GetConfig() *Config {
+	return config
 }
