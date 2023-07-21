@@ -13,6 +13,7 @@ var resolvers = map[string]string{
 	"ipify": "https://api.ipify.org",
 	"my-ip": "https://api.my-ip.io/ip",
 	"ipych": "https://api.ipy.ch",
+	"intel": "https://nms.intellitrend.de",
 }
 
 func GetPublicIP() (string, error) {
