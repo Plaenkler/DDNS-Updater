@@ -1,5 +1,5 @@
-github.com/aliyun/alibaba-cloud-sdk-go v1.62.443 h1:jM+NWDOn1RSY7WRmbALGrRYcukO8t4FXLSQEyID2/dM=
-github.com/aliyun/alibaba-cloud-sdk-go v1.62.443/go.mod h1:Api2AkmMgGaSUAhmk76oaFObkoeCPc/bKAqcyplPODs=
+github.com/aliyun/alibaba-cloud-sdk-go v1.62.460 h1:1ee9IbO8Yb4kcU6XkPlIWWmfSh1q6apjAtc618ThJeM=
+github.com/aliyun/alibaba-cloud-sdk-go v1.62.460/go.mod h1:Api2AkmMgGaSUAhmk76oaFObkoeCPc/bKAqcyplPODs=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
