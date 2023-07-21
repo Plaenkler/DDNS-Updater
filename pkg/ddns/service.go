@@ -2,6 +2,7 @@ package ddns
 
 import (
 	"encoding/json"
+	"sync"
 	"time"
 
 	"github.com/plaenkler/ddns-updater/pkg/config"
@@ -11,9 +12,14 @@ import (
 	"gorm.io/gorm"
 )
 
-var stop chan bool
+var (
+	mu   sync.Mutex
+	stop chan bool
+)
 
 func StartService() {
+	mu.Lock()
+	defer mu.Unlock()
 	stop = make(chan bool)
 	interval := time.Second * time.Duration(config.GetConfig().Interval)
 	ticker := time.NewTicker(interval)
