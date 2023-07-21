@@ -1,6 +1,8 @@
 package model
 
-import "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
+)
 
 type SyncJob struct {
 	gorm.Model
@@ -13,4 +15,11 @@ type SyncJob struct {
 type IPAddress struct {
 	gorm.Model
 	Address string `gorm:"not null;unique"`
+}
+
+type User struct {
+	gorm.Model
+	Username string `gorm:"not null;unique"`
+	Password string `gorm:"not null"`
+	EMail    string `gorm:"not null;unique"`
 }
