@@ -10,11 +10,12 @@ import (
 )
 
 var resolvers = map[string]string{
-	"ipify": "https://api.ipify.org",
-	"my-ip": "https://api.my-ip.io/ip",
-	"ipych": "https://api.ipy.ch",
-	"intel": "https://nms.intellitrend.de",
-	"ident": "https://ident.me/",
+	"ipify":  "https://api.ipify.org",
+	"my-ip":  "https://api.my-ip.io/ip",
+	"ipych":  "https://api.ipy.ch",
+	"intel":  "https://nms.intellitrend.de",
+	"ident":  "https://ident.me/",
+	"ifconf": "https://ifconfig.me/ip",
 }
 
 func GetPublicIP() (string, error) {
