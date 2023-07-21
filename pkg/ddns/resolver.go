@@ -14,6 +14,7 @@ var resolvers = map[string]string{
 	"my-ip": "https://api.my-ip.io/ip",
 	"ipych": "https://api.ipy.ch",
 	"intel": "https://nms.intellitrend.de",
+	"ident": "https://ident.me/",
 }
 
 func GetPublicIP() (string, error) {
