@@ -5,6 +5,7 @@ import (
 	"io"
 	"net"
 	"net/http"
+	"strings"
 
 	"github.com/plaenkler/ddns-updater/pkg/config"
 	log "github.com/plaenkler/ddns-updater/pkg/logging"
@@ -48,11 +49,11 @@ func resolveIPAddress(url string) (string, error) {
 		return "", err
 	}
 	defer resp.Body.Close()
-	bytes, err := io.ReadAll(resp.Body)
+	bytes, err := io.ReadAll(io.LimitReader(resp.Body, 15))
 	if err != nil {
 		return "", err
 	}
-	addr := string(bytes)
+	addr := strings.TrimSpace(string(bytes))
 	if !isValidIPAddress(addr) {
 		return "", err
 	}
