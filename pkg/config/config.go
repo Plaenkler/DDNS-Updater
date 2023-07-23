@@ -1,6 +1,7 @@
 package config
 
 import (
+	"net/url"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -12,6 +13,7 @@ import (
 type Config struct {
 	Port     uint64 `yaml:"Port"`
 	Interval uint64 `yaml:"Interval"`
+	Resolver string `yaml:"Resolver"`
 }
 
 const (
@@ -77,19 +79,26 @@ func createConfig() error {
 }
 
 func loadConfigFromEnv() error {
-	port, err := parseUintEnv("APP_PORT")
+	port, err := parseUintEnv("DDNS_PORT")
 	if err != nil {
 		return err
 	}
 	if port != 0 {
 		config.Port = port
 	}
-	interval, err := parseUintEnv("APP_INTERVAL")
-	if err == nil {
+	interval, err := parseUintEnv("DDNS_INTERVAL")
+	if err != nil {
 		return err
 	}
 	if interval != 0 {
 		config.Interval = interval
+	}
+	resolver, err := parseURLEnv("DDNS_RESOLVER")
+	if err != nil {
+		return err
+	}
+	if resolver != "" {
+		config.Resolver = resolver
 	}
 	return nil
 }
@@ -99,12 +108,21 @@ func parseUintEnv(envName string) (uint64, error) {
 	if !ok {
 		return 0, nil
 	}
-	if valueStr == "" {
-		return 0, nil
-	}
 	value, err := strconv.ParseUint(valueStr, 10, 64)
 	if err != nil {
 		return 0, err
+	}
+	return value, nil
+}
+
+func parseURLEnv(envName string) (string, error) {
+	value, ok := os.LookupEnv(envName)
+	if !ok {
+		return "", nil
+	}
+	_, err := url.ParseRequestURI(value)
+	if err != nil {
+		return "", err
 	}
 	return value, nil
 }
