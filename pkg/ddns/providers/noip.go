@@ -19,7 +19,7 @@ func UpdateNoIP(request interface{}, ipAddr string) error {
 		return fmt.Errorf("invalid request type: %T", r)
 	}
 	urlStr := fmt.Sprintf("http://%s:%s@dynupdate.no-ip.com/nic/update?hostname=%s&myip=%s", r.Username, r.Password, r.Host, ipAddr)
-	req, err := http.NewRequest("GET", urlStr, nil)
+	req, err := http.NewRequest(http.MethodGet, urlStr, nil)
 	if err != nil {
 		return err
 	}
