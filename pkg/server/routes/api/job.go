@@ -13,10 +13,6 @@ import (
 )
 
 func CreateJob(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		w.WriteHeader(http.StatusMethodNotAllowed)
-		return
-	}
 	err := r.ParseForm()
 	if err != nil {
 		log.Errorf("[api-CreateJob-1] could not parse form - error: %s", err)
@@ -59,10 +55,6 @@ func CreateJob(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdateJob(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		w.WriteHeader(http.StatusMethodNotAllowed)
-		return
-	}
 	err := r.ParseForm()
 	if err != nil {
 		http.Error(w, "Could not parse form", http.StatusBadRequest)
