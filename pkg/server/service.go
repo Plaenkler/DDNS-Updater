@@ -16,7 +16,7 @@ import (
 )
 
 var (
-	lock sync.Mutex
+	mu sync.Mutex
 	//go:embed routes/web/static
 	static embed.FS
 	router *http.ServeMux
@@ -24,8 +24,11 @@ var (
 )
 
 func StartService() {
-	lock.Lock()
-	defer lock.Unlock()
+	mu.Lock()
+	defer mu.Unlock()
+	if server != nil {
+		return
+	}
 	initializeRouter()
 	initializeServer()
 }
@@ -89,4 +92,5 @@ func StopService() {
 	if err != nil {
 		log.Errorf("could not shutdown server: %v", err)
 	}
+	server = nil
 }

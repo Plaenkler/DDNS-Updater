@@ -11,27 +11,19 @@ import (
 )
 
 func main() {
-	start()
-	stop()
-}
-
-func start() {
 	database.StartService()
-	log.Infof("[main-start-1] started database connection")
+	log.Infof("[main-main-1] started database connection")
 	go ddns.StartService()
-	log.Infof("[main-start-2] started ddns service")
+	log.Infof("[main-main-2] started ddns service")
 	go server.StartService()
-	log.Infof("[main-start-3] started webserver")
-}
-
-func stop() {
+	log.Infof("[main-main-3] started webserver")
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt)
 	<-c
 	server.StopService()
-	log.Infof("[main-stop-1] stopped webserver")
+	log.Infof("[main-main-4] stopped webserver")
 	ddns.StopService()
-	log.Infof("[main-stop-2] stopped ddns service")
+	log.Infof("[main-main-5] stopped ddns service")
 	database.StopService()
-	log.Infof("[main-stop-3] stopped database connection")
+	log.Infof("[main-main-6] stopped database connection")
 }
