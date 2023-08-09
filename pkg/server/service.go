@@ -16,21 +16,18 @@ import (
 )
 
 var (
-	mu sync.Mutex
 	//go:embed routes/web/static
 	static embed.FS
+	oc     sync.Once
 	router *http.ServeMux
 	server *http.Server
 )
 
 func StartService() {
-	mu.Lock()
-	defer mu.Unlock()
-	if server != nil {
-		return
-	}
-	initializeRouter()
-	initializeServer()
+	oc.Do(func() {
+		initializeRouter()
+		initializeServer()
+	})
 }
 
 func initializeRouter() {
@@ -48,6 +45,7 @@ func registerMiddlewares(r *Router) {
 
 func registerAPIRoutes(r *Router) {
 	r.HandleFunc("/", web.ProvideIndex)
+	r.HandleFunc("/login", web.ProvideLogin)
 	r.HandleFunc("/api/inputs", api.GetInputs)
 	r.HandleFunc("/api/job/create", api.CreateJob)
 	r.HandleFunc("/api/job/update", api.UpdateJob)
@@ -92,5 +90,4 @@ func StopService() {
 	if err != nil {
 		log.Errorf("could not shutdown server: %v", err)
 	}
-	server = nil
 }

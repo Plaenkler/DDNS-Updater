@@ -1,0 +1,44 @@
+<!-- htmlhint doctype-first:false -->
+{{define "login"}}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no"
+        />
+        {{template "include-head" .}}
+        <link rel="stylesheet" href="/css/login.css" />
+        <title>DDNS Updater</title>
+    </head>
+    <body class="bg-dark">
+        <div class="container">
+            <div class="card bg-dark">
+                <form action="/api/login" method="POST">
+                    <div class="mb-3">
+                        <input
+                            type="password"
+                            class="form-control w-100 text-center"
+                            id="totp"
+                            name="totp"
+                            required
+                            placeholder="123456"
+                            minlength="6"
+                            maxlength="6"
+                            pattern="[0-9]+"
+                            autocomplete="off"
+                            autofocus
+                        />
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">
+                        Login
+                    </button>
+                </form>                
+            </div>
+        </div>
+        {{template "include-body" .}}
+        <script src="/js/login.js"></script>
+    </body>
+</html>
+{{end}}

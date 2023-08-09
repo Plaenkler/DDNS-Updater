@@ -17,7 +17,7 @@ var (
 	static embed.FS
 )
 
-type templateData struct {
+type indexPageData struct {
 	Jobs      []model.SyncJob
 	IPAddress string
 	Config    *config.Config
@@ -42,7 +42,7 @@ func ProvideIndex(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "[web-ProvideIndex-2] could not provide template - error: %s", err)
 		return
 	}
-	data := templateData{
+	data := indexPageData{
 		Config:    config.GetConfig(),
 		Providers: ddns.GetProviders(),
 	}
