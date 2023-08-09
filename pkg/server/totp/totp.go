@@ -10,7 +10,7 @@ import (
 
 const (
 	filePerm   = 0644
-	secretPath = "./data/OTPSecret"
+	secretPath = "./data/TOTPSecret"
 )
 
 var (
@@ -23,7 +23,6 @@ func init() {
 		log.Fatalf("[totp-init-1] could not load secret: %v", err)
 	}
 	keySecret = secret
-	log.Infof("[totp-init-2] initiated 2FA secret successfully")
 }
 
 func readKeySecret() (string, error) {
