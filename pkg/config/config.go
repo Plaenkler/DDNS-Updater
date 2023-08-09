@@ -28,7 +28,7 @@ var config *Config
 func init() {
 	err := loadConfig()
 	if err != nil {
-		log.Fatalf("[config-init-1] initialization failed - error: %s", err.Error())
+		log.Fatalf("[config-init-1] initialization failed: %s", err.Error())
 	}
 }
 

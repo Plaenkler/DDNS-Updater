@@ -70,12 +70,12 @@ func StopService() {
 	}
 	sqlDB, err := db.DB()
 	if err != nil {
-		log.Errorf("[database-StopService-1] failed to get underlying DB connection - error: %s", err.Error())
+		log.Errorf("[database-StopService-1] failed to get underlying DB connection: %s", err.Error())
 		return
 	}
 	err = sqlDB.Close()
 	if err != nil {
-		log.Errorf("[database-StopService-2] failed to close DB connection - error: %s", err.Error())
+		log.Errorf("[database-StopService-2] failed to close DB connection: %s", err.Error())
 	}
 }
 

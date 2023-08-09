@@ -88,6 +88,6 @@ func StopService() {
 	}
 	err := server.Shutdown(context.Background())
 	if err != nil {
-		log.Errorf("could not shutdown server: %v", err)
+		log.Errorf("[server-StopService-1] could not shutdown server: %v", err)
 	}
 }

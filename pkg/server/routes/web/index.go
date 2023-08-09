@@ -39,7 +39,7 @@ func ProvideIndex(w http.ResponseWriter, r *http.Request) {
 	)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintf(w, "[web-ProvideIndex-2] could not provide template - error: %s", err)
+		fmt.Fprintf(w, "[web-ProvideIndex-2] could not provide template: %s", err)
 		return
 	}
 	data := indexPageData{
@@ -49,7 +49,7 @@ func ProvideIndex(w http.ResponseWriter, r *http.Request) {
 	data.IPAddress, err = ddns.GetPublicIP()
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintf(w, "[web-ProvideIndex-3] could not get public IP address - error: %s", err)
+		fmt.Fprintf(w, "[web-ProvideIndex-3] could not get public IP address: %s", err)
 		return
 	}
 	db := database.GetDatabase()
@@ -61,13 +61,13 @@ func ProvideIndex(w http.ResponseWriter, r *http.Request) {
 	err = db.Find(&data.Jobs).Error
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintf(w, "[web-ProvideIndex-5] could not find jobs - error: %s", err)
+		fmt.Fprintf(w, "[web-ProvideIndex-5] could not find jobs: %s", err)
 		return
 	}
 	w.Header().Add("Content-Type", "text/html")
 	err = template.Execute(w, data)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintf(w, "[web-ProvideIndex-6] could not execute parsed template - error: %v", err)
+		fmt.Fprintf(w, "[web-ProvideIndex-6] could not execute parsed template: %v", err)
 	}
 }

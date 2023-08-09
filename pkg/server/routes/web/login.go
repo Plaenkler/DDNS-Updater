@@ -13,13 +13,13 @@ func ProvideLogin(w http.ResponseWriter, r *http.Request) {
 	)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintf(w, "[web-ProvideLogin-1] could not provide template - error: %s", err)
+		fmt.Fprintf(w, "[web-ProvideLogin-1] could not provide template: %s", err)
 		return
 	}
 	w.Header().Add("Content-Type", "text/html")
 	err = template.Execute(w, nil)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintf(w, "[web-ProvideLogin-2] could not execute parsed template - error: %v", err)
+		fmt.Fprintf(w, "[web-ProvideLogin-2] could not execute parsed template: %v", err)
 	}
 }
