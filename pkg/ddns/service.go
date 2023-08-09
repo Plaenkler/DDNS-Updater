@@ -14,13 +14,12 @@ import (
 
 var (
 	mu   sync.Mutex
-	stop chan bool
+	stop = make(chan bool)
 )
 
 func StartService() {
 	mu.Lock()
 	defer mu.Unlock()
-	stop = make(chan bool)
 	interval := time.Second * time.Duration(config.GetConfig().Interval)
 	ticker := time.NewTicker(interval)
 	defer ticker.Stop()

@@ -16,28 +16,25 @@ const (
 )
 
 var (
-	mu sync.Mutex
 	db *gorm.DB
+	oc sync.Once
 )
 
 func StartService() {
-	mu.Lock()
-	defer mu.Unlock()
-	if db != nil {
-		return
-	}
-	err := createDBDir()
-	if err != nil {
-		log.Fatalf("[database-StartService-1] failed to create database directory: %s", err.Error())
-	}
-	db, err = openDBConnection()
-	if err != nil {
-		log.Fatalf("[database-StartService-2] failed to open database connection: %s", err.Error())
-	}
-	err = migrateDBSchema(db)
-	if err != nil {
-		log.Fatalf("[database-StartService-3] failed to migrate database schema: %s", err.Error())
-	}
+	oc.Do(func() {
+		err := createDBDir()
+		if err != nil {
+			log.Fatalf("[database-StartService-1] failed to create database directory: %s", err.Error())
+		}
+		db, err = openDBConnection()
+		if err != nil {
+			log.Fatalf("[database-StartService-2] failed to open database connection: %s", err.Error())
+		}
+		err = migrateDBSchema(db)
+		if err != nil {
+			log.Fatalf("[database-StartService-3] failed to migrate database schema: %s", err.Error())
+		}
+	})
 }
 
 func createDBDir() error {
@@ -80,7 +77,6 @@ func StopService() {
 	if err != nil {
 		log.Errorf("[database-StopService-2] failed to close DB connection - error: %s", err.Error())
 	}
-	db = nil
 }
 
 func GetDatabase() *gorm.DB {
