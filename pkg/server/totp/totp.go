@@ -1,6 +1,9 @@
 package totp
 
 import (
+	"bytes"
+	"encoding/base64"
+	"image/png"
 	"os"
 
 	log "github.com/plaenkler/ddns-updater/pkg/logging"
@@ -53,6 +56,27 @@ func createKeySecret() ([]byte, error) {
 		return nil, err
 	}
 	return secret, nil
+}
+
+func GetKeyAsQR() (string, error) {
+	key, err := totp.Generate(totp.GenerateOpts{
+		Issuer:      "DDNS-Updater",
+		AccountName: "Administrator",
+		Secret:      []byte(keySecret),
+	})
+	if err != nil {
+		return "", err
+	}
+	img, err := key.Image(200, 200)
+	if err != nil {
+		return "", err
+	}
+	var buf bytes.Buffer
+	err = png.Encode(&buf, img)
+	if err != nil {
+		return "", err
+	}
+	return "data:image/png;base64," + base64.StdEncoding.EncodeToString(buf.Bytes()), nil
 }
 
 func VerifiyTOTP(otp string) bool {

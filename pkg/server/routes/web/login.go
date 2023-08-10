@@ -7,7 +7,7 @@ import (
 )
 
 func ProvideLogin(w http.ResponseWriter, r *http.Request) {
-	template, err := template.New("login").ParseFS(static,
+	tpl, err := template.New("login").ParseFS(static,
 		"static/html/pages/login.html",
 		"static/html/partials/include.html",
 	)
@@ -17,7 +17,7 @@ func ProvideLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Header().Add("Content-Type", "text/html")
-	err = template.Execute(w, nil)
+	err = tpl.Execute(w, nil)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		fmt.Fprintf(w, "[web-ProvideLogin-2] could not execute parsed template: %v", err)

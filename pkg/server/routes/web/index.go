@@ -10,6 +10,7 @@ import (
 	"github.com/plaenkler/ddns-updater/pkg/database"
 	"github.com/plaenkler/ddns-updater/pkg/database/model"
 	"github.com/plaenkler/ddns-updater/pkg/ddns"
+	"github.com/plaenkler/ddns-updater/pkg/server/totp"
 )
 
 var (
@@ -22,16 +23,15 @@ type indexPageData struct {
 	IPAddress string
 	Config    *config.Config
 	Providers []string
+	TOTPQR    template.URL
 }
 
 func ProvideIndex(w http.ResponseWriter, r *http.Request) {
-	// Default to 404
 	if r.URL.Path != "/" {
-		w.WriteHeader(http.StatusNotFound)
-		fmt.Fprintf(w, "[web-ProvideIndex-1] 404 - Not found")
+		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
-	template, err := template.New("index").ParseFS(static,
+	tpl, err := template.New("index").ParseFS(static,
 		"static/html/pages/index.html",
 		"static/html/partials/include.html",
 		"static/html/partials/navbar.html",
@@ -39,7 +39,7 @@ func ProvideIndex(w http.ResponseWriter, r *http.Request) {
 	)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintf(w, "[web-ProvideIndex-2] could not provide template: %s", err)
+		fmt.Fprintf(w, "[web-ProvideIndex-1] could not provide template: %s", err)
 		return
 	}
 	data := indexPageData{
@@ -49,23 +49,30 @@ func ProvideIndex(w http.ResponseWriter, r *http.Request) {
 	data.IPAddress, err = ddns.GetPublicIP()
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintf(w, "[web-ProvideIndex-3] could not get public IP address: %s", err)
+		fmt.Fprintf(w, "[web-ProvideIndex-2] could not get public IP address: %s", err)
 		return
 	}
 	db := database.GetDatabase()
 	if db == nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintf(w, "[web-ProvideIndex-4] could not get database connection")
+		fmt.Fprintf(w, "[web-ProvideIndex-3] could not get database connection")
 		return
 	}
 	err = db.Find(&data.Jobs).Error
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintf(w, "[web-ProvideIndex-5] could not find jobs: %s", err)
+		fmt.Fprintf(w, "[web-ProvideIndex-4] could not find jobs: %s", err)
 		return
 	}
+	img, err := totp.GetKeyAsQR()
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprintf(w, "[web-ProvideIndex-5] could not generate TOTP QR code: %s", err)
+		return
+	}
+	data.TOTPQR = template.URL(img)
 	w.Header().Add("Content-Type", "text/html")
-	err = template.Execute(w, data)
+	err = tpl.Execute(w, data)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		fmt.Fprintf(w, "[web-ProvideIndex-6] could not execute parsed template: %v", err)
