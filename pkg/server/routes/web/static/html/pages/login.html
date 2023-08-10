@@ -3,11 +3,6 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="utf-8" />
-        <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1, shrink-to-fit=no"
-        />
         {{template "include-head" .}}
         <link rel="stylesheet" href="/css/login.css" />
         <title>DDNS Updater</title>
@@ -15,6 +10,9 @@
     <body class="bg-dark">
         <div class="container">
             <div class="card bg-dark">
+                <div class="d-flex justify-content-center align-items-center mb-3">
+                    <img src="/img/logo.svg" alt="DDNS Updater logo" width="100"/>
+                </div>                
                 <form action="/api/login" method="POST">
                     <div class="mb-3">
                         <input
