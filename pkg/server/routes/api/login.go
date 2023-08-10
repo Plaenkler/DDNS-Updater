@@ -11,8 +11,7 @@ import (
 
 func Login(w http.ResponseWriter, r *http.Request) {
 	currentTOTP := r.FormValue("totp")
-	ok := totp.VerifiyTOTP(currentTOTP)
-	if !ok {
+	if !totp.VerifiyTOTP(currentTOTP) {
 		log.Errorf("[api-login-1] invalid totp: %s", currentTOTP)
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
@@ -31,5 +30,5 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		SameSite: http.SameSiteNoneMode,
 		Secure:   true,
 	})
-	http.Redirect(w, r, "/", http.StatusOK)
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
