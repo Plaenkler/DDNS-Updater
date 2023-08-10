@@ -57,6 +57,7 @@ func registerStaticFiles(r *Router) {
 	staticHandler := createStaticHandler()
 	r.Handle("/js/", staticHandler)
 	r.Handle("/css/", staticHandler)
+	r.Handle("/img/", staticHandler)
 }
 
 func createStaticHandler() http.Handler {
