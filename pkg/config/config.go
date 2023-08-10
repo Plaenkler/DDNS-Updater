@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"net/url"
 	"os"
 	"path/filepath"
@@ -90,10 +91,12 @@ func loadConfigFromEnv() error {
 		config.Interval = interval
 	}
 	useTOTP, err := parseBoolEnv("DDNS_TOTP")
-	if err != nil {
+	if err == nil {
+		config.UseTOTP = useTOTP
+	}
+	if err != nil && err.Error() != "not set" {
 		return err
 	}
-	config.UseTOTP = useTOTP
 	port, err := parseUintEnv("DDNS_PORT")
 	if err != nil {
 		return err
@@ -126,7 +129,7 @@ func parseUintEnv(envName string) (uint64, error) {
 func parseBoolEnv(envName string) (bool, error) {
 	valueStr, ok := os.LookupEnv(envName)
 	if !ok {
-		return false, nil
+		return false, fmt.Errorf("not set")
 	}
 	value, err := strconv.ParseBool(valueStr)
 	if err != nil {
