@@ -63,7 +63,7 @@ func authenticate(next http.Handler) http.Handler {
 			http.Redirect(w, r, "/login", http.StatusSeeOther)
 			return
 		}
-		if !session.VerifySession(c.Value) {
+		if !session.Verify(c.Value) {
 			http.Redirect(w, r, "/login", http.StatusSeeOther)
 			return
 		}

@@ -50,7 +50,7 @@ func cleanOrphans() {
 	}
 }
 
-func AddSession() (string, error) {
+func Add() (string, error) {
 	key, err := generateKey()
 	if err != nil {
 		return "", err
@@ -70,7 +70,7 @@ func generateKey() (string, error) {
 	return base64.RawURLEncoding.EncodeToString(key), nil
 }
 
-func VerifySession(key string) bool {
+func Verify(key string) bool {
 	mu.Lock()
 	defer mu.Unlock()
 	s, ok := sessions[key]

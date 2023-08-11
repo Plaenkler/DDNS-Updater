@@ -10,7 +10,7 @@ import (
 	"github.com/plaenkler/ddns-updater/pkg/database"
 	"github.com/plaenkler/ddns-updater/pkg/database/model"
 	"github.com/plaenkler/ddns-updater/pkg/ddns"
-	"github.com/plaenkler/ddns-updater/pkg/server/totp"
+	"github.com/plaenkler/ddns-updater/pkg/server/totps"
 )
 
 var (
@@ -64,7 +64,7 @@ func ProvideIndex(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "[web-ProvideIndex-4] could not find jobs: %s", err)
 		return
 	}
-	img, err := totp.GetKeyAsQR()
+	img, err := totps.GetKeyAsQR()
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		fmt.Fprintf(w, "[web-ProvideIndex-5] could not generate TOTP QR code: %s", err)

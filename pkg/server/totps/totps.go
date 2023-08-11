@@ -1,10 +1,13 @@
-package totp
+package totps
 
 import (
 	"bytes"
+	"encoding/base32"
 	"encoding/base64"
+	"fmt"
 	"image/png"
 	"os"
+	"path/filepath"
 
 	log "github.com/plaenkler/ddns-updater/pkg/logging"
 
@@ -12,8 +15,11 @@ import (
 )
 
 const (
-	filePerm   = 0644
-	secretPath = "./data/TOTPSecret"
+	dirPerm     = 0755
+	filePerm    = 0644
+	secretPath  = "./data/TOTPSecret"
+	issuer      = "DDNS-Updater"
+	accountName = "Administrator"
 )
 
 var (
@@ -44,9 +50,14 @@ func readKeySecret() (string, error) {
 
 func createKeySecret() ([]byte, error) {
 	key, err := totp.Generate(totp.GenerateOpts{
-		Issuer:      "DDNS-Updater",
-		AccountName: "Administrator",
+		Issuer:      issuer,
+		AccountName: accountName,
 	})
+	fmt.Println(key.URL())
+	if err != nil {
+		return nil, err
+	}
+	err = os.MkdirAll(filepath.Dir(secretPath), dirPerm)
 	if err != nil {
 		return nil, err
 	}
@@ -59,10 +70,14 @@ func createKeySecret() ([]byte, error) {
 }
 
 func GetKeyAsQR() (string, error) {
+	secret, err := base32.StdEncoding.DecodeString(keySecret)
+	if err != nil {
+		return "", err
+	}
 	key, err := totp.Generate(totp.GenerateOpts{
-		Issuer:      "DDNS-Updater",
-		AccountName: "Administrator",
-		Secret:      []byte(keySecret),
+		Issuer:      issuer,
+		AccountName: accountName,
+		Secret:      secret,
 	})
 	if err != nil {
 		return "", err
@@ -76,9 +91,9 @@ func GetKeyAsQR() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return "data:image/png;base64," + base64.StdEncoding.EncodeToString(buf.Bytes()), nil
+	return base64.StdEncoding.EncodeToString(buf.Bytes()), nil
 }
 
-func VerifiyTOTP(otp string) bool {
+func Verifiy(otp string) bool {
 	return totp.Validate(otp, keySecret)
 }

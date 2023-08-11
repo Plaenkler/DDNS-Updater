@@ -6,17 +6,17 @@ import (
 
 	log "github.com/plaenkler/ddns-updater/pkg/logging"
 	"github.com/plaenkler/ddns-updater/pkg/server/session"
-	"github.com/plaenkler/ddns-updater/pkg/server/totp"
+	"github.com/plaenkler/ddns-updater/pkg/server/totps"
 )
 
 func Login(w http.ResponseWriter, r *http.Request) {
 	currentTOTP := r.FormValue("totp")
-	if !totp.VerifiyTOTP(currentTOTP) {
+	if !totps.Verifiy(currentTOTP) {
 		log.Errorf("[api-login-1] invalid totp: %s", currentTOTP)
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
 	}
-	token, err := session.AddSession()
+	token, err := session.Add()
 	if err != nil {
 		log.Errorf("[api-login-2] could not add session: %s", err)
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
