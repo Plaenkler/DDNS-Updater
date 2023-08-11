@@ -8,7 +8,7 @@
             </div>
             <div class="modal-body">
                 <div class="d-flex justify-content-center align-items-center mb-3">
-                    <img src="{{.TOTPQR}}" alt="TOTP QR" width="200"/>
+                    <img src="data:image/png;base64,{{.TOTPQR}}" alt="TOTP QR" width="200"/>
                 </div>
                 <form action="/api/config/update" method="POST">
                     <div class="mb-3">
