@@ -8,6 +8,7 @@ import (
 
 	"github.com/plaenkler/ddns-updater/pkg/config"
 	log "github.com/plaenkler/ddns-updater/pkg/logging"
+	"github.com/plaenkler/ddns-updater/pkg/server/totps"
 )
 
 func UpdateConfig(w http.ResponseWriter, r *http.Request) {
@@ -43,10 +44,14 @@ func UpdateConfig(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-	config.UpdateConfig(&config.Config{
+	cfg := &config.Config{
 		Port:     port,
 		Interval: interval,
 		Resolver: resolver,
-	})
+	}
+	if totps.Verifiy(r.FormValue("otp")) {
+		cfg.UseTOTP = !config.GetConfig().UseTOTP
+	}
+	config.UpdateConfig(cfg)
 	http.Redirect(w, r, r.Header.Get("Referer"), http.StatusTemporaryRedirect)
 }
