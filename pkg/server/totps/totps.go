@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/base32"
 	"encoding/base64"
-	"fmt"
 	"image/png"
 	"os"
 	"path/filepath"
@@ -53,7 +52,6 @@ func createKeySecret() ([]byte, error) {
 		Issuer:      issuer,
 		AccountName: accountName,
 	})
-	fmt.Println(key.URL())
 	if err != nil {
 		return nil, err
 	}
