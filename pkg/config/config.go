@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"net/url"
 	"os"
 	"path/filepath"
@@ -11,15 +12,16 @@ import (
 )
 
 type Config struct {
-	Port     uint64 `yaml:"Port"`
 	Interval uint64 `yaml:"Interval"`
+	UseTOTP  bool   `yaml:"TOTP"`
+	Port     uint64 `yaml:"Port"`
 	Resolver string `yaml:"Resolver"`
 }
 
 const (
-	pathToConfig   = "./data/config.yaml"
-	configDirPerm  = 0755
-	configFilePerm = 0644
+	pathToConfig = "./data/config.yaml"
+	dirPerm      = 0755
+	filePerm     = 0644
 )
 
 var config *Config
@@ -27,7 +29,7 @@ var config *Config
 func init() {
 	err := loadConfig()
 	if err != nil {
-		log.Fatalf("[config-init-1] initialization failed - error: %s", err.Error())
+		log.Fatalf("[config-init-1] initialization failed: %s", err.Error())
 	}
 }
 
@@ -59,10 +61,12 @@ func loadConfig() error {
 
 func createConfig() error {
 	config := Config{
-		Port:     80,
 		Interval: 600,
+		UseTOTP:  false,
+		Port:     80,
+		Resolver: "",
 	}
-	err := os.MkdirAll(filepath.Dir(pathToConfig), configDirPerm)
+	err := os.MkdirAll(filepath.Dir(pathToConfig), dirPerm)
 	if err != nil {
 		return err
 	}
@@ -70,7 +74,7 @@ func createConfig() error {
 	if err != nil {
 		return err
 	}
-	err = os.WriteFile(pathToConfig, data, configFilePerm)
+	err = os.WriteFile(pathToConfig, data, filePerm)
 	if err != nil {
 		return err
 	}
@@ -79,19 +83,26 @@ func createConfig() error {
 }
 
 func loadConfigFromEnv() error {
-	port, err := parseUintEnv("DDNS_PORT")
-	if err != nil {
-		return err
-	}
-	if port != 0 {
-		config.Port = port
-	}
 	interval, err := parseUintEnv("DDNS_INTERVAL")
 	if err != nil {
 		return err
 	}
 	if interval != 0 {
 		config.Interval = interval
+	}
+	useTOTP, err := parseBoolEnv("DDNS_TOTP")
+	if err == nil {
+		config.UseTOTP = useTOTP
+	}
+	if err != nil && err.Error() != "not set" {
+		return err
+	}
+	port, err := parseUintEnv("DDNS_PORT")
+	if err != nil {
+		return err
+	}
+	if port != 0 {
+		config.Port = port
 	}
 	resolver, err := parseURLEnv("DDNS_RESOLVER")
 	if err != nil {
@@ -115,6 +126,18 @@ func parseUintEnv(envName string) (uint64, error) {
 	return value, nil
 }
 
+func parseBoolEnv(envName string) (bool, error) {
+	valueStr, ok := os.LookupEnv(envName)
+	if !ok {
+		return false, fmt.Errorf("not set")
+	}
+	value, err := strconv.ParseBool(valueStr)
+	if err != nil {
+		return false, err
+	}
+	return value, nil
+}
+
 func parseURLEnv(envName string) (string, error) {
 	value, ok := os.LookupEnv(envName)
 	if !ok {
@@ -132,7 +155,7 @@ func UpdateConfig(updatedConfig *Config) error {
 	if err != nil {
 		return err
 	}
-	err = os.WriteFile(pathToConfig, data, configFilePerm)
+	err = os.WriteFile(pathToConfig, data, filePerm)
 	if err != nil {
 		return err
 	}
