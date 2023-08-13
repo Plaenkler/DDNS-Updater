@@ -22,7 +22,7 @@ var resolvers = map[string]string{
 }
 
 func GetPublicIP() (string, error) {
-	cRes := config.GetConfig().Resolver
+	cRes := config.Get().Resolver
 	if cRes != "" {
 		addr, err := resolveIPAddress(cRes)
 		if err != nil {

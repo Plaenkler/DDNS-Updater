@@ -92,6 +92,6 @@ func GetKeyAsQR() (string, error) {
 	return base64.StdEncoding.EncodeToString(buf.Bytes()), nil
 }
 
-func Verifiy(otp string) bool {
+func Verify(otp string) bool {
 	return totp.Validate(otp, keySecret)
 }

@@ -23,7 +23,7 @@ var (
 	server *http.Server
 )
 
-func StartService() {
+func Start() {
 	oc.Do(func() {
 		initializeRouter()
 		initializeServer()
@@ -41,14 +41,14 @@ func initializeRouter() {
 func registerMiddlewares(r *Router) {
 	r.Use(forwardToProxy)
 	r.Use(limitRequests)
-	if config.GetConfig().UseTOTP {
+	if config.Get().UseTOTP {
 		r.Use(authenticate)
 	}
 }
 
 func registerAPIRoutes(r *Router) {
 	r.HandleFunc("/", web.ProvideIndex)
-	if config.GetConfig().UseTOTP {
+	if config.Get().UseTOTP {
 		r.HandleFunc("/login", web.ProvideLogin)
 		r.HandleFunc("/api/login", api.Login)
 	}
@@ -76,7 +76,7 @@ func createStaticHandler() http.Handler {
 
 func initializeServer() {
 	server = &http.Server{
-		Addr:              fmt.Sprintf(":%v", config.GetConfig().Port),
+		Addr:              fmt.Sprintf(":%v", config.Get().Port),
 		ReadTimeout:       15 * time.Second,
 		ReadHeaderTimeout: 5 * time.Second,
 		WriteTimeout:      15 * time.Second,
@@ -89,12 +89,12 @@ func initializeServer() {
 	}
 }
 
-func StopService() {
+func Stop() {
 	if server == nil {
 		return
 	}
 	err := server.Shutdown(context.Background())
 	if err != nil {
-		log.Errorf("[server-StopService-1] could not shutdown server: %v", err)
+		log.Errorf("[server-Stop-1] could not shutdown server: %v", err)
 	}
 }
