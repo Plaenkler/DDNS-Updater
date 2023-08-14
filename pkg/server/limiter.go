@@ -22,7 +22,7 @@ func isOverLimit(r *http.Request) error {
 	iplm, ok := ipLimiters[addr]
 	if !ok {
 		iplm = ipLimiter{
-			limiter: rate.NewLimiter(1, 8),
+			limiter: rate.NewLimiter(1, 10),
 			address: addr,
 		}
 		ipLimiters[addr] = iplm
