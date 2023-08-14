@@ -20,19 +20,19 @@ var (
 	oc sync.Once
 )
 
-func StartService() {
+func Start() {
 	oc.Do(func() {
 		err := createDBDir()
 		if err != nil {
-			log.Fatalf("[database-StartService-1] failed to create database directory: %s", err.Error())
+			log.Fatalf("[database-Start-1] failed to create database directory: %s", err.Error())
 		}
 		db, err = openDBConnection()
 		if err != nil {
-			log.Fatalf("[database-StartService-2] failed to open database connection: %s", err.Error())
+			log.Fatalf("[database-Start-2] failed to open database connection: %s", err.Error())
 		}
 		err = migrateDBSchema(db)
 		if err != nil {
-			log.Fatalf("[database-StartService-3] failed to migrate database schema: %s", err.Error())
+			log.Fatalf("[database-Start-3] failed to migrate database schema: %s", err.Error())
 		}
 	})
 }
@@ -64,18 +64,18 @@ func migrateDBSchema(db *gorm.DB) error {
 	return nil
 }
 
-func StopService() {
+func Stop() {
 	if db == nil {
 		return
 	}
 	sqlDB, err := db.DB()
 	if err != nil {
-		log.Errorf("[database-StopService-1] failed to get underlying DB connection: %s", err.Error())
+		log.Errorf("[database-Stop-1] failed to get underlying DB connection: %s", err.Error())
 		return
 	}
 	err = sqlDB.Close()
 	if err != nil {
-		log.Errorf("[database-StopService-2] failed to close DB connection: %s", err.Error())
+		log.Errorf("[database-Stop-2] failed to close DB connection: %s", err.Error())
 	}
 }
 

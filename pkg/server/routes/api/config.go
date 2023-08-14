@@ -49,9 +49,9 @@ func UpdateConfig(w http.ResponseWriter, r *http.Request) {
 		Interval: interval,
 		Resolver: resolver,
 	}
-	if totps.Verifiy(r.FormValue("otp")) {
-		cfg.UseTOTP = !config.GetConfig().UseTOTP
+	if totps.Verify(r.FormValue("otp")) {
+		cfg.UseTOTP = !config.Get().UseTOTP
 	}
-	config.UpdateConfig(cfg)
+	config.Update(cfg)
 	http.Redirect(w, r, r.Header.Get("Referer"), http.StatusTemporaryRedirect)
 }
