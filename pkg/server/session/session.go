@@ -19,7 +19,7 @@ var (
 	cancel   = make(chan bool)
 )
 
-func StartService() {
+func Start() {
 	oc.Do(func() {
 		go startCaretaker()
 	})
@@ -85,6 +85,6 @@ func Verify(key string) bool {
 	return true
 }
 
-func StopService() {
+func Stop() {
 	cancel <- true
 }

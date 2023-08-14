@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/base32"
 	"encoding/base64"
-	"fmt"
 	"image/png"
 	"os"
 	"path/filepath"
@@ -53,7 +52,6 @@ func createKeySecret() ([]byte, error) {
 		Issuer:      issuer,
 		AccountName: accountName,
 	})
-	fmt.Println(key.URL())
 	if err != nil {
 		return nil, err
 	}
@@ -94,6 +92,6 @@ func GetKeyAsQR() (string, error) {
 	return base64.StdEncoding.EncodeToString(buf.Bytes()), nil
 }
 
-func Verifiy(otp string) bool {
+func Verify(otp string) bool {
 	return totp.Validate(otp, keySecret)
 }

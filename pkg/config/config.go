@@ -27,16 +27,16 @@ const (
 var config *Config
 
 func init() {
-	err := loadConfig()
+	err := load()
 	if err != nil {
 		log.Fatalf("[config-init-1] initialization failed: %s", err.Error())
 	}
 }
 
-func loadConfig() error {
+func load() error {
 	_, err := os.Stat(pathToConfig)
 	if os.IsNotExist(err) {
-		err = createConfig()
+		err = create()
 		if err != nil {
 			return err
 		}
@@ -52,14 +52,14 @@ func loadConfig() error {
 		return err
 	}
 	config = instance
-	err = loadConfigFromEnv()
+	err = loadFromEnv()
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func createConfig() error {
+func create() error {
 	config := Config{
 		Interval: 600,
 		UseTOTP:  false,
@@ -78,11 +78,11 @@ func createConfig() error {
 	if err != nil {
 		return err
 	}
-	log.Infof("[config-createConfig-1] created default configuration")
+	log.Infof("[config-create-1] created default configuration")
 	return nil
 }
 
-func loadConfigFromEnv() error {
+func loadFromEnv() error {
 	interval, err := parseUintEnv("DDNS_INTERVAL")
 	if err != nil {
 		return err
@@ -150,7 +150,7 @@ func parseURLEnv(envName string) (string, error) {
 	return value, nil
 }
 
-func UpdateConfig(updatedConfig *Config) error {
+func Update(updatedConfig *Config) error {
 	data, err := yaml.Marshal(updatedConfig)
 	if err != nil {
 		return err
@@ -163,6 +163,6 @@ func UpdateConfig(updatedConfig *Config) error {
 	return nil
 }
 
-func GetConfig() *Config {
+func Get() *Config {
 	return config
 }

@@ -17,10 +17,10 @@ var (
 	stop = make(chan bool)
 )
 
-func StartService() {
+func Start() {
 	mu.Lock()
 	defer mu.Unlock()
-	interval := time.Second * time.Duration(config.GetConfig().Interval)
+	interval := time.Second * time.Duration(config.Get().Interval)
 	ticker := time.NewTicker(interval)
 	defer ticker.Stop()
 	for {
@@ -29,7 +29,7 @@ func StartService() {
 			updateInterval(interval, ticker)
 			address, err := GetPublicIP()
 			if err != nil {
-				log.Errorf("[ddns-StartService-1] failed to get public IP address: %v", err)
+				log.Errorf("[ddns-Start-1] failed to get public IP address: %v", err)
 				continue
 			}
 			newAddress := model.IPAddress{
@@ -37,17 +37,17 @@ func StartService() {
 			}
 			db := database.GetDatabase()
 			if db == nil {
-				log.Errorf("[ddns-StartService-2] failed to get database connection")
+				log.Errorf("[ddns-Start-2] failed to get database connection")
 				continue
 			}
 			err = db.FirstOrCreate(&newAddress, newAddress).Error
 			if err != nil {
-				log.Errorf("[ddns-StartService-3] failed to save new IP address: %v", err)
+				log.Errorf("[ddns-Start-3] failed to save new IP address: %v", err)
 				continue
 			}
 			jobs := getSyncJobs(db, newAddress.ID)
 			if len(jobs) == 0 {
-				log.Infof("[ddns-StartService-4] no dynamic DNS record needs to be updated")
+				log.Infof("[ddns-Start-4] no dynamic DNS record needs to be updated")
 				continue
 			}
 			updateDDNSEntries(db, jobs, newAddress)
@@ -58,7 +58,7 @@ func StartService() {
 }
 
 func updateInterval(interval time.Duration, ticker *time.Ticker) {
-	newInterval := time.Second * time.Duration(config.GetConfig().Interval)
+	newInterval := time.Second * time.Duration(config.Get().Interval)
 	if interval != newInterval && newInterval > 0 {
 		ticker.Reset(newInterval)
 		log.Infof("[ddns-updateInterval-1] changed interval from %v to %v", interval, newInterval)
@@ -101,6 +101,6 @@ func updateDDNSEntries(db *gorm.DB, jobs []model.SyncJob, a model.IPAddress) {
 	}
 }
 
-func StopService() {
+func Stop() {
 	stop <- true
 }

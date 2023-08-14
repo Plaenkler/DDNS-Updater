@@ -11,7 +11,7 @@ import (
 
 func Login(w http.ResponseWriter, r *http.Request) {
 	currentTOTP := r.FormValue("totp")
-	if !totps.Verifiy(currentTOTP) {
+	if !totps.Verify(currentTOTP) {
 		log.Errorf("[api-login-1] invalid totp: %s", currentTOTP)
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return

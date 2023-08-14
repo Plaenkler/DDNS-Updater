@@ -43,7 +43,7 @@ func ProvideIndex(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	data := indexPageData{
-		Config:    config.GetConfig(),
+		Config:    config.Get(),
 		Providers: ddns.GetProviders(),
 	}
 	data.IPAddress, err = ddns.GetPublicIP()
