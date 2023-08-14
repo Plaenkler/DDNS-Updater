@@ -5,7 +5,7 @@
 [![Linters](https://github.com/plaenkler/ddns-updater/actions/workflows/linters.yml/badge.svg)](https://github.com/plaenkler/ddns-updater/actions/workflows/linters.yml)
 [![Support me](https://img.shields.io/badge/Support%20me%20%E2%98%95-orange.svg)](https://www.buymeacoffee.com/Plaenkler)
 
-DDNS Updater provides a straightforward way to update dynamic DNS records without messing with the command line or a file.
+DDNS Updater provides a straightforward way to update dynamic DNS records without messing with the command-line or a file.
 The user-friendly interface allows for straightforward secure setup and management.
 
 > **Note:** If your DynDNS provider is not listed open an issue and I will integrate it.
