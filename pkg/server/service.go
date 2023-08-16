@@ -16,21 +16,18 @@ import (
 )
 
 var (
-	mu sync.Mutex
 	//go:embed routes/web/static
 	static embed.FS
+	oc     sync.Once
 	router *http.ServeMux
 	server *http.Server
 )
 
-func StartService() {
-	mu.Lock()
-	defer mu.Unlock()
-	if server != nil {
-		return
-	}
-	initializeRouter()
-	initializeServer()
+func Start() {
+	oc.Do(func() {
+		initializeRouter()
+		initializeServer()
+	})
 }
 
 func initializeRouter() {
@@ -44,10 +41,17 @@ func initializeRouter() {
 func registerMiddlewares(r *Router) {
 	r.Use(forwardToProxy)
 	r.Use(limitRequests)
+	if config.Get().UseTOTP {
+		r.Use(authenticate)
+	}
 }
 
 func registerAPIRoutes(r *Router) {
 	r.HandleFunc("/", web.ProvideIndex)
+	if config.Get().UseTOTP {
+		r.HandleFunc("/login", web.ProvideLogin)
+		r.HandleFunc("/api/login", api.Login)
+	}
 	r.HandleFunc("/api/inputs", api.GetInputs)
 	r.HandleFunc("/api/job/create", api.CreateJob)
 	r.HandleFunc("/api/job/update", api.UpdateJob)
@@ -59,6 +63,7 @@ func registerStaticFiles(r *Router) {
 	staticHandler := createStaticHandler()
 	r.Handle("/js/", staticHandler)
 	r.Handle("/css/", staticHandler)
+	r.Handle("/img/", staticHandler)
 }
 
 func createStaticHandler() http.Handler {
@@ -71,7 +76,7 @@ func createStaticHandler() http.Handler {
 
 func initializeServer() {
 	server = &http.Server{
-		Addr:              fmt.Sprintf(":%v", config.GetConfig().Port),
+		Addr:              fmt.Sprintf(":%v", config.Get().Port),
 		ReadTimeout:       15 * time.Second,
 		ReadHeaderTimeout: 5 * time.Second,
 		WriteTimeout:      15 * time.Second,
@@ -84,13 +89,12 @@ func initializeServer() {
 	}
 }
 
-func StopService() {
+func Stop() {
 	if server == nil {
 		return
 	}
 	err := server.Shutdown(context.Background())
 	if err != nil {
-		log.Errorf("could not shutdown server: %v", err)
+		log.Errorf("[server-Stop-1] could not shutdown server: %v", err)
 	}
-	server = nil
 }

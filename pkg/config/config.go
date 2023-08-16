@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"net/url"
 	"os"
 	"path/filepath"
@@ -11,30 +12,31 @@ import (
 )
 
 type Config struct {
-	Port     uint64 `yaml:"Port"`
 	Interval uint64 `yaml:"Interval"`
+	UseTOTP  bool   `yaml:"TOTP"`
+	Port     uint64 `yaml:"Port"`
 	Resolver string `yaml:"Resolver"`
 }
 
 const (
-	pathToConfig   = "./data/config.yaml"
-	configDirPerm  = 0755
-	configFilePerm = 0644
+	pathToConfig = "./data/config.yaml"
+	dirPerm      = 0755
+	filePerm     = 0644
 )
 
 var config *Config
 
 func init() {
-	err := loadConfig()
+	err := load()
 	if err != nil {
-		log.Fatalf("[config-init-1] initialization failed - error: %s", err.Error())
+		log.Fatalf("[config-init-1] initialization failed: %s", err.Error())
 	}
 }
 
-func loadConfig() error {
+func load() error {
 	_, err := os.Stat(pathToConfig)
 	if os.IsNotExist(err) {
-		err = createConfig()
+		err = create()
 		if err != nil {
 			return err
 		}
@@ -50,19 +52,21 @@ func loadConfig() error {
 		return err
 	}
 	config = instance
-	err = loadConfigFromEnv()
+	err = loadFromEnv()
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func createConfig() error {
+func create() error {
 	config := Config{
-		Port:     80,
 		Interval: 600,
+		UseTOTP:  false,
+		Port:     80,
+		Resolver: "",
 	}
-	err := os.MkdirAll(filepath.Dir(pathToConfig), configDirPerm)
+	err := os.MkdirAll(filepath.Dir(pathToConfig), dirPerm)
 	if err != nil {
 		return err
 	}
@@ -70,28 +74,35 @@ func createConfig() error {
 	if err != nil {
 		return err
 	}
-	err = os.WriteFile(pathToConfig, data, configFilePerm)
+	err = os.WriteFile(pathToConfig, data, filePerm)
 	if err != nil {
 		return err
 	}
-	log.Infof("[config-createConfig-1] created default configuration")
+	log.Infof("[config-create-1] created default configuration")
 	return nil
 }
 
-func loadConfigFromEnv() error {
-	port, err := parseUintEnv("DDNS_PORT")
-	if err != nil {
-		return err
-	}
-	if port != 0 {
-		config.Port = port
-	}
+func loadFromEnv() error {
 	interval, err := parseUintEnv("DDNS_INTERVAL")
 	if err != nil {
 		return err
 	}
 	if interval != 0 {
 		config.Interval = interval
+	}
+	useTOTP, err := parseBoolEnv("DDNS_TOTP")
+	if err == nil {
+		config.UseTOTP = useTOTP
+	}
+	if err != nil && err.Error() != "not set" {
+		return err
+	}
+	port, err := parseUintEnv("DDNS_PORT")
+	if err != nil {
+		return err
+	}
+	if port != 0 {
+		config.Port = port
 	}
 	resolver, err := parseURLEnv("DDNS_RESOLVER")
 	if err != nil {
@@ -115,6 +126,18 @@ func parseUintEnv(envName string) (uint64, error) {
 	return value, nil
 }
 
+func parseBoolEnv(envName string) (bool, error) {
+	valueStr, ok := os.LookupEnv(envName)
+	if !ok {
+		return false, fmt.Errorf("not set")
+	}
+	value, err := strconv.ParseBool(valueStr)
+	if err != nil {
+		return false, err
+	}
+	return value, nil
+}
+
 func parseURLEnv(envName string) (string, error) {
 	value, ok := os.LookupEnv(envName)
 	if !ok {
@@ -127,12 +150,12 @@ func parseURLEnv(envName string) (string, error) {
 	return value, nil
 }
 
-func UpdateConfig(updatedConfig *Config) error {
+func Update(updatedConfig *Config) error {
 	data, err := yaml.Marshal(updatedConfig)
 	if err != nil {
 		return err
 	}
-	err = os.WriteFile(pathToConfig, data, configFilePerm)
+	err = os.WriteFile(pathToConfig, data, filePerm)
 	if err != nil {
 		return err
 	}
@@ -140,6 +163,6 @@ func UpdateConfig(updatedConfig *Config) error {
 	return nil
 }
 
-func GetConfig() *Config {
+func Get() *Config {
 	return config
 }

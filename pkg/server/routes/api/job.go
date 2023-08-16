@@ -13,13 +13,9 @@ import (
 )
 
 func CreateJob(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		w.WriteHeader(http.StatusMethodNotAllowed)
-		return
-	}
 	err := r.ParseForm()
 	if err != nil {
-		log.Errorf("[api-CreateJob-1] could not parse form - error: %s", err)
+		log.Errorf("[api-CreateJob-1] could not parse form: %s", err)
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 		return
 	}
@@ -34,7 +30,7 @@ func CreateJob(w http.ResponseWriter, r *http.Request) {
 	params := r.FormValue("params")
 	err = json.Unmarshal([]byte(params), &jobModel)
 	if err != nil {
-		log.Errorf("[api-CreateJob-3] could not unmarshal params - error: %s", err)
+		log.Errorf("[api-CreateJob-3] could not unmarshal params: %s", err)
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 		return
 	}
@@ -50,7 +46,7 @@ func CreateJob(w http.ResponseWriter, r *http.Request) {
 	}
 	err = db.Create(&job).Error
 	if err != nil {
-		log.Errorf("[api-CreateJob-5] could not create job - error: %s", err)
+		log.Errorf("[api-CreateJob-5] could not create job: %s", err)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}
@@ -59,20 +55,16 @@ func CreateJob(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdateJob(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		w.WriteHeader(http.StatusMethodNotAllowed)
-		return
-	}
 	err := r.ParseForm()
 	if err != nil {
 		http.Error(w, "Could not parse form", http.StatusBadRequest)
-		log.Errorf("[api-UpdateJob-1] could not parse form - error: %s", err)
+		log.Errorf("[api-UpdateJob-1] could not parse form: %s", err)
 		return
 	}
 	id, err := strconv.ParseUint(r.FormValue("ID"), 10, 32)
 	if err != nil {
 		http.Error(w, "ID is not valid", http.StatusBadRequest)
-		log.Errorf("[api-UpdateJob-2] ID is not valid - error: %s", err)
+		log.Errorf("[api-UpdateJob-2] ID is not valid: %s", err)
 		return
 	}
 	provider := r.FormValue("provider")
@@ -87,7 +79,7 @@ func UpdateJob(w http.ResponseWriter, r *http.Request) {
 	err = json.Unmarshal([]byte(params), &jobModel)
 	if err != nil {
 		http.Error(w, "Could not unmarshal params", http.StatusBadRequest)
-		log.Errorf("[api-UpdateJob-4] could not unmarshal params - error: %s", err)
+		log.Errorf("[api-UpdateJob-4] could not unmarshal params: %s", err)
 		return
 	}
 	job := model.SyncJob{
@@ -106,7 +98,7 @@ func UpdateJob(w http.ResponseWriter, r *http.Request) {
 	err = db.Save(&job).Error
 	if err != nil {
 		http.Error(w, "Could not update job", http.StatusInternalServerError)
-		log.Errorf("[api-UpdateJob-6] could not update job - error: %s", err)
+		log.Errorf("[api-UpdateJob-6] could not update job: %s", err)
 		return
 	}
 	http.Redirect(w, r, r.Header.Get("Referer"), http.StatusSeeOther)
@@ -122,7 +114,7 @@ func DeleteJob(w http.ResponseWriter, r *http.Request) {
 	}
 	id, err := strconv.ParseUint(strID, 10, 32)
 	if err != nil {
-		log.Errorf("[api-DeleteJob-2] ID is not valid - error: %s", err)
+		log.Errorf("[api-DeleteJob-2] ID is not valid: %s", err)
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 		return
 	}
@@ -138,7 +130,7 @@ func DeleteJob(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if err := db.Unscoped().Delete(&job).Error; err != nil {
-		log.Errorf("[api-DeleteJob-4] could not delete job - error: %s", err)
+		log.Errorf("[api-DeleteJob-4] could not delete job: %s", err)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}
