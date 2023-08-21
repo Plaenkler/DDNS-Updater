@@ -3,6 +3,8 @@
 [![License](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 [![Release](https://img.shields.io/badge/Calver-YY.WW.REVISION-22bfda.svg)](https://calver.org/)
 [![Linters](https://github.com/plaenkler/ddns-updater/actions/workflows/linters.yml/badge.svg)](https://github.com/plaenkler/ddns-updater/actions/workflows/linters.yml)
+[![Go Report](https://goreportcard.com/badge/github.com/plaenkler/ddns-updater)](https://goreportcard.com/report/github.com/plaenkler/ddns-updater)
+[![CQL](https://github.com/plaenkler/ddns-updater/workflows/CodeQL/badge.svg)](https://github.com/plaenkler/ddns-updater)
 [![Support me](https://img.shields.io/badge/Support%20me%20%E2%98%95-orange.svg)](https://www.buymeacoffee.com/Plaenkler)
 
 DDNS Updater provides a straightforward way to update dynamic DNS records without messing with the command-line or a file.
@@ -47,7 +49,7 @@ version: '3.9'
 
 services:
   ddns:
-    image: plaenkler/ddns:latest
+    image: plaenkler/ddns-updater:latest
     container_name: ddns
     restart: always
     networks:
@@ -74,7 +76,7 @@ version: '3.9'
 
 services:
   ddns:
-    image: plaenkler/ddns:latest
+    image: plaenkler/ddns-updater:latest
     container_name: ddns
     restart: always
     networks:
