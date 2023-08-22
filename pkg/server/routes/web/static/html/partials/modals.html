@@ -1,0 +1,224 @@
+<!-- htmlhint doctype-first:false -->
+{{define "config-modal"}}
+<div
+    class="modal fade dark-mode"
+    id="config-modal"
+    tabindex="-1"
+    aria-labelledby="config-modal-label"
+    aria-hidden="true"
+>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-dark text-light">
+            <div class="modal-header">
+                <h5 class="modal-title text-light" id="config-modal-label">
+                    Edit Configuration
+                </h5>
+                <button
+                    type="button"
+                    class="btn-close btn-close-white"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                ></button>
+            </div>
+            <div class="modal-body">
+                <div
+                    class="d-flex justify-content-center align-items-center mb-3"
+                >
+                    <img
+                        src="data:image/png;base64,{{.TOTPQR}}"
+                        alt="TOTP QR"
+                        width="200"
+                    />
+                </div>
+                <form action="/api/config/update" method="POST">
+                    <div class="mb-3">
+                        <label for="port-input" class="form-label text-light"
+                            >Port</label
+                        >
+                        <input
+                            type="number"
+                            class="form-control bg-white text-dark"
+                            id="port-input"
+                            name="port"
+                            min="1"
+                            max="65535"
+                            value="{{.Config.Port}}"
+                            required
+                        />
+                    </div>
+                    <div class="mb-3">
+                        <label
+                            for="interval-input"
+                            class="form-label text-light"
+                            >Interval (in seconds)</label
+                        >
+                        <input
+                            type="number"
+                            class="form-control bg-white text-dark"
+                            id="interval-input"
+                            name="interval"
+                            min="10"
+                            value="{{.Config.Interval}}"
+                            required
+                        />
+                    </div>
+                    <div class="mb-3">
+                        <label
+                            for="resolver-input"
+                            class="form-label text-light"
+                            >Custom resolver URL</label
+                        >
+                        <input
+                            type="text"
+                            class="form-control bg-white text-dark"
+                            id="resolver-input"
+                            name="resolver"
+                            value="{{.Config.Resolver}}"
+                        />
+                    </div>
+                    <div class="mb-3">
+                        <label for="otp-input" class="form-label text-light"
+                            >Turn TOTP on/off</label
+                        >
+                        <input
+                            type="password"
+                            class="form-control bg-white text-dark"
+                            id="otp-input"
+                            name="otp"
+                            placeholder="123456"
+                            minlength="6"
+                            maxlength="6"
+                            pattern="[0-9]+"
+                            autocomplete="off"
+                        />
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{{end}} 
+
+{{define "add-modal"}}
+<div
+    class="modal fade dark-mode"
+    id="add-modal"
+    tabindex="-1"
+    aria-labelledby="add-modal-label"
+    aria-hidden="true"
+>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-dark text-light">
+            <div class="modal-header">
+                <h5 class="modal-title" id="add-modal-label">Add Job</h5>
+                <button
+                    type="button"
+                    class="btn-close btn-close-white"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                ></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="add-provider-select" class="form-label"
+                        >Provider</label
+                    >
+                    <select
+                        class="form-select bg-white text-dark"
+                        id="add-provider-select"
+                        name="provider"
+                        required
+                    >
+                        <option selected disabled hidden>Please select</option>
+                        {{range .Providers}}
+                        <option value="{{.}}">{{.}}</option>
+                        {{end}}
+                    </select>
+                </div>
+                <form id="add-form" action="/api/job/create" method="POST">
+                    <div id="add-inputs-container"></div>
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                        data-bs-dismiss="modal"
+                    >
+                        Submit
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{{end}} 
+
+{{define "edit-modal"}}
+<div
+    class="modal fade dark-mode"
+    id="edit-modal"
+    tabindex="-1"
+    aria-labelledby="edit-modal-label"
+    aria-hidden="true"
+>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-dark text-light">
+            <div class="modal-header">
+                <h5 class="modal-title" id="edit-modal-label">Edit Job</h5>
+                <button
+                    type="button"
+                    class="btn-close btn-close-white"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                ></button>
+            </div>
+            <div class="modal-body">
+                <input
+                    type="hidden"
+                    class="form-control"
+                    id="edit-id"
+                    name="id"
+                    readonly
+                />
+                <div class="mb-3">
+                    <label for="edit-provider-select" class="form-label"
+                        >Provider</label
+                    >
+                    <select
+                        class="form-select bg-white text-dark"
+                        id="edit-provider-select"
+                        name="provider"
+                        required
+                    >
+                        {{range .Providers}}
+                        <option value="{{.}}">{{.}}</option>
+                        {{end}}
+                    </select>
+                </div>
+                <form id="edit-form" action="/api/job/update" method="POST">
+                    <div class="row">
+                        <div class="col">
+                            <div id="edit-inputs-container"></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <button
+                                type="submit"
+                                class="btn btn-primary"
+                                data-bs-dismiss="modal"
+                            >
+                                Save
+                            </button>
+                            <a
+                                class="btn btn-danger float-end"
+                                id="delete-button"
+                                >Delete</a
+                            >
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{{end}}

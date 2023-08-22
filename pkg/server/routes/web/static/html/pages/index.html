@@ -1,0 +1,41 @@
+<!-- htmlhint doctype-first:false -->
+{{define "index"}}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        {{template "include-head" .}}
+        <link rel="stylesheet" href="/css/index.css" />
+        <title>DDNS Updater</title>
+    </head>
+    <body class="bg-dark">
+        {{template "navbar" .}}
+        {{template "config-modal" .}}
+        {{template "add-modal" .}}
+        {{template "edit-modal" .}}
+        <div class="table-container">
+            <table class="table table-dark table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th class="d-none">ID</th>
+                        <th>Provider</th>
+                        <th>Updated</th>
+                        <th>Params</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{range .Jobs}}
+                    <tr>
+                        <td class="d-none">{{.ID}}</td>
+                        <td>{{.Provider}}</td>
+                        <td>{{.UpdatedAt.Format "02.01.2006 15:04"}}</td>
+                        <td>{{.Params}}</td>
+                    </tr>
+                    {{end}}
+                </tbody>
+            </table>
+        </div>
+        {{template "include-body" .}}
+        <script src="/js/index.js"></script>
+    </body>
+</html>
+{{end}}

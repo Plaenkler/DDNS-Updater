@@ -41,6 +41,7 @@ linters:
     - varnamelen
     - wsl
     - nonamedreturns
+    - depguard
 
     # review later
     - gofmt
