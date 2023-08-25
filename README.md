@@ -30,8 +30,7 @@ The user-friendly interface allows for straightforward secure setup and manageme
 
 ## 🏷️ Supported providers
 
-`Strato` `DDNSS` `Dynu` `Aliyun` `NoIP` `DD24` ~~`AllInkl`~~ ~~`Cloudflare`~~ ~~`DigitalOcean`~~ ~~`DonDominio`~~ ~~`DNSOMatic`~~ ~~`DNSPod`~~ ~~`Dreamhost`~~ ~~`DuckDNS`~~ ~~`DynDNS`~~ ~~`FreeDNS`~~ ~~`Gandi`~~ ~~`GCP`~~ ~~`GoDaddy`~~
-~~`Google`~~ ~~`He.net`~~ ~~`Infomaniak`~~ ~~`INWX`~~ ~~`Linode`~~ ~~`LuaDNS`~~ ~~`Namecheap`~~  ~~`Njalla`~~ ~~`OpenDNS`~~ ~~`OVH`~~ ~~`Porkbun`~~ ~~`Selfhost.de`~~ ~~`Servercow.de`~~ ~~`Spdyn`~~ ~~`Variomedia.de`~~
+`Strato` `DDNSS` `Dynu` `Aliyun` `NoIP` `DD24` `INWX`
 
 > **Note:** The crossed out providers will be implemented in future releases. In addition, the implementation of an individual update link with user-specific input and return values is planned.
 
