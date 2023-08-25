@@ -10,8 +10,6 @@
 DDNS Updater provides a straightforward way to update dynamic DNS records without messing with the command-line or a file.
 The user-friendly interface allows for straightforward secure setup and management.
 
-> **Note:** If your DynDNS provider is not listed open an issue and I will integrate it.
-
 <table>
   <tr>
     <td><img src="https://user-images.githubusercontent.com/60503970/219900612-b4d7d3c4-7e0a-4dca-bc73-63c4822c5133.png" width="480"/></td>
@@ -30,10 +28,9 @@ The user-friendly interface allows for straightforward secure setup and manageme
 
 ## 🏷️ Supported providers
 
-`Strato` `DDNSS` `Dynu` `Aliyun` `NoIP` `DD24` ~~`AllInkl`~~ ~~`Cloudflare`~~ ~~`DigitalOcean`~~ ~~`DonDominio`~~ ~~`DNSOMatic`~~ ~~`DNSPod`~~ ~~`Dreamhost`~~ ~~`DuckDNS`~~ ~~`DynDNS`~~ ~~`FreeDNS`~~ ~~`Gandi`~~ ~~`GCP`~~ ~~`GoDaddy`~~
-~~`Google`~~ ~~`He.net`~~ ~~`Infomaniak`~~ ~~`INWX`~~ ~~`Linode`~~ ~~`LuaDNS`~~ ~~`Namecheap`~~  ~~`Njalla`~~ ~~`OpenDNS`~~ ~~`OVH`~~ ~~`Porkbun`~~ ~~`Selfhost.de`~~ ~~`Servercow.de`~~ ~~`Spdyn`~~ ~~`Variomedia.de`~~
+`Strato` `DDNSS` `Dynu` `Aliyun` `NoIP` `DD24` `INWX`
 
-> **Note:** The crossed out providers will be implemented in future releases. In addition, the implementation of an individual update link with user-specific input and return values is planned.
+> **Note:** If your DynDNS provider is not listed open an issue and I will integrate it.
 
 ## 📜 Installation guide
 
