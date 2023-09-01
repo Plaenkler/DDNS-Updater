@@ -2,9 +2,11 @@ package web
 
 import (
 	"embed"
+	"encoding/json"
 	"fmt"
 	"html/template"
 	"net/http"
+	"strings"
 
 	"github.com/plaenkler/ddns-updater/pkg/config"
 	"github.com/plaenkler/ddns-updater/pkg/database"
@@ -64,10 +66,16 @@ func ProvideIndex(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "[web-ProvideIndex-4] could not find jobs: %s", err)
 		return
 	}
+	err = formatParams(data.Jobs)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprintf(w, "[web-ProvideIndex-5] formatting params failed: %s", err)
+		return
+	}
 	img, err := totps.GetKeyAsQR()
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintf(w, "[web-ProvideIndex-5] could not generate TOTP QR code: %s", err)
+		fmt.Fprintf(w, "[web-ProvideIndex-6] could not generate TOTP QR code: %s", err)
 		return
 	}
 	data.TOTPQR = template.URL(img)
@@ -75,6 +83,25 @@ func ProvideIndex(w http.ResponseWriter, r *http.Request) {
 	err = tpl.Execute(w, data)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintf(w, "[web-ProvideIndex-6] could not execute parsed template: %v", err)
+		fmt.Fprintf(w, "[web-ProvideIndex-7] could not execute parsed template: %v", err)
 	}
+}
+
+func formatParams(jobs []model.SyncJob) error {
+	for j := range jobs {
+		params := make(map[string]string)
+		err := json.Unmarshal([]byte(jobs[j].Params), &params)
+		if err != nil {
+			return err
+		}
+		var paramList []string
+		for k, v := range params {
+			if strings.ToLower(k) == "password" {
+				continue
+			}
+			paramList = append(paramList, fmt.Sprintf("%s: %s", k, v))
+		}
+		jobs[j].Params = strings.Join(paramList, ", ")
+	}
+	return nil
 }

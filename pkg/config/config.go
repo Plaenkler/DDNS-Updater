@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+	"sync"
 
 	log "github.com/plaenkler/ddns-updater/pkg/logging"
 	"gopkg.in/yaml.v3"
@@ -24,7 +25,10 @@ const (
 	filePerm     = 0644
 )
 
-var config *Config
+var (
+	config *Config
+	mutex  = &sync.RWMutex{}
+)
 
 func init() {
 	err := load()
@@ -159,10 +163,14 @@ func Update(updatedConfig *Config) error {
 	if err != nil {
 		return err
 	}
+	mutex.Lock()
+	defer mutex.Unlock()
 	config = updatedConfig
 	return nil
 }
 
 func Get() *Config {
+	mutex.RLock()
+	defer mutex.RUnlock()
 	return config
 }
