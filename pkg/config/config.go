@@ -8,17 +8,17 @@ import (
 	"strconv"
 	"sync"
 
+	"github.com/plaenkler/ddns-updater/pkg/cipher"
 	log "github.com/plaenkler/ddns-updater/pkg/logging"
-	"github.com/plaenkler/ddns-updater/pkg/security"
 	"gopkg.in/yaml.v3"
 )
 
 type Config struct {
-	Interval  uint64 `yaml:"Interval"`
-	UseTOTP   bool   `yaml:"TOTP"`
-	Port      uint64 `yaml:"Port"`
-	Resolver  string `yaml:"Resolver"`
-	Encryptor string `yaml:"Encryptor"`
+	Interval uint64 `yaml:"Interval"`
+	UseTOTP  bool   `yaml:"TOTP"`
+	Port     uint64 `yaml:"Port"`
+	Resolver string `yaml:"Resolver"`
+	Cryptor  string `yaml:"Cryptor"`
 }
 
 const (
@@ -66,16 +66,16 @@ func load() error {
 }
 
 func create() error {
-	encryptor, err := security.GenerateRandomKey(8)
+	Cryptor, err := cipher.GenerateRandomKey(16)
 	if err != nil {
 		return err
 	}
 	config := Config{
-		Interval:  600,
-		UseTOTP:   false,
-		Port:      80,
-		Resolver:  "",
-		Encryptor: encryptor,
+		Interval: 600,
+		UseTOTP:  false,
+		Port:     80,
+		Resolver: "",
+		Cryptor:  Cryptor,
 	}
 	err = os.MkdirAll(filepath.Dir(pathToConfig), dirPerm)
 	if err != nil {
@@ -122,9 +122,9 @@ func loadFromEnv() error {
 	if resolver != "" {
 		config.Resolver = resolver
 	}
-	encryptor, ok := os.LookupEnv("DDNS_ENCRYPTOR")
-	if ok && encryptor != "" {
-		config.Encryptor = encryptor
+	Cryptor, ok := os.LookupEnv("DDNS_Cryptor")
+	if ok && Cryptor != "" {
+		config.Cryptor = Cryptor
 	}
 	return nil
 }
