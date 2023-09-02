@@ -1,20 +1,34 @@
 package main
 
 import (
-	"log"
+	"os"
+	"os/signal"
 
-	"github.com/plaenkler/ddns/pkg/database"
-	"github.com/plaenkler/ddns/pkg/ddns"
-	"github.com/plaenkler/ddns/pkg/server"
+	"github.com/plaenkler/ddns-updater/pkg/database"
+	"github.com/plaenkler/ddns-updater/pkg/ddns"
+	log "github.com/plaenkler/ddns-updater/pkg/logging"
+	"github.com/plaenkler/ddns-updater/pkg/server"
+	"github.com/plaenkler/ddns-updater/pkg/server/session"
 )
 
-func init() {
-	database.GetManager().Start()
-	log.Printf("[main-init-1] initialized database")
-}
-
 func main() {
-	go ddns.Run()
-	log.Printf("[main-main-1] started ddns service")
-	server.StartService()
+	database.Start()
+	log.Infof("[main-main-1] started database connection")
+	go ddns.Start()
+	log.Infof("[main-main-2] started ddns service")
+	go session.Start()
+	log.Infof("[main-main-3] started session service")
+	go server.Start()
+	log.Infof("[main-main-4] started webserver")
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt)
+	<-c
+	server.Stop()
+	log.Infof("[main-main-5] stopped webserver")
+	session.Stop()
+	log.Infof("[main-main-6] stopped session service")
+	ddns.Stop()
+	log.Infof("[main-main-7] stopped ddns service")
+	database.Stop()
+	log.Infof("[main-main-8] stopped database connection")
 }

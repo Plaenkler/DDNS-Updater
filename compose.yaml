@@ -6,8 +6,8 @@ version: '3.9'
 
 services:
   ddns:
-    image: ddns
-    container_name: ddns
+    image: ddns-updater:latest
+    container_name: ddns-updater
     restart: always
     networks:
       - web

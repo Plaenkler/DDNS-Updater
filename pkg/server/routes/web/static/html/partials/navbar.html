@@ -2,12 +2,24 @@
 {{ define "navbar" }}
 <nav class="navbar navbar-dark bg-dark">
     <div class="container-fluid">
-        <p class="navbar-brand text-white text-center my-auto">IP-Address: {{.IPAddress}}</p>
+        <p class="navbar-brand text-white text-center my-auto">
+            IP-Address: {{.IPAddress}}
+        </p>
         <div class="d-flex">
-            <button type="button" class="btn btn-danger me-2" data-bs-toggle="modal" data-bs-target="#config-modal">
+            <button
+                type="button"
+                class="btn btn-danger me-2"
+                data-bs-toggle="modal"
+                data-bs-target="#config-modal"
+            >
                 <i class="bi bi-gear-wide-connected"></i>
             </button>
-            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add-modal">
+            <button
+                type="button"
+                class="btn btn-success"
+                data-bs-toggle="modal"
+                data-bs-target="#add-modal"
+            >
                 <i class="bi bi-plus-square"></i>
             </button>
         </div>

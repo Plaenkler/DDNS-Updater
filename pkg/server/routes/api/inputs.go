@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/plaenkler/ddns/pkg/ddns"
+	"github.com/plaenkler/ddns-updater/pkg/ddns"
 )
 
 func GetInputs(w http.ResponseWriter, r *http.Request) {
