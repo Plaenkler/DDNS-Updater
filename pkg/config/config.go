@@ -9,14 +9,16 @@ import (
 	"sync"
 
 	log "github.com/plaenkler/ddns-updater/pkg/logging"
+	"github.com/plaenkler/ddns-updater/pkg/security"
 	"gopkg.in/yaml.v3"
 )
 
 type Config struct {
-	Interval uint64 `yaml:"Interval"`
-	UseTOTP  bool   `yaml:"TOTP"`
-	Port     uint64 `yaml:"Port"`
-	Resolver string `yaml:"Resolver"`
+	Interval  uint64 `yaml:"Interval"`
+	UseTOTP   bool   `yaml:"TOTP"`
+	Port      uint64 `yaml:"Port"`
+	Resolver  string `yaml:"Resolver"`
+	Encryptor string `yaml:"Encryptor"`
 }
 
 const (
@@ -64,13 +66,18 @@ func load() error {
 }
 
 func create() error {
-	config := Config{
-		Interval: 600,
-		UseTOTP:  false,
-		Port:     80,
-		Resolver: "",
+	encryptor, err := security.GenerateRandomKey(8)
+	if err != nil {
+		return err
 	}
-	err := os.MkdirAll(filepath.Dir(pathToConfig), dirPerm)
+	config := Config{
+		Interval:  600,
+		UseTOTP:   false,
+		Port:      80,
+		Resolver:  "",
+		Encryptor: encryptor,
+	}
+	err = os.MkdirAll(filepath.Dir(pathToConfig), dirPerm)
 	if err != nil {
 		return err
 	}
@@ -114,6 +121,10 @@ func loadFromEnv() error {
 	}
 	if resolver != "" {
 		config.Resolver = resolver
+	}
+	encryptor, ok := os.LookupEnv("DDNS_ENCRYPTOR")
+	if ok && encryptor != "" {
+		config.Encryptor = encryptor
 	}
 	return nil
 }
