@@ -66,7 +66,7 @@ func load() error {
 }
 
 func create() error {
-	Cryptor, err := cipher.GenerateRandomKey(16)
+	cryptor, err := cipher.GenerateRandomKey(16)
 	if err != nil {
 		return err
 	}
@@ -75,7 +75,7 @@ func create() error {
 		UseTOTP:  false,
 		Port:     80,
 		Resolver: "",
-		Cryptor:  Cryptor,
+		Cryptor:  cryptor,
 	}
 	err = os.MkdirAll(filepath.Dir(pathToConfig), dirPerm)
 	if err != nil {
@@ -122,9 +122,9 @@ func loadFromEnv() error {
 	if resolver != "" {
 		config.Resolver = resolver
 	}
-	Cryptor, ok := os.LookupEnv("DDNS_CRYPTOR")
-	if ok && Cryptor != "" {
-		config.Cryptor = Cryptor
+	cryptor, ok := os.LookupEnv("DDNS_CRYPTOR")
+	if ok && cryptor != "" {
+		config.Cryptor = cryptor
 	}
 	return nil
 }
