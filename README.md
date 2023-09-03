@@ -25,6 +25,7 @@ The user-friendly interface allows for straightforward secure setup and manageme
 - [x] Scheduled update service
 - [x] Supports multiple IP resolvers
 - [ ] Deploy as Windows Service
+- [x] Secure encryption of sensitive data
 
 ## 🏷️ Supported providers
 
