@@ -120,9 +120,9 @@ func sanitizeParams(jobs []model.SyncJob) error {
 	return nil
 }
 
-func formatParams(paramsData []byte) (string, error) {
+func formatParams(paramsData string) (string, error) {
 	params := make(map[string]string)
-	err := json.Unmarshal(paramsData, &params)
+	err := json.Unmarshal([]byte(paramsData), &params)
 	if err != nil {
 		return "", err
 	}
