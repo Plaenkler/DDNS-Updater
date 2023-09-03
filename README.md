@@ -3,12 +3,12 @@
 [![License](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 [![Release](https://img.shields.io/badge/Calver-YY.WW.REVISION-22bfda.svg)](https://calver.org/)
 [![Linters](https://github.com/plaenkler/ddns-updater/actions/workflows/linters.yml/badge.svg)](https://github.com/plaenkler/ddns-updater/actions/workflows/linters.yml)
+[![Go Report](https://goreportcard.com/badge/github.com/plaenkler/ddns-updater)](https://goreportcard.com/report/github.com/plaenkler/ddns-updater)
+[![CQL](https://github.com/plaenkler/ddns-updater/workflows/CodeQL/badge.svg)](https://github.com/plaenkler/ddns-updater)
 [![Support me](https://img.shields.io/badge/Support%20me%20%E2%98%95-orange.svg)](https://www.buymeacoffee.com/Plaenkler)
 
 DDNS Updater provides a straightforward way to update dynamic DNS records without messing with the command-line or a file.
 The user-friendly interface allows for straightforward secure setup and management.
-
-> **Note:** If your DynDNS provider is not listed open an issue and I will integrate it.
 
 <table>
   <tr>
@@ -21,17 +21,17 @@ The user-friendly interface allows for straightforward secure setup and manageme
 
 - [x] Simple & User friendly UI
 - [x] Secure authentication with TOTP
-- [x] Available as Docker Container
+- [x] Encryption of sensitive data
 - [x] Scheduled update service
 - [x] Supports multiple IP resolvers
 - [ ] Deploy as Windows Service
+- [x] Available as Docker Container
 
 ## 🏷️ Supported providers
 
-`Strato` `DDNSS` `Dynu` `Aliyun` `NoIP` `DD24` ~~`AllInkl`~~ ~~`Cloudflare`~~ ~~`DigitalOcean`~~ ~~`DonDominio`~~ ~~`DNSOMatic`~~ ~~`DNSPod`~~ ~~`Dreamhost`~~ ~~`DuckDNS`~~ ~~`DynDNS`~~ ~~`FreeDNS`~~ ~~`Gandi`~~ ~~`GCP`~~ ~~`GoDaddy`~~
-~~`Google`~~ ~~`He.net`~~ ~~`Infomaniak`~~ ~~`INWX`~~ ~~`Linode`~~ ~~`LuaDNS`~~ ~~`Namecheap`~~  ~~`Njalla`~~ ~~`OpenDNS`~~ ~~`OVH`~~ ~~`Porkbun`~~ ~~`Selfhost.de`~~ ~~`Servercow.de`~~ ~~`Spdyn`~~ ~~`Variomedia.de`~~
+`Strato` `DDNSS` `Dynu` `Aliyun` `NoIP` `DD24` `INWX`
 
-> **Note:** The crossed out providers will be implemented in future releases. In addition, the implementation of an individual update link with user-specific input and return values is planned.
+> **Note:** If your DynDNS provider is not listed open an issue and I will integrate it.
 
 ## 📜 Installation guide
 
@@ -47,7 +47,7 @@ version: '3.9'
 
 services:
   ddns:
-    image: plaenkler/ddns:latest
+    image: plaenkler/ddns-updater:latest
     container_name: ddns
     restart: always
     networks:
@@ -74,7 +74,7 @@ version: '3.9'
 
 services:
   ddns:
-    image: plaenkler/ddns:latest
+    image: plaenkler/ddns-updater:latest
     container_name: ddns
     restart: always
     networks:
@@ -127,9 +127,13 @@ Changes to the interval take effect immediately. The program must be restarted f
 A config.yaml file is provided to store all settings. In the absence of this file, the program generates one. Users have the option to directly modify settings within this file. It is important to note that changes made here will only take effect upon restarting the program. Default settings within the file are as follows:
 
 ```yaml
+# How often the IP address is checked in seconds
 Interval: 600
+# Enable TOTP authentication
 TOTP: false
+# Port for the web interface
 Port: 80
+# Custom IP resolver returns IPv4 address in plain text
 Resolver: ""
 ```
 

@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/plaenkler/ddns-updater/pkg/cipher"
 	"github.com/plaenkler/ddns-updater/pkg/database"
 	"github.com/plaenkler/ddns-updater/pkg/database/model"
 	"github.com/plaenkler/ddns-updater/pkg/ddns"
@@ -34,19 +35,25 @@ func CreateJob(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 		return
 	}
+	encParams, err := cipher.Encrypt(params)
+	if err != nil {
+		log.Errorf("[api-CreateJob-4] could not encrypt params: %s", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
 	job := model.SyncJob{
 		Provider: provider,
-		Params:   params,
+		Params:   encParams,
 	}
 	db := database.GetDatabase()
 	if db == nil {
-		log.Errorf("[api-CreateJob-4] could not get database connection")
+		log.Errorf("[api-CreateJob-5] could not get database connection")
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}
 	err = db.Create(&job).Error
 	if err != nil {
-		log.Errorf("[api-CreateJob-5] could not create job: %s", err)
+		log.Errorf("[api-CreateJob-6] could not create job: %s", err)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}
@@ -82,27 +89,33 @@ func UpdateJob(w http.ResponseWriter, r *http.Request) {
 		log.Errorf("[api-UpdateJob-4] could not unmarshal params: %s", err)
 		return
 	}
+	encParams, err := cipher.Encrypt(params)
+	if err != nil {
+		http.Error(w, "Could not encrypt params", http.StatusInternalServerError)
+		log.Errorf("[api-UpdateJob-5] could not encrypt params: %s", err)
+		return
+	}
 	job := model.SyncJob{
 		Model: gorm.Model{
 			ID: uint(id),
 		},
 		Provider: provider,
-		Params:   params,
+		Params:   encParams,
 	}
 	db := database.GetDatabase()
 	if db == nil {
 		http.Error(w, "Could not get database connection", http.StatusInternalServerError)
-		log.Errorf("[api-UpdateJob-5] could not get database connection")
+		log.Errorf("[api-UpdateJob-6] could not get database connection")
 		return
 	}
 	err = db.Save(&job).Error
 	if err != nil {
 		http.Error(w, "Could not update job", http.StatusInternalServerError)
-		log.Errorf("[api-UpdateJob-6] could not update job: %s", err)
+		log.Errorf("[api-UpdateJob-7] could not update job: %s", err)
 		return
 	}
 	http.Redirect(w, r, r.Header.Get("Referer"), http.StatusSeeOther)
-	log.Infof("[api-UpdateJob-7] updated job with ID %d", job.ID)
+	log.Infof("[api-UpdateJob-8] updated job with ID %d", job.ID)
 }
 
 func DeleteJob(w http.ResponseWriter, r *http.Request) {

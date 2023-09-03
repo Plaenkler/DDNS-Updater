@@ -28,7 +28,7 @@
                         <td class="d-none">{{.ID}}</td>
                         <td>{{.Provider}}</td>
                         <td>{{.UpdatedAt.Format "02.01.2006 15:04"}}</td>
-                        <td>{{.Params}}</td>
+                        <td json="{{ .Params }}">{{formatParams .Params}}</td>
                     </tr>
                     {{end}}
                 </tbody>

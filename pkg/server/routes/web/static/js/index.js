@@ -24,7 +24,7 @@ document.querySelector('table tbody').addEventListener('click', function(event) 
   document.getElementById('edit-id').value = row.querySelector('td:nth-child(1)').textContent;
   document.getElementById('delete-button').href = `/api/job/delete?ID=${row.querySelector('td:nth-child(1)').textContent}`;
   document.getElementById('edit-provider-select').value = row.querySelector('td:nth-child(2)').textContent;
-  const params = JSON.parse(row.querySelector('td:nth-child(4)').textContent);
+  const params = JSON.parse(document.querySelector('td:nth-child(4)').getAttribute('json'));
   let html = '';
   for (const key in params) {
     html += `

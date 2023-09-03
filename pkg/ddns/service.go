@@ -5,6 +5,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/plaenkler/ddns-updater/pkg/cipher"
 	"github.com/plaenkler/ddns-updater/pkg/config"
 	"github.com/plaenkler/ddns-updater/pkg/database"
 	"github.com/plaenkler/ddns-updater/pkg/database/model"
@@ -82,22 +83,27 @@ func updateDDNSEntries(db *gorm.DB, jobs []model.SyncJob, a model.IPAddress) {
 			log.Errorf("[ddns-updateDDNSEntries-1] no updater found for job %v", job.ID)
 			continue
 		}
-		request := updater.Request
-		err := json.Unmarshal([]byte(job.Params), request)
+		params, err := cipher.Decrypt(job.Params)
 		if err != nil {
-			log.Errorf("[ddns-updateDDNSEntries-2] failed to unmarshal job params for job %v: %s", job.ID, err)
+			log.Errorf("[ddns-updateDDNSEntries-2] failed to decrypt job params for job %v: %s", job.ID, err)
+			continue
+		}
+		request := updater.Request
+		err = json.Unmarshal(params, request)
+		if err != nil {
+			log.Errorf("[ddns-updateDDNSEntries-3] failed to unmarshal job params for job %v: %s", job.ID, err)
 			continue
 		}
 		err = updater.Updater(request, a.Address)
 		if err != nil {
-			log.Errorf("[ddns-updateDDNSEntries-3] failed to update DDNS entry for job %v: %s", job.ID, err)
+			log.Errorf("[ddns-updateDDNSEntries-4] failed to update DDNS entry for job %v: %s", job.ID, err)
 			continue
 		}
 		err = db.Model(&job).Update("ip_address_id", a.ID).Error
 		if err != nil {
-			log.Errorf("[ddns-updateDDNSEntries-4] failed to update IP address for job %v: %s", job.ID, err)
+			log.Errorf("[ddns-updateDDNSEntries-5] failed to update IP address for job %v: %s", job.ID, err)
 		}
-		log.Infof("[ddns-updateDDNSEntries-5] updated DDNS entry for ID: %v Provider: %s Params: %+v", job.ID, job.Provider, job.Params)
+		log.Infof("[ddns-updateDDNSEntries-6] updated DDNS entry for ID: %v Provider: %s Params: %+v", job.ID, job.Provider, job.Params)
 	}
 }
 
