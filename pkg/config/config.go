@@ -122,7 +122,7 @@ func loadFromEnv() error {
 	if resolver != "" {
 		config.Resolver = resolver
 	}
-	Cryptor, ok := os.LookupEnv("DDNS_Cryptor")
+	Cryptor, ok := os.LookupEnv("DDNS_CRYPTOR")
 	if ok && Cryptor != "" {
 		config.Cryptor = Cryptor
 	}

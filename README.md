@@ -148,5 +148,5 @@ DDNS_INTERVAL=600
 DDNS_TOTP=false
 DDNS_PORT=80
 DDNS_RESOLVER=ipv4.example.com
-DDNS_Cryptor=29atdqljyqUVXNAuXltyng==
+DDNS_CRYPTOR=29atdqljyqUVXNAuXltyng==
 ```
