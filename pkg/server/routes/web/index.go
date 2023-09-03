@@ -64,7 +64,7 @@ func ProvideIndex(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "[web-ProvideIndex-4] could not find jobs: %s", err)
 		return
 	}
-	err = sanatizeParams(data.Jobs)
+	err = sanitizeParams(data.Jobs)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		fmt.Fprintf(w, "[web-ProvideIndex-5] formatting params failed: %s", err)
@@ -91,7 +91,7 @@ func ProvideIndex(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func sanatizeParams(jobs []model.SyncJob) error {
+func sanitizeParams(jobs []model.SyncJob) error {
 	for j := range jobs {
 		decParams, err := cipher.Decrypt(config.Get().Cryptor, jobs[j].Params)
 		if err != nil {
