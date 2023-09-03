@@ -6,7 +6,6 @@ import (
 	"strconv"
 
 	"github.com/plaenkler/ddns-updater/pkg/cipher"
-	"github.com/plaenkler/ddns-updater/pkg/config"
 	"github.com/plaenkler/ddns-updater/pkg/database"
 	"github.com/plaenkler/ddns-updater/pkg/database/model"
 	"github.com/plaenkler/ddns-updater/pkg/ddns"
@@ -36,7 +35,7 @@ func CreateJob(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 		return
 	}
-	encParams, err := cipher.Encrypt(config.Get().Cryptor, params)
+	encParams, err := cipher.Encrypt(params)
 	if err != nil {
 		log.Errorf("[api-CreateJob-4] could not encrypt params: %s", err)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
@@ -90,7 +89,7 @@ func UpdateJob(w http.ResponseWriter, r *http.Request) {
 		log.Errorf("[api-UpdateJob-4] could not unmarshal params: %s", err)
 		return
 	}
-	encParams, err := cipher.Encrypt(config.Get().Cryptor, params)
+	encParams, err := cipher.Encrypt(params)
 	if err != nil {
 		http.Error(w, "Could not encrypt params", http.StatusInternalServerError)
 		log.Errorf("[api-UpdateJob-5] could not encrypt params: %s", err)

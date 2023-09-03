@@ -8,7 +8,6 @@ import (
 	"strconv"
 	"sync"
 
-	"github.com/plaenkler/ddns-updater/pkg/cipher"
 	log "github.com/plaenkler/ddns-updater/pkg/logging"
 	"gopkg.in/yaml.v3"
 )
@@ -18,7 +17,6 @@ type Config struct {
 	UseTOTP  bool   `yaml:"TOTP"`
 	Port     uint64 `yaml:"Port"`
 	Resolver string `yaml:"Resolver"`
-	Cryptor  string `yaml:"Cryptor"`
 }
 
 const (
@@ -66,18 +64,13 @@ func load() error {
 }
 
 func create() error {
-	cryptor, err := cipher.GenerateRandomKey(16)
-	if err != nil {
-		return err
-	}
 	config := Config{
 		Interval: 600,
 		UseTOTP:  false,
 		Port:     80,
 		Resolver: "",
-		Cryptor:  cryptor,
 	}
-	err = os.MkdirAll(filepath.Dir(pathToConfig), dirPerm)
+	err := os.MkdirAll(filepath.Dir(pathToConfig), dirPerm)
 	if err != nil {
 		return err
 	}
@@ -121,10 +114,6 @@ func loadFromEnv() error {
 	}
 	if resolver != "" {
 		config.Resolver = resolver
-	}
-	cryptor, ok := os.LookupEnv("DDNS_CRYPTOR")
-	if ok && cryptor != "" {
-		config.Cryptor = cryptor
 	}
 	return nil
 }

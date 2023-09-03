@@ -83,7 +83,7 @@ func updateDDNSEntries(db *gorm.DB, jobs []model.SyncJob, a model.IPAddress) {
 			log.Errorf("[ddns-updateDDNSEntries-1] no updater found for job %v", job.ID)
 			continue
 		}
-		params, err := cipher.Decrypt(config.Get().Cryptor, job.Params)
+		params, err := cipher.Decrypt(job.Params)
 		if err != nil {
 			log.Errorf("[ddns-updateDDNSEntries-2] failed to decrypt job params for job %v: %s", job.ID, err)
 			continue

@@ -93,7 +93,7 @@ func ProvideIndex(w http.ResponseWriter, r *http.Request) {
 
 func sanitizeParams(jobs []model.SyncJob) error {
 	for j := range jobs {
-		decParams, err := cipher.Decrypt(config.Get().Cryptor, jobs[j].Params)
+		decParams, err := cipher.Decrypt(jobs[j].Params)
 		if err != nil {
 			return err
 		}
