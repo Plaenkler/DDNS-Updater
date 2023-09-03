@@ -48,6 +48,7 @@ func UpdateConfig(w http.ResponseWriter, r *http.Request) {
 		Port:     port,
 		Interval: interval,
 		Resolver: resolver,
+		Cryptor:  config.Get().Cryptor,
 	}
 	if totps.Verify(r.FormValue("otp")) {
 		cfg.UseTOTP = !config.Get().UseTOTP
