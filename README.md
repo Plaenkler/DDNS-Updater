@@ -135,8 +135,6 @@ TOTP: false
 Port: 80
 # Custom IP resolver returns IPv4 address in plain text
 Resolver: ""
-# Random key for symmetrical encryption
-Cryptor: 29atdqljyqUVXNAuXltyng==
 ```
 
 **3. Environment Variables**
@@ -148,5 +146,4 @@ DDNS_INTERVAL=600
 DDNS_TOTP=false
 DDNS_PORT=80
 DDNS_RESOLVER=ipv4.example.com
-DDNS_CRYPTOR=29atdqljyqUVXNAuXltyng==
 ```

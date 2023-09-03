@@ -26,20 +26,20 @@ var (
 )
 
 func init() {
-	secret, err := readKeySecret()
+	var err error
+	keySecret, err = read()
 	if err != nil {
 		log.Fatalf("[totp-init-1] could not load secret: %v", err)
 	}
-	keySecret = secret
 }
 
-func readKeySecret() (string, error) {
+func read() (string, error) {
 	secret, err := os.ReadFile(secretPath)
 	if err != nil && !os.IsNotExist(err) {
 		return "", err
 	}
 	if os.IsNotExist(err) {
-		secret, err = createKeySecret()
+		secret, err = create()
 		if err != nil {
 			return "", err
 		}
@@ -47,7 +47,7 @@ func readKeySecret() (string, error) {
 	return string(secret), nil
 }
 
-func createKeySecret() ([]byte, error) {
+func create() ([]byte, error) {
 	key, err := totp.Generate(totp.GenerateOpts{
 		Issuer:      issuer,
 		AccountName: accountName,
