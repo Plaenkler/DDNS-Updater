@@ -20,7 +20,7 @@ var (
 	static embed.FS
 	oc     sync.Once
 	router *http.ServeMux
-	server *http.Server
+	cancel = make(chan bool)
 )
 
 func Start() {
@@ -75,7 +75,7 @@ func createStaticHandler() http.Handler {
 }
 
 func initializeServer() {
-	server = &http.Server{
+	server := &http.Server{
 		Addr:              fmt.Sprintf(":%v", config.Get().Port),
 		ReadTimeout:       15 * time.Second,
 		ReadHeaderTimeout: 5 * time.Second,
@@ -83,18 +83,16 @@ func initializeServer() {
 		IdleTimeout:       120 * time.Second,
 		Handler:           router,
 	}
-	err := server.ListenAndServe()
-	if err != nil && err != http.ErrServerClosed {
-		log.Fatalf("[server-initializeServer-1] could not initialize server: %v", err)
-	}
+	go func() {
+		err := server.ListenAndServe()
+		if err != nil && err != http.ErrServerClosed {
+			log.Fatalf("[server-initializeServer-1] could not initialize server: %v", err)
+		}
+	}()
+	<-cancel
+	server.Shutdown(context.Background())
 }
 
 func Stop() {
-	if server == nil {
-		return
-	}
-	err := server.Shutdown(context.Background())
-	if err != nil {
-		log.Errorf("[server-Stop-1] could not shutdown server: %v", err)
-	}
+	cancel <- true
 }
