@@ -37,13 +37,13 @@ func ProvideIndex(w http.ResponseWriter, r *http.Request) {
 	addr, err := ddns.GetPublicIP()
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintf(w, "[web-ProvideIndex-2] could not get public IP address: %s", err)
+		fmt.Fprintf(w, "[web-ProvideIndex-1] could not get public IP address: %s", err)
 		return
 	}
 	img, err := totps.GetKeyAsQR()
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintf(w, "[web-ProvideIndex-6] could not generate TOTP QR code: %s", err)
+		fmt.Fprintf(w, "[web-ProvideIndex-2] could not generate TOTP QR code: %s", err)
 		return
 	}
 	data := indexPageData{
@@ -80,7 +80,7 @@ func ProvideIndex(w http.ResponseWriter, r *http.Request) {
 	)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintf(w, "[web-ProvideIndex-1] could not provide template: %s", err)
+		fmt.Fprintf(w, "[web-ProvideIndex-6] could not provide template: %s", err)
 		return
 	}
 	w.Header().Add("Content-Type", "text/html")
