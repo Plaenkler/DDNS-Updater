@@ -26,29 +26,29 @@ func Encrypt(key string, plaintext string) (string, error) {
 	return base64.StdEncoding.EncodeToString(gcm.Seal(nonce, nonce, []byte(plaintext), nil)), nil
 }
 
-func Decrypt(key string, ciphertext string) (string, error) {
+func Decrypt(key string, ciphertext string) ([]byte, error) {
 	c, err := aes.NewCipher([]byte(key))
 	if err != nil {
-		return "", fmt.Errorf("[cipher-Decrypt-1] decryption failed: %s", err)
+		return nil, fmt.Errorf("[cipher-Decrypt-1] decryption failed: %s", err)
 	}
 	gcm, err := cipher.NewGCM(c)
 	if err != nil {
-		return "", fmt.Errorf("[cipher-Decrypt-2] decryption failed: %s", err)
+		return nil, fmt.Errorf("[cipher-Decrypt-2] decryption failed: %s", err)
 	}
 	cipherBytes, err := base64.StdEncoding.DecodeString(ciphertext)
 	if err != nil {
-		return "", fmt.Errorf("[cipher-Decrypt-3] decryption failed: %s", err)
+		return nil, fmt.Errorf("[cipher-Decrypt-3] decryption failed: %s", err)
 	}
 	nonceSize := gcm.NonceSize()
 	if len(cipherBytes) < nonceSize {
-		return "", fmt.Errorf("[cipher-Decrypt-4] decryption failed: %s", err)
+		return nil, fmt.Errorf("[cipher-Decrypt-4] decryption failed: %s", err)
 	}
 	nonce, cipherBytes := cipherBytes[:nonceSize], cipherBytes[nonceSize:]
 	plaintext, err := gcm.Open(nil, nonce, cipherBytes, nil)
 	if err != nil {
-		return "", fmt.Errorf("[cipher-Decrypt-5] decryption failed: %s", err)
+		return nil, fmt.Errorf("[cipher-Decrypt-5] decryption failed: %s", err)
 	}
-	return string(plaintext), nil
+	return plaintext, nil
 }
 
 func GenerateRandomKey(length int) (string, error) {
