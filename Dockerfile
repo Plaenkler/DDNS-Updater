@@ -6,7 +6,7 @@ FROM golang:1.21-bullseye AS build
 WORKDIR /app
 COPY . /app
 
-RUN go mod tidy && go build -o /ddns-updater cmd/main.go
+RUN go mod tidy && go build -o /ddns-updater cmd/def/main.go
 
 ## Deploy
 FROM debian:stable-slim
