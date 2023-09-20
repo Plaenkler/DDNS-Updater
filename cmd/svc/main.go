@@ -41,11 +41,17 @@ func (p *program) Stop(_ service.Service) error {
 func main() {
 	if service.AvailableSystems()[len(service.AvailableSystems())-1].Interactive() {
 		p := &program{}
-		p.Start(nil)
+		err := p.Start(nil)
+		if err != nil {
+			log.Fatalf("[main-main-0] failed to start service: %v", err)
+		}
 		c := make(chan os.Signal, 1)
 		signal.Notify(c, os.Interrupt)
 		<-c
-		p.Stop(nil)
+		err = p.Stop(nil)
+		if err != nil {
+			log.Fatalf("[main-main-0] failed to stop service: %v", err)
+		}
 		return
 	}
 	svcConfig := &service.Config{

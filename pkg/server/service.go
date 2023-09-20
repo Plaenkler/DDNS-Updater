@@ -90,7 +90,10 @@ func initializeServer() {
 		}
 	}()
 	<-cancel
-	server.Shutdown(context.Background())
+	err := server.Shutdown(context.Background())
+	if err != nil {
+		log.Fatalf("[server-initializeServer-2] could not shutdown server: %v", err)
+	}
 }
 
 func Stop() {
