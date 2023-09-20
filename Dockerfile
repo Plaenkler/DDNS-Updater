@@ -16,7 +16,8 @@ WORKDIR /app
 COPY --from=build /ddns-updater /app/ddns-updater
 
 RUN apt-get update && \
-    apt-get install -y ca-certificates
+    apt-get install -y ca-certificates && \
+    rm -rf /var/lib/apt/lists/*
 
 EXPOSE 80
 
