@@ -24,7 +24,7 @@ The user-friendly interface allows for straightforward secure setup and manageme
 - [x] Encryption of sensitive data
 - [x] Scheduled update service
 - [x] Supports multiple IP resolvers
-- [ ] Deploy as Windows Service
+- [x] Deploy as Windows Service
 - [x] Available as Docker Container
 
 ## 🏷️ Supported providers

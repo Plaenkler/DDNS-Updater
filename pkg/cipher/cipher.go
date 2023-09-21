@@ -72,7 +72,7 @@ func generate() ([]byte, error) {
 	randomBytes := make([]byte, keyLength)
 	_, err := rand.Read(randomBytes)
 	if err != nil {
-		return nil, fmt.Errorf("[cipher-GenerateRandomKey-1] generating random key failed: %s", err)
+		return nil, err
 	}
 	return randomBytes, nil
 }

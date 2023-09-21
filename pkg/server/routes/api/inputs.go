@@ -25,5 +25,9 @@ func GetInputs(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
-	w.Write(inputs)
+	_, err = w.Write(inputs)
+	if err != nil {
+		http.Error(w, "[api-GetInputs-4] could not write response", http.StatusInternalServerError)
+		return
+	}
 }

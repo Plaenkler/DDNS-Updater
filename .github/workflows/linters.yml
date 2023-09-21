@@ -9,21 +9,38 @@ on:
     branches: main
 
 jobs:
-  build:
-    name: Lint Code Base
+  super-linter:
+    name: Lint Multiple
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
       - name: Lint Code Base
         uses: super-linter/super-linter@v5
         env:
           DEFAULT_BRANCH: main
-          VALIDATE_ALL_CODEBASE: true
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VALIDATE_ALL_CODEBASE: true
           VALIDATE_HTML: false
           VALIDATE_JAVASCRIPT_STANDARD: false
+          VALIDATE_GO: false
+  golangci-lint:
+    name: Lint Golang
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.21.1
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install dependencies
+        run: go mod tidy
+      - name: Run golangci-lint
+        uses: golangci/golangci-lint-action@v3
+        with:
+          args: --timeout=3m
