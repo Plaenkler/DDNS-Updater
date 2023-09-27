@@ -52,6 +52,11 @@ func UpdateConfig(w http.ResponseWriter, r *http.Request) {
 	if totps.Verify(r.FormValue("otp")) {
 		cfg.UseTOTP = !config.Get().UseTOTP
 	}
-	config.Update(cfg)
+	err = config.Update(cfg)
+	if err != nil {
+		log.Errorf("[api-UpdateConfig-6] could not update config: %s", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 	http.Redirect(w, r, r.Header.Get("Referer"), http.StatusTemporaryRedirect)
 }

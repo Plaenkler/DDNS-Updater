@@ -7,42 +7,50 @@ import (
 	"strings"
 )
 
+const (
+	xForwardedFor  = "X-Forwarded-For"
+	xRealIP        = "X-Real-IP"
+	xForwardedPort = "X-Forwarded-Port"
+)
+
 func getRealClientIP(r *http.Request) (string, error) {
-	clientIP := r.Header.Get("X-Real-IP")
-	if clientIP != "" {
-		return clientIP, nil
+	rAddr := r.Header.Get(xRealIP)
+	if rAddr != "" {
+		return rAddr, nil
 	}
-	xff := r.Header.Get("X-Forwarded-For")
-	ips := strings.Split(xff, ",")
-	for i := len(ips) - 1; i >= 0; i-- {
-		// Check IP addresses in reverse order to find real IP
-		ip := strings.TrimSpace(ips[i])
-		if ip != "" {
-			clientIP = ip
-			break
-		}
+	rAddr = crawlForwardedIPs(r)
+	if rAddr != "" {
+		return rAddr, nil
 	}
-	if clientIP != "" {
-		return clientIP, nil
-	}
-	clientIP, _, err := net.SplitHostPort(r.RemoteAddr)
+	rAddr, _, err := net.SplitHostPort(r.RemoteAddr)
 	if err != nil {
 		return "", err
 	}
-	return clientIP, nil
+	return rAddr, nil
+}
+
+func crawlForwardedIPs(r *http.Request) string {
+	xff := r.Header.Get(xForwardedFor)
+	ips := strings.Split(xff, ",")
+	// Check IP addresses in reverse order
+	for i := len(ips) - 1; i >= 0; i-- {
+		ip := strings.TrimSpace(ips[i])
+		if ip != "" {
+			return ip
+		}
+	}
+	return ""
 }
 
 func getRealClientPort(r *http.Request) (string, error) {
-	remotePort := r.Header.Get("X-Forwarded-Port")
+	remotePort := r.Header.Get(xForwardedPort)
 	if remotePort != "" {
 		return remotePort, nil
 	}
-	// Extract remote address from TCP connection
-	remoteAddr := r.RemoteAddr
-	if !strings.Contains(remoteAddr, ":") {
+	if !strings.Contains(r.RemoteAddr, ":") {
 		return "", fmt.Errorf("[server-GetRealClientPort-2] could not determine remote port")
 	}
-	_, port, err := net.SplitHostPort(remoteAddr)
+	_, port, err := net.SplitHostPort(r.RemoteAddr)
 	if err != nil {
 		return "", err
 	}
