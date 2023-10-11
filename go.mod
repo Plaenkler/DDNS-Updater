@@ -5,13 +5,13 @@ go 1.21
 toolchain go1.21.1
 
 require (
-	github.com/aliyun/alibaba-cloud-sdk-go v1.62.567
+	github.com/aliyun/alibaba-cloud-sdk-go v1.62.572
 	github.com/kardianos/service v1.2.2
 	github.com/pquerna/otp v1.4.0
 	golang.org/x/time v0.3.0
 	gopkg.in/yaml.v3 v3.0.1
-	gorm.io/driver/sqlite v1.5.3
-	gorm.io/gorm v1.25.4
+	gorm.io/driver/sqlite v1.5.4
+	gorm.io/gorm v1.25.5
 )
 
 require (
