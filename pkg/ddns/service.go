@@ -103,7 +103,7 @@ func updateDDNSEntries(db *gorm.DB, jobs []model.SyncJob, a model.IPAddress) {
 		if err != nil {
 			log.Errorf("[ddns-updateDDNSEntries-5] failed to update IP address for job %v: %s", job.ID, err)
 		}
-		log.Infof("[ddns-updateDDNSEntries-6] updated DDNS entry for ID: %s", job.ID)
+		log.Infof("[ddns-updateDDNSEntries-6] updated DDNS entry for ID: %v", job.ID)
 	}
 }
 

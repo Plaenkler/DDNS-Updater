@@ -48,13 +48,15 @@ func UpdateConfig(w http.ResponseWriter, r *http.Request) {
 		Port:     port,
 		Interval: interval,
 		Resolver: resolver,
+		UseTOTP:  config.Get().UseTOTP,
 	}
 	if totps.Verify(r.FormValue("otp")) {
-		cfg.UseTOTP = !config.Get().UseTOTP
+		cfg.UseTOTP = !cfg.UseTOTP
+		log.Infof("[api-UpdateConfig-6] Token verified TOTP is now %t", cfg.UseTOTP)
 	}
 	err = config.Update(cfg)
 	if err != nil {
-		log.Errorf("[api-UpdateConfig-6] could not update config: %s", err)
+		log.Errorf("[api-UpdateConfig-7] could not update config: %s", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
