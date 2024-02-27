@@ -7,7 +7,16 @@ updates:
     schedule:
       interval: "daily"
     target-branch: "dependencies"
+    assignees:
+      - "Plaenkler"
+    reviewers:
+      - "Plaenkler"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "daily"
+    target-branch: "dependencies"
+    assignees:
+      - "Plaenkler"
+    reviewers:
+      - "Plaenkler"
