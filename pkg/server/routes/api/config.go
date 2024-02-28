@@ -18,23 +18,25 @@ func UpdateConfig(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	port, err := strconv.ParseUint(r.FormValue("port"), 10, 16)
+	port64, err := strconv.ParseUint(r.FormValue("port"), 10, 16)
 	if err != nil {
 		log.Errorf("[api-UpdateConfig-2] port is not valid: %s", err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	interval, err := strconv.ParseUint(r.FormValue("interval"), 10, 64)
+	port := uint16(port64)
+	interval64, err := strconv.ParseUint(r.FormValue("interval"), 10, 32)
 	if err != nil {
 		log.Errorf("[api-UpdateConfig-3] interval is not valid: %s", err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	if interval < 10 {
+	if interval64 < 10 {
 		log.Errorf("[api-UpdateConfig-4] interval is too small: %s", err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
+	interval := uint32(interval64)
 	resolver := strings.TrimSpace(r.FormValue("resolver"))
 	if resolver != "" {
 		_, err = url.ParseRequestURI(resolver)

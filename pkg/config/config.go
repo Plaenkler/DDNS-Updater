@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"math"
 	"net/url"
 	"os"
 	"path/filepath"
@@ -13,9 +14,9 @@ import (
 )
 
 type Config struct {
-	Interval uint64 `yaml:"Interval"`
+	Interval uint32 `yaml:"Interval"`
 	UseTOTP  bool   `yaml:"TOTP"`
-	Port     uint64 `yaml:"Port"`
+	Port     uint16 `yaml:"Port"`
 	Resolver string `yaml:"Resolver"`
 }
 
@@ -91,22 +92,28 @@ func loadFromEnv() error {
 	if err != nil {
 		return err
 	}
+	if interval > uint64(math.MaxUint32) {
+		return fmt.Errorf("interval value exceeds uint32 maximum")
+	}
 	if interval != 0 {
-		config.Interval = interval
+		config.Interval = uint32(interval)
 	}
 	useTOTP, err := parseBoolEnv("DDNS_TOTP")
-	if err == nil {
-		config.UseTOTP = useTOTP
-	}
 	if err != nil && err.Error() != "not set" {
 		return err
+	}
+	if err == nil {
+		config.UseTOTP = useTOTP
 	}
 	port, err := parseUintEnv("DDNS_PORT")
 	if err != nil {
 		return err
 	}
+	if port > uint64(math.MaxUint16) {
+		return fmt.Errorf("port value exceeds uint16 maximum")
+	}
 	if port != 0 {
-		config.Port = port
+		config.Port = uint16(port)
 	}
 	resolver, err := parseURLEnv("DDNS_RESOLVER")
 	if err != nil {
