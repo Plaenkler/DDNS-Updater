@@ -7,8 +7,8 @@ on:
     branches: main
 
 permissions:
-  contents: read
-  packages: read
+  contents: write
+  packages: write
   statuses: write
 
 jobs:
