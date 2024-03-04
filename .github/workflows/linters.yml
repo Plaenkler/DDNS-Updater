@@ -8,6 +8,11 @@ on:
   pull_request:
     branches: main
 
+permissions:
+  contents: read
+  packages: read
+  statuses: write
+
 jobs:
   super-linter:
     name: Lint Multiple
@@ -18,7 +23,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Lint Code Base
-        uses: super-linter/super-linter@v5
+        uses: super-linter/super-linter@v6
         env:
           DEFAULT_BRANCH: main
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -26,6 +31,7 @@ jobs:
           VALIDATE_HTML: false
           VALIDATE_JAVASCRIPT_STANDARD: false
           VALIDATE_GO: false
+          VALIDATE_GO_MODULES: false
   golangci-lint:
     name: Lint Golang
     runs-on: ubuntu-latest

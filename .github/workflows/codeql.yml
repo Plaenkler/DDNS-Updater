@@ -8,6 +8,11 @@ on:
   pull_request:
     branches: main
 
+permissions:
+  contents: read
+  packages: read
+  statuses: write
+
 jobs:
   analyze:
     name: Analyze
