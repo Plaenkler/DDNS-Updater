@@ -12,8 +12,8 @@ The user-friendly interface allows for straightforward secure setup and manageme
 
 <table>
   <tr>
-    <td><img src="https://user-images.githubusercontent.com/60503970/219900612-b4d7d3c4-7e0a-4dca-bc73-63c4822c5133.png" width="480"/></td>
-    <td><img src="https://user-images.githubusercontent.com/60503970/219900611-dfaa9c4b-13ac-4fc4-b7ca-1cdae47961a9.png" width="480"/></td>
+    <td><img src="https://user-images.githubusercontent.com/60503970/219900612-b4d7d3c4-7e0a-4dca-bc73-63c4822c5133.png" width="480" alt="DDNS Updater Dashboard"/></td>
+    <td><img src="https://user-images.githubusercontent.com/60503970/219900611-dfaa9c4b-13ac-4fc4-b7ca-1cdae47961a9.png" width="480" alt="DDNS Updater add Job"/></td>
   </tr>
 </table>
 

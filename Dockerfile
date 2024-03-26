@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 ## Build
-FROM golang:1.21-bullseye AS build
+FROM golang:1.22 AS build
 
 WORKDIR /app
 COPY . /app
@@ -15,9 +15,15 @@ WORKDIR /app
 
 COPY --from=build /ddns-updater /app/ddns-updater
 
+ARG CA_CERTIFICATES_VERSION=20230311        # https://packages.debian.org/bookworm/ca-certificates
+ARG CURL_VERSION=7.88.1-10+deb12u5          # https://packages.debian.org/bookworm/curl
+
 RUN apt-get update && \
-    apt-get install -y ca-certificates && \
-    rm -rf /var/lib/apt/lists/*
+    apt-get install -y --no-install-recommends ca-certificates=${CA_CERTIFICATES_VERSION} curl=${CURL_VERSION}
+
+HEALTHCHECK CMD curl --fail http://localhost:80
+
+#checkov:skip=CKV_DOCKER_3:Irrelevant
 
 EXPOSE 80
 
