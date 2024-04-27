@@ -44,6 +44,7 @@ var updaters = map[string]provider{
 	"Servercow":    {Updater: providers.UpdateServercow, Request: &providers.UpdateServercowRequest{}},
 	"Spdyn":        {Updater: providers.UpdateSpdyn, Request: &providers.UpdateSpdynRequest{}},
 	"Variomedia":   {Updater: providers.UpdateVariomedia, Request: &providers.UpdateVariomediaRequest{}},
+	"MaxiHoster":   {Updater: providers.UpdateMaxiHoster, Request: &providers.UpdateMaxiHosterRequest{}},
 }
 
 func GetProviders() []string {
