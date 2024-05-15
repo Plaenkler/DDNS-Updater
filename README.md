@@ -106,8 +106,8 @@ networks:
 
 DDNS Updater requires the following software to be installed on your system:
 
- - [Go](https://golang.org/dl/)
- - [CGO](https://gist.github.com/Plaenkler/0c319b89fbc884a928612b7fdef97fbd)
+- [Go](https://golang.org/dl/)
+- [CGO](https://gist.github.com/Plaenkler/0c319b89fbc884a928612b7fdef97fbd)
 
 **Windows Service**
 
