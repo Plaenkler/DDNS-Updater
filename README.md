@@ -104,14 +104,26 @@ networks:
 
 ### 📄 Build from source
 
-From the root of the source tree, run:
+DDNS Updater requires the following software to be installed on your system:
+
+- [Go](https://golang.org/dl/)
+- [CGO](https://gist.github.com/Plaenkler/0c319b89fbc884a928612b7fdef97fbd)
+
+**Windows Service**
+
+After cloning the repository, navigate to the root of the source tree and run the following command to build the executable file:
 
 ```text
-go build -o ddns-updater.exe cmd/main.go
+go build -o ddns-updater.exe cmd/svc/main.go
 ```
 
-> **Note:** Make sure that [CGO](https://gist.github.com/Plaenkler/0c319b89fbc884a928612b7fdef97fbd) is operational!
+**Standalone application**
 
+To build the standalone application, run the following command:
+
+```text
+go build -o ddns-updater cmd/def/main.go
+```
 
 ### ⚙️ Configuration
 
