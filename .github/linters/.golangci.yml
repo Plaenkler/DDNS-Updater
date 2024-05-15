@@ -1,18 +1,11 @@
 ---
 
 run:
-  concurrency: 4
-  timeout: 240s
-  issues-exit-code: 2
-  tests: false
-  go: '1.21'
+  timeout: 60s
 
 linters:
-  # start with everything
   enable-all: true
-
   disable:
-    # deprecated
     - golint
     - interfacer
     - maligned
@@ -20,8 +13,6 @@ linters:
     - deadcode
     - varcheck
     - structcheck
-
-    # too annoying
     - cyclop
     - exhaustive
     - exhaustivestruct
@@ -30,7 +21,8 @@ linters:
     - funlen
     - gochecknoglobals
     - godot
-    - goerr113
+    - err113
+    - gofmt
     - gofumpt
     - gomnd
     - lll
@@ -41,25 +33,15 @@ linters:
     - varnamelen
     - wsl
     - nonamedreturns
-    - depguard
-
-    # review later
-    - gofmt
-    - goimports
-
-    # complexity linters
+    - contextcheck
     - gocognit
     - gocyclo
     - maintidx
-
-    # i disagree with these
     - wrapcheck
     - nolintlint
     - errorlint
     - noctx
     - gochecknoinits
-
-    # should not block the build
     - prealloc
     - godox
     - dupl
@@ -68,18 +50,15 @@ linters:
     - nilerr
     - ireturn
     - nosprintfhostport
-
-    # buggy
+    - depguard
     - gci
-
-    # this breaks with proto generation
     - nosnakecase
-
-    # disabled because of generics
     - rowserrcheck
     - sqlclosecheck
     - structcheck
     - wastedassign
+    - goimports
+    - mnd
 
 linters-settings:
   wsl:
