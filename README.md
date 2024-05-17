@@ -117,6 +117,12 @@ After cloning the repository, navigate to the root of the source tree and run th
 go build -o ddns-updater.exe cmd/svc/main.go
 ```
 
+The program can then be stored in any file path and set up as a service using the CMD:
+
+```text
+sc create DDNS-Updater binPath=[INSTALL_DIR]\ddns-updater.exe type=share start=auto DisplayName=DDNS-Updater
+```
+
 **Standalone application**
 
 To build the standalone application, run the following command:
