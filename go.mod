@@ -3,7 +3,7 @@ module github.com/plaenkler/ddns-updater
 go 1.22.0
 
 require (
-	github.com/aliyun/alibaba-cloud-sdk-go v1.62.737
+	github.com/aliyun/alibaba-cloud-sdk-go v1.62.742
 	github.com/kardianos/service v1.2.2
 	github.com/pquerna/otp v1.4.0
 	golang.org/x/time v0.5.0
