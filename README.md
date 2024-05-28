@@ -43,7 +43,6 @@ It is recommended to use [Compose](https://docs.docker.com/compose/) as it is ve
 
 ```yaml
 ---
-version: '3.9'
 
 services:
   ddns:
@@ -70,7 +69,6 @@ networks:
 
 ```yaml
 ---
-version: '3.9'
 
 services:
   ddns:
