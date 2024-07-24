@@ -3,6 +3,7 @@ package api
 import (
 	"encoding/json"
 	"net/http"
+	"reflect"
 	"strconv"
 
 	"github.com/plaenkler/ddns-updater/pkg/cipher"
@@ -27,7 +28,7 @@ func CreateJob(w http.ResponseWriter, r *http.Request) {
 		log.Errorf("[api-CreateJob-2] provider is not valid")
 		return
 	}
-	jobModel := updater.Request
+	jobModel := reflect.New(reflect.TypeOf(updater.Request)).Interface()
 	params := r.FormValue("params")
 	err = json.Unmarshal([]byte(params), &jobModel)
 	if err != nil {
@@ -81,7 +82,7 @@ func UpdateJob(w http.ResponseWriter, r *http.Request) {
 		log.Errorf("[api-UpdateJob-3] provider is not valid")
 		return
 	}
-	jobModel := updater.Request
+	jobModel := reflect.New(reflect.TypeOf(updater.Request)).Interface()
 	params := r.FormValue("params")
 	err = json.Unmarshal([]byte(params), &jobModel)
 	if err != nil {
