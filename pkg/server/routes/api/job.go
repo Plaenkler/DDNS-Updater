@@ -27,7 +27,7 @@ func CreateJob(w http.ResponseWriter, r *http.Request) {
 		log.Errorf("[api-CreateJob-2] provider is not valid")
 		return
 	}
-	jobModel := &updater.Request
+	jobModel := updater.Request
 	params := r.FormValue("params")
 	err = json.Unmarshal([]byte(params), &jobModel)
 	if err != nil {
@@ -81,7 +81,7 @@ func UpdateJob(w http.ResponseWriter, r *http.Request) {
 		log.Errorf("[api-UpdateJob-3] provider is not valid")
 		return
 	}
-	jobModel := &updater.Request
+	jobModel := updater.Request
 	params := r.FormValue("params")
 	err = json.Unmarshal([]byte(params), &jobModel)
 	if err != nil {
