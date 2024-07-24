@@ -1,7 +1,6 @@
 package server
 
 import (
-	"fmt"
 	"net"
 	"net/http"
 	"strings"
@@ -40,19 +39,4 @@ func crawlForwardedIPs(r *http.Request) string {
 		}
 	}
 	return ""
-}
-
-func getRealClientPort(r *http.Request) (string, error) {
-	remotePort := r.Header.Get(xForwardedPort)
-	if remotePort != "" {
-		return remotePort, nil
-	}
-	if !strings.Contains(r.RemoteAddr, ":") {
-		return "", fmt.Errorf("[server-GetRealClientPort-2] could not determine remote port")
-	}
-	_, port, err := net.SplitHostPort(r.RemoteAddr)
-	if err != nil {
-		return "", err
-	}
-	return port, nil
 }
