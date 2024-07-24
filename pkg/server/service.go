@@ -39,7 +39,6 @@ func initializeRouter() {
 }
 
 func registerMiddlewares(r *Router) {
-	r.Use(forwardToProxy)
 	r.Use(limitRequests)
 	if config.Get().UseTOTP {
 		r.Use(authenticate)
