@@ -89,7 +89,7 @@ func updateDDNSEntries(db *gorm.DB, jobs []model.SyncJob, a model.IPAddress) {
 			continue
 		}
 		request := updater.Request
-		err = json.Unmarshal(params, request)
+		err = json.Unmarshal(params, &request)
 		if err != nil {
 			log.Errorf("[ddns-updateDDNSEntries-3] failed to unmarshal job params for job %v: %s", job.ID, err)
 			continue
