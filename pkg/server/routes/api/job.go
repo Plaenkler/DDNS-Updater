@@ -145,6 +145,5 @@ func verifyJobModel(provider, params string) error {
 		return fmt.Errorf("provider is not valid")
 	}
 	jobModel := reflect.New(reflect.TypeOf(updater.Request)).Interface()
-	err := json.Unmarshal([]byte(params), &jobModel)
-	return err
+	return json.Unmarshal([]byte(params), &jobModel)
 }
