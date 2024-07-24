@@ -13,12 +13,12 @@ func GetInputs(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "[api-GetInputs-1] missing provider", http.StatusBadRequest)
 		return
 	}
-	request, ok := ddns.GetUpdaters()[provider]
+	updater, ok := ddns.GetUpdaters()[provider]
 	if !ok {
 		http.Error(w, "[api-GetInputs-2] provider is not valid", http.StatusBadRequest)
 		return
 	}
-	fields := &request.Request
+	fields := updater.Request
 	inputs, err := json.Marshal(fields)
 	if err != nil {
 		http.Error(w, "[api-GetInputs-3] could not marshal fields", http.StatusInternalServerError)
