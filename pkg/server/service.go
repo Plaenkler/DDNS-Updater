@@ -68,7 +68,7 @@ func registerStaticFiles(r *Router) {
 func createStaticHandler() http.Handler {
 	fs, err := fs.Sub(static, "routes/web/static")
 	if err != nil {
-		log.Fatalf("[server-createStaticHandler-1] could not create static handler: %v", err)
+		log.Fatalf("could not create static handler: %v", err)
 	}
 	return controlCache(http.FileServer(http.FS(fs)))
 }
@@ -85,13 +85,13 @@ func initializeServer() {
 	go func() {
 		err := server.ListenAndServe()
 		if err != nil && err != http.ErrServerClosed {
-			log.Fatalf("[server-initializeServer-1] could not initialize server: %v", err)
+			log.Fatalf("could not initialize server: %v", err)
 		}
 	}()
 	<-cancel
 	err := server.Shutdown(context.Background())
 	if err != nil {
-		log.Fatalf("[server-initializeServer-2] could not shutdown server: %v", err)
+		log.Fatalf("could not shutdown server: %v", err)
 	}
 }
 
