@@ -1,38 +1,92 @@
 package logging
 
 import (
+	"fmt"
+	"io"
 	"log"
 	"os"
+	"path/filepath"
+	"runtime"
+	"strings"
 )
 
 const (
-	INFO  = "[\033[0;32mINF\033[0m] "
-	ERROR = "[\033[0;31mERR\033[0m] "
-	FATAL = "[\033[0;31mFAT\033[0m] "
+	pathToLog = "./data/ddns.log"
+	dirPerm   = 0755
+	filePerm  = 0644
+	INFO      = "[INF]"
+	ERROR     = "[ERR]"
+	FATAL     = "[FAT]"
+	INFOC     = "[\033[0;32mINF\033[0m] "
+	ERRORC    = "[\033[0;31mERR\033[0m] "
+	FATALC    = "[\033[0;31mFAT\033[0m] "
+	UNKOWN    = "unknown-origin"
 )
-
-var logger *Logger
 
 type Logger struct {
 	infoLogger  *log.Logger
 	errorLogger *log.Logger
 }
 
+var (
+	consoleLogger *Logger
+	fileLogger    *Logger
+	logFile       *os.File
+)
+
 func init() {
-	logger = &Logger{
-		infoLogger:  log.New(os.Stdout, "", log.Ldate|log.Ltime),
-		errorLogger: log.New(os.Stderr, "", log.Ldate|log.Ltime),
+	consoleLogger = createLogger(os.Stdout, os.Stderr)
+	openLogFile()
+	fileLogger = createLogger(logFile, logFile)
+}
+
+func openLogFile() {
+	err := os.MkdirAll(filepath.Dir(pathToLog), dirPerm)
+	if err != nil {
+		log.Fatalf("could not open log: %v", err)
+	}
+	file, err := os.OpenFile(pathToLog, os.O_CREATE|os.O_WRONLY|os.O_APPEND, filePerm)
+	if err != nil {
+		log.Fatalf("could not open log: %v", err)
+	}
+	logFile = file
+}
+
+func createLogger(infoOutput io.Writer, errorOutput io.Writer) *Logger {
+	return &Logger{
+		infoLogger:  log.New(infoOutput, "", log.Ldate|log.Ltime),
+		errorLogger: log.New(errorOutput, "", log.Ldate|log.Ltime),
 	}
 }
 
-func Infof(format string, args ...interface{}) {
-	logger.infoLogger.Printf(INFO+format, args...)
+func Infof(msg string, args ...interface{}) {
+	consoleLogger.infoLogger.Printf(INFOC+trace()+"message: "+msg, args...)
+	fileLogger.infoLogger.Printf(INFO+trace()+"message: "+msg, args...)
 }
 
-func Errorf(format string, args ...interface{}) {
-	logger.errorLogger.Printf(ERROR+format, args...)
+func Errorf(msg string, args ...interface{}) {
+	consoleLogger.errorLogger.Printf(ERRORC+trace()+"message: "+msg, args...)
+	fileLogger.errorLogger.Printf(ERROR+trace()+"message: "+msg, args...)
 }
 
-func Fatalf(format string, args ...interface{}) {
-	logger.errorLogger.Fatalf(FATAL+format, args...)
+func Fatalf(msg string, args ...interface{}) {
+	consoleLogger.errorLogger.Fatalf(FATALC+trace()+"message: "+msg, args...)
+	fileLogger.errorLogger.Fatalf(FATAL+trace()+"message: "+msg, args...)
+}
+
+func trace() string {
+	pc, _, line, ok := runtime.Caller(2)
+	if !ok {
+		return UNKOWN
+	}
+	f := runtime.FuncForPC(pc)
+	if f == nil {
+		return UNKOWN
+	}
+	origin := f.Name()
+	parts := strings.Split(origin, "/")
+	if len(parts) > 0 {
+		origin = parts[len(parts)-1]
+	}
+	return fmt.Sprintf("origin: %v line: %v ", strings.Replace(origin, ".", "-", -1), line)
 }
