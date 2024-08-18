@@ -14,9 +14,9 @@ const (
 	pathToLog = "./data/ddns.log"
 	dirPerm   = 0755
 	filePerm  = 0644
-	INFO      = "[INF]"
-	ERROR     = "[ERR]"
-	FATAL     = "[FAT]"
+	INFO      = "[INF] "
+	ERROR     = "[ERR] "
+	FATAL     = "[FAT] "
 	INFOC     = "[\033[0;32mINF\033[0m] "
 	ERRORC    = "[\033[0;31mERR\033[0m] "
 	FATALC    = "[\033[0;31mFAT\033[0m] "
