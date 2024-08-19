@@ -14,12 +14,12 @@ const (
 	pathToLog = "./data/ddns.log"
 	dirPerm   = 0755
 	filePerm  = 0644
-	INFO      = "[INF] "
-	ERROR     = "[ERR] "
-	FATAL     = "[FAT] "
-	INFOC     = "[\033[0;32mINF\033[0m] "
-	ERRORC    = "[\033[0;31mERR\033[0m] "
-	FATALC    = "[\033[0;31mFAT\033[0m] "
+	INFO      = "INF "
+	ERROR     = "ERR "
+	FATAL     = "FAT "
+	INFOC     = "\033[0;32mINF\033[0m "
+	ERRORC    = "\033[0;31mERR\033[0m "
+	FATALC    = "\033[0;31mFAT\033[0m "
 	UNKOWN    = "unknown-origin"
 )
 
@@ -60,18 +60,18 @@ func createLogger(infoOutput io.Writer, errorOutput io.Writer) *Logger {
 }
 
 func Infof(msg string, args ...interface{}) {
-	consoleLogger.infoLogger.Printf(INFOC+trace()+"message: "+msg, args...)
-	fileLogger.infoLogger.Printf(INFO+trace()+"message: "+msg, args...)
+	consoleLogger.infoLogger.Printf(INFOC+trace()+"message:"+msg, args...)
+	fileLogger.infoLogger.Printf(INFO+trace()+"message:"+msg, args...)
 }
 
 func Errorf(msg string, args ...interface{}) {
-	consoleLogger.errorLogger.Printf(ERRORC+trace()+"message: "+msg, args...)
-	fileLogger.errorLogger.Printf(ERROR+trace()+"message: "+msg, args...)
+	consoleLogger.errorLogger.Printf(ERRORC+trace()+"message:"+msg, args...)
+	fileLogger.errorLogger.Printf(ERROR+trace()+"message:"+msg, args...)
 }
 
 func Fatalf(msg string, args ...interface{}) {
-	consoleLogger.errorLogger.Fatalf(FATALC+trace()+"message: "+msg, args...)
-	fileLogger.errorLogger.Fatalf(FATAL+trace()+"message: "+msg, args...)
+	consoleLogger.errorLogger.Fatalf(FATALC+trace()+"message:"+msg, args...)
+	fileLogger.errorLogger.Fatalf(FATAL+trace()+"message:"+msg, args...)
 }
 
 func trace() string {
@@ -88,5 +88,5 @@ func trace() string {
 	if len(parts) > 0 {
 		origin = parts[len(parts)-1]
 	}
-	return fmt.Sprintf("origin: %v line: %v ", strings.Replace(origin, ".", "-", -1), line)
+	return fmt.Sprintf("origin:%v line:%v ", strings.Replace(origin, ".", "-", -1), line)
 }
