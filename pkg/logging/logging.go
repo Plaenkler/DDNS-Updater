@@ -1,6 +1,7 @@
 package logging
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"log"
@@ -89,4 +90,16 @@ func trace() string {
 		origin = parts[len(parts)-1]
 	}
 	return fmt.Sprintf("origin:%v line:%v ", strings.Replace(origin, ".", "-", -1), line)
+}
+
+func GetEntries() ([]byte, error) {
+	file, err := os.ReadFile(pathToLog)
+	if err != nil {
+		return nil, fmt.Errorf("could not read log file: %v", err)
+	}
+	entries, err := json.Marshal(strings.Split(string(file), "\n"))
+	if err != nil {
+		return nil, fmt.Errorf("could not marshal JSON: %v", err)
+	}
+	return entries, nil
 }

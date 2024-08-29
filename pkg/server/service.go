@@ -51,6 +51,7 @@ func registerAPIRoutes(r *Router) {
 		r.HandleFunc("/login", web.ProvideLogin)
 		r.HandleFunc("/api/login", api.Login)
 	}
+	r.HandleFunc("/api/logs", api.GetLogs)
 	r.HandleFunc("/api/inputs", api.GetInputs)
 	r.HandleFunc("/api/job/create", api.CreateJob)
 	r.HandleFunc("/api/job/update", api.UpdateJob)
