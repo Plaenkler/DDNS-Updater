@@ -34,7 +34,7 @@ var (
 func init() {
 	err := load()
 	if err != nil {
-		log.Fatalf("[config-init-1] initialization failed: %s", err.Error())
+		log.Fatalf("initialization failed: %s", err.Error())
 	}
 }
 
@@ -83,7 +83,7 @@ func create() error {
 	if err != nil {
 		return err
 	}
-	log.Infof("[config-create-1] created default configuration")
+	log.Infof("created default configuration")
 	return nil
 }
 

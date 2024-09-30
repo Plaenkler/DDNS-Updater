@@ -37,13 +37,13 @@ func ProvideIndex(w http.ResponseWriter, r *http.Request) {
 	addr, err := ddns.GetPublicIP()
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintf(w, "[web-ProvideIndex-1] could not get public IP address: %s", err)
+		fmt.Fprintf(w, "could not get public IP address: %s", err.Error())
 		return
 	}
 	img, err := totps.GetKeyAsQR()
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintf(w, "[web-ProvideIndex-2] could not generate TOTP QR code: %s", err)
+		fmt.Fprintf(w, "could not generate TOTP QR code: %s", err.Error())
 		return
 	}
 	data := indexPageData{
@@ -55,19 +55,19 @@ func ProvideIndex(w http.ResponseWriter, r *http.Request) {
 	db := database.GetDatabase()
 	if db == nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintf(w, "[web-ProvideIndex-3] could not get database connection")
+		fmt.Fprintf(w, "could not get database connection")
 		return
 	}
 	err = db.Find(&data.Jobs).Error
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintf(w, "[web-ProvideIndex-4] could not find jobs: %s", err)
+		fmt.Fprintf(w, "could not find jobs: %s", err.Error())
 		return
 	}
 	err = sanitizeParams(data.Jobs)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintf(w, "[web-ProvideIndex-5] formatting params failed: %s", err)
+		fmt.Fprintf(w, "formatting params failed: %s", err.Error())
 		return
 	}
 	tpl, err := template.New("index").Funcs(template.FuncMap{
@@ -80,14 +80,14 @@ func ProvideIndex(w http.ResponseWriter, r *http.Request) {
 	)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintf(w, "[web-ProvideIndex-6] could not provide template: %s", err)
+		fmt.Fprintf(w, "could not provide template: %s", err.Error())
 		return
 	}
 	w.Header().Add("Content-Type", "text/html")
 	err = tpl.Execute(w, data)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintf(w, "[web-ProvideIndex-7] could not execute parsed template: %v", err)
+		fmt.Fprintf(w, "could not execute parsed template: %v", err.Error())
 	}
 }
 

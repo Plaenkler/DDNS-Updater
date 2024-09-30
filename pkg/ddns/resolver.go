@@ -26,21 +26,21 @@ func GetPublicIP() (string, error) {
 	if cRes != "" {
 		addr, err := resolveIPAddress(cRes)
 		if err != nil {
-			return "", fmt.Errorf("[ddns-GetPublicIP-1] resolver %s failed: %s", cRes, err)
+			return "", fmt.Errorf("resolver %s failed: %s", cRes, err)
 		}
-		log.Infof("[ddns-GetPublicIP-2] %s succeeded: %s", cRes, addr)
+		log.Infof("%s succeeded: %s", cRes, addr)
 		return addr, nil
 	}
 	for r := range resolvers {
 		addr, err := resolveIPAddress(resolvers[r])
 		if err != nil {
-			log.Errorf("[ddns-GetPublicIP-3] resolver %s failed: %s", r, err)
+			log.Errorf("resolver %s failed: %s", r, err)
 			continue
 		}
-		log.Infof("[ddns-GetPublicIP-4] %s succeeded: %s", r, addr)
+		log.Infof("%s succeeded: %s", r, addr)
 		return addr, nil
 	}
-	return "", fmt.Errorf("[ddns-GetPublicIP-5] all resolvers failed")
+	return "", fmt.Errorf("all resolvers failed")
 }
 
 func resolveIPAddress(url string) (string, error) {
