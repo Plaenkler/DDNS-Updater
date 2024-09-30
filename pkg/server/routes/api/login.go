@@ -12,13 +12,13 @@ import (
 func Login(w http.ResponseWriter, r *http.Request) {
 	currentTOTP := r.FormValue("totp")
 	if !totps.Verify(currentTOTP) {
-		log.Errorf("[api-login-1] invalid totp: %s", currentTOTP)
+		log.Errorf("invalid totp: %s", currentTOTP)
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
 	}
 	token, err := session.Add()
 	if err != nil {
-		log.Errorf("[api-login-2] could not add session: %s", err)
+		log.Errorf("could not add session: %s", err)
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
 	}

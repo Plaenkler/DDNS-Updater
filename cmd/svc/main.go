@@ -16,25 +16,25 @@ type program struct{}
 
 func (p *program) Start(_ service.Service) error {
 	database.Start()
-	log.Infof("[main-Start-1] started database connection")
+	log.Infof("started database connection")
 	go ddns.Start()
-	log.Infof("[main-Start-2] started ddns service")
+	log.Infof("started ddns service")
 	go session.Start()
-	log.Infof("[main-Start-3] started session service")
+	log.Infof("started session service")
 	go server.Start()
-	log.Infof("[main-Start-4] started webserver")
+	log.Infof("started webserver")
 	return nil
 }
 
 func (p *program) Stop(_ service.Service) error {
 	server.Stop()
-	log.Infof("[main-Stop-1] stopped webserver")
+	log.Infof("stopped webserver")
 	session.Stop()
-	log.Infof("[main-Stop-2] stopped session service")
+	log.Infof("stopped session service")
 	ddns.Stop()
-	log.Infof("[main-Stop-3] stopped ddns service")
+	log.Infof("stopped ddns service")
 	database.Stop()
-	log.Infof("[main-Stop-4] stopped database connection")
+	log.Infof("stopped database connection")
 	return nil
 }
 
@@ -43,14 +43,14 @@ func main() {
 		p := &program{}
 		err := p.Start(nil)
 		if err != nil {
-			log.Fatalf("[main-main-0] failed to start service: %v", err)
+			log.Fatalf("failed to start service: %v", err)
 		}
 		c := make(chan os.Signal, 1)
 		signal.Notify(c, os.Interrupt)
 		<-c
 		err = p.Stop(nil)
 		if err != nil {
-			log.Fatalf("[main-main-0] failed to stop service: %v", err)
+			log.Fatalf("failed to stop service: %v", err)
 		}
 		return
 	}
@@ -62,10 +62,10 @@ func main() {
 	prg := &program{}
 	s, err := service.New(prg, svcConfig)
 	if err != nil {
-		log.Fatalf("[main-main-1] failed to create service: %v", err)
+		log.Fatalf("failed to create service: %v", err)
 	}
 	err = s.Run()
 	if err != nil {
-		log.Errorf("[main-main-2] failed to run service: %v", err)
+		log.Errorf("failed to run service: %v", err)
 	}
 }
