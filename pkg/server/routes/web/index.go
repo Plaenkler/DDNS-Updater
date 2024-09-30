@@ -7,7 +7,7 @@ import (
 	"html/template"
 	"net/http"
 	"strings"
-	"html"
+
 	"github.com/plaenkler/ddns-updater/pkg/cipher"
 	"github.com/plaenkler/ddns-updater/pkg/config"
 	"github.com/plaenkler/ddns-updater/pkg/database"
@@ -37,13 +37,13 @@ func ProvideIndex(w http.ResponseWriter, r *http.Request) {
 	addr, err := ddns.GetPublicIP()
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintf(w, "could not get public IP address: %s", html.EscapeString(err.Error()))
+		fmt.Fprintf(w, "could not get public IP address: %s", err)
 		return
 	}
 	img, err := totps.GetKeyAsQR()
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintf(w, "could not generate TOTP QR code: %s", html.EscapeString(err.Error()))
+		fmt.Fprintf(w, "could not generate TOTP QR code: %s", err)
 		return
 	}
 	data := indexPageData{
@@ -61,13 +61,13 @@ func ProvideIndex(w http.ResponseWriter, r *http.Request) {
 	err = db.Find(&data.Jobs).Error
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintf(w, "could not find jobs: %s", html.EscapeString(err.Error()))
+		fmt.Fprintf(w, "could not find jobs: %s", err)
 		return
 	}
 	err = sanitizeParams(data.Jobs)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintf(w, "formatting params failed: %s", html.EscapeString(err.Error()))
+		fmt.Fprintf(w, "formatting params failed: %s", err)
 		return
 	}
 	tpl, err := template.New("index").Funcs(template.FuncMap{
@@ -80,14 +80,14 @@ func ProvideIndex(w http.ResponseWriter, r *http.Request) {
 	)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintf(w, "could not provide template: %s", html.EscapeString(err.Error()))
+		fmt.Fprintf(w, "could not provide template: %s", err)
 		return
 	}
 	w.Header().Add("Content-Type", "text/html")
 	err = tpl.Execute(w, data)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintf(w, "could not execute parsed template: %v", html.EscapeString(err.Error()))
+		fmt.Fprintf(w, "could not execute parsed template: %v", err)
 	}
 }
 

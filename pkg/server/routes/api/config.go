@@ -1,6 +1,7 @@
 package api
 
 import (
+	"html"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -37,7 +38,7 @@ func UpdateConfig(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	interval := uint32(interval64)
-	resolver := strings.TrimSpace(r.FormValue("resolver"))
+	resolver := html.EscapeString(strings.TrimSpace(r.FormValue("resolver")))
 	if resolver != "" {
 		_, err = url.ParseRequestURI(resolver)
 		if err != nil {
