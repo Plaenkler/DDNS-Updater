@@ -1,3 +1,10 @@
+// Utility function to encode text content
+function encodeTextContent(text) {
+  const div = document.createElement('div');
+  div.appendChild(document.createTextNode(text));
+  return div.innerHTML;
+}
+
 // Append inputs to form create job
 document.getElementById('add-provider-select').addEventListener('change', async (e) => {
   try {
@@ -21,8 +28,9 @@ document.getElementById('add-provider-select').addEventListener('change', async 
 document.querySelector('table tbody').addEventListener('click', function(event) {
   const row = event.target.closest('tr');
   if (!row) return;
-  document.getElementById('edit-id').value = row.querySelector('td:nth-child(1)').textContent;
-  document.getElementById('delete-button').href = `/api/job/delete?ID=${row.querySelector('td:nth-child(1)').textContent}`;
+  const idText = row.querySelector('td:nth-child(1)').textContent;
+  document.getElementById('edit-id').value = idText;
+  document.getElementById('delete-button').href = `/api/job/delete?ID=${encodeTextContent(idText)}`;
   document.getElementById('edit-provider-select').value = row.querySelector('td:nth-child(2)').textContent;
   const params = JSON.parse(row.querySelector('td:nth-child(4)').getAttribute('json'));
   let html = '';
