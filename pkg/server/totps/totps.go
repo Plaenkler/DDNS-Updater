@@ -29,7 +29,7 @@ func init() {
 	var err error
 	keySecret, err = read()
 	if err != nil {
-		log.Fatalf("[totp-init-1] could not load secret: %v", err)
+		log.Fatalf("could not load secret: %v", err)
 	}
 }
 

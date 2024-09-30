@@ -27,7 +27,7 @@ func init() {
 	var err error
 	key, err = read()
 	if err != nil {
-		log.Fatalf("[cipher-init-1] could not load key: %v", err)
+		log.Fatalf("could not load key: %v", err)
 	}
 }
 
@@ -80,16 +80,16 @@ func generate() ([]byte, error) {
 func Encrypt(plaintext string) (string, error) {
 	encrypter, err := aes.NewCipher(key)
 	if err != nil {
-		return "", fmt.Errorf("[cipher-Encrypt-1] encryption failed: %s", err)
+		return "", fmt.Errorf("encryption failed: %s", err)
 	}
 	gcm, err := cipher.NewGCM(encrypter)
 	if err != nil {
-		return "", fmt.Errorf("[cipher-Encrypt-2] encryption failed: %s", err)
+		return "", fmt.Errorf("encryption failed: %s", err)
 	}
 	nonce := make([]byte, gcm.NonceSize())
 	_, err = io.ReadFull(rand.Reader, nonce)
 	if err != nil {
-		return "", fmt.Errorf("[cipher-Encrypt-3] encryption failed: %s", err)
+		return "", fmt.Errorf("encryption failed: %s", err)
 	}
 	return base64.StdEncoding.EncodeToString(gcm.Seal(nonce, nonce, []byte(plaintext), nil)), nil
 }
@@ -97,24 +97,24 @@ func Encrypt(plaintext string) (string, error) {
 func Decrypt(ciphertext string) ([]byte, error) {
 	c, err := aes.NewCipher(key)
 	if err != nil {
-		return nil, fmt.Errorf("[cipher-Decrypt-1] decryption failed: %s", err)
+		return nil, fmt.Errorf("decryption failed: %s", err)
 	}
 	gcm, err := cipher.NewGCM(c)
 	if err != nil {
-		return nil, fmt.Errorf("[cipher-Decrypt-2] decryption failed: %s", err)
+		return nil, fmt.Errorf("decryption failed: %s", err)
 	}
 	cipherBytes, err := base64.StdEncoding.DecodeString(ciphertext)
 	if err != nil {
-		return nil, fmt.Errorf("[cipher-Decrypt-3] decryption failed: %s", err)
+		return nil, fmt.Errorf("decryption failed: %s", err)
 	}
 	nonceSize := gcm.NonceSize()
 	if len(cipherBytes) < nonceSize {
-		return nil, fmt.Errorf("[cipher-Decrypt-4] decryption failed: %s", err)
+		return nil, fmt.Errorf("decryption failed: %s", err)
 	}
 	nonce, cipherBytes := cipherBytes[:nonceSize], cipherBytes[nonceSize:]
 	plaintext, err := gcm.Open(nil, nonce, cipherBytes, nil)
 	if err != nil {
-		return nil, fmt.Errorf("[cipher-Decrypt-5] decryption failed: %s", err)
+		return nil, fmt.Errorf("decryption failed: %s", err)
 	}
 	return plaintext, nil
 }

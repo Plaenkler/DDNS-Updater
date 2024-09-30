@@ -17,7 +17,7 @@ var ipLimiters = map[string]ipLimiter{}
 func isOverLimit(r *http.Request) error {
 	addr, err := getRealClientIP(r)
 	if err != nil {
-		return fmt.Errorf("[server-IsOverLimit-1] could not get client ip address")
+		return fmt.Errorf("could not get client ip address")
 	}
 	iplm, ok := ipLimiters[addr]
 	if !ok {
@@ -28,7 +28,7 @@ func isOverLimit(r *http.Request) error {
 		ipLimiters[addr] = iplm
 	}
 	if !iplm.limiter.Allow() {
-		return fmt.Errorf("[server-IsOverLimit-2] ip address %s is over limit", addr)
+		return fmt.Errorf("ip address %s is over limit", addr)
 	}
 	return nil
 }

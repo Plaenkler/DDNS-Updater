@@ -10,24 +10,24 @@ import (
 func GetInputs(w http.ResponseWriter, r *http.Request) {
 	provider := r.URL.Query().Get("provider")
 	if provider == "" {
-		http.Error(w, "[api-GetInputs-1] missing provider", http.StatusBadRequest)
+		http.Error(w, "missing provider", http.StatusBadRequest)
 		return
 	}
 	updater, ok := ddns.GetUpdaters()[provider]
 	if !ok {
-		http.Error(w, "[api-GetInputs-2] provider is not valid", http.StatusBadRequest)
+		http.Error(w, "provider is not valid", http.StatusBadRequest)
 		return
 	}
 	fields := updater.Request
 	inputs, err := json.Marshal(fields)
 	if err != nil {
-		http.Error(w, "[api-GetInputs-3] could not marshal fields", http.StatusInternalServerError)
+		http.Error(w, "could not marshal fields", http.StatusInternalServerError)
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
 	_, err = w.Write(inputs)
 	if err != nil {
-		http.Error(w, "[api-GetInputs-4] could not write response", http.StatusInternalServerError)
+		http.Error(w, "could not write response", http.StatusInternalServerError)
 		return
 	}
 }
