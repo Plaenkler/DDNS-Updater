@@ -10,6 +10,7 @@ type provider struct {
 }
 
 var updaters = map[string]provider{
+	"Custom":       {Updater: providers.UpdateCustom, Request: providers.UpdateCustomRequest{}},
 	"Strato":       {Updater: providers.UpdateStrato, Request: providers.UpdateStratoRequest{}},
 	"DDNSS":        {Updater: providers.UpdateDDNSS, Request: providers.UpdateDDNSSRequest{}},
 	"Dynu":         {Updater: providers.UpdateDynu, Request: providers.UpdateDynuRequest{}},
