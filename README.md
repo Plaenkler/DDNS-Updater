@@ -26,12 +26,20 @@ The user-friendly interface allows for straightforward secure setup and manageme
 - [x] Supports multiple IP resolvers
 - [x] Deploy as Windows Service
 - [x] Available as Docker Container
+- [x] Custom update URL with check
 
 ## 🏷️ Supported providers
 
 `Strato` `DDNSS` `Dynu` `Aliyun` `NoIP` `DD24` `INWX`
 
 > **Note:** If your DynDNS provider is not listed open an issue and I will integrate it.
+
+### Custom provider
+
+Select the provider **Custom** from the provider list.
+Then enter the user-defined URL in the **URL** field.
+Use the placeholder `<ipv4>` at the point where the IPv4 address is to be inserted.
+In the **“Check”** field, enter a string that will be used for checking to ensure that the update server's response is successful.
 
 ## 📜 Installation guide
 
