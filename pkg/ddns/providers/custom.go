@@ -24,12 +24,7 @@ func UpdateCustom(request interface{}, ipAddr string) error {
 	if err != nil {
 		return err
 	}
-	defer resp.Body.Close()
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return fmt.Errorf("failed to read response body: %v", err)
-	}
-	if !strings.Contains(string(body), r.Check) {
+	if !strings.Contains(resp, r.Check) {
 		return fmt.Errorf("check string '%s' not found in response", r.Check)
 	}
 	return nil
