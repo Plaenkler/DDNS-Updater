@@ -16,7 +16,7 @@ WORKDIR /app
 COPY --from=build /ddns-updater /app/ddns-updater
 
 ARG CA_CERTIFICATES_VERSION=20230311        # https://packages.debian.org/bookworm/ca-certificates
-ARG CURL_VERSION=7.88.1-10+deb12u6          # https://packages.debian.org/bookworm/curl
+ARG CURL_VERSION=7.88.1*                    # https://packages.debian.org/bookworm/curl
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends ca-certificates=${CA_CERTIFICATES_VERSION} curl=${CURL_VERSION}
