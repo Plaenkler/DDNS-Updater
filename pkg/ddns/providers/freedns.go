@@ -11,12 +11,12 @@ type UpdateFreeDNSRequest struct {
 	Token string `json:"Token"`
 }
 
-func UpdateDD24(request interface{}, ipAddr string) error {
+func UpdateFreeDNS(request interface{}, ipAddr string) error {
 	r, ok := request.(*UpdateFreeDNSRequest)
 	if !ok {
 		return fmt.Errorf("invalid request type: %T", request)
 	}
-	urlStr := fmt.Sprintf("https://freedns.afraid.org/dynamic/update.php?hostname=%s&Token", r.Host, r.Token)
+	urlStr := fmt.Sprintf("https://freedns.afraid.org/dynamic/update.php?hostname=%s&Token", r.Domain, r.Token)
 	resp, err := SendHTTPRequest(http.MethodGet, urlStr, nil)
 	if err != nil {
 		return err
