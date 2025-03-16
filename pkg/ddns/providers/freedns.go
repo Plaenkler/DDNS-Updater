@@ -2,12 +2,13 @@ package providers
 
 import (
 	"fmt"
+	"net/http"
+	"strings"
 )
 
 type UpdateFreeDNSRequest struct {
-	Domain string
-	Host   string
-	Token  string
+	Domain   string `json:"Domain"`
+	Token string `json:"Token"`
 }
 
 func UpdateFreeDNS(request interface{}, ipAddr string) error {
@@ -15,5 +16,13 @@ func UpdateFreeDNS(request interface{}, ipAddr string) error {
 	if !ok {
 		return fmt.Errorf("invalid request type: %T", request)
 	}
-	return fmt.Errorf("not implemented %s", r.Domain)
+	urlStr := fmt.Sprintf("https://freedns.afraid.org/dynamic/update.php?%s", r.Token)
+	resp, err := SendHTTPRequest(http.MethodGet, urlStr, nil)
+	if err != nil {
+		return err
+	}
+	if strings.Contains(resp, "success") {
+		return nil
+	}
+	return fmt.Errorf("failed to update DDNS entry: %s", resp)
 }
