@@ -16,7 +16,7 @@ func UpdateFreeDNS(request interface{}, ipAddr string) error {
 	if !ok {
 		return fmt.Errorf("invalid request type: %T", request)
 	}
-	urlStr := fmt.Sprintf("https://freedns.afraid.org/dynamic/update.php?hostname=%s&Token", r.Domain, r.Token)
+	urlStr := fmt.Sprintf("https://freedns.afraid.org/dynamic/update.php?%s", r.Token)
 	resp, err := SendHTTPRequest(http.MethodGet, urlStr, nil)
 	if err != nil {
 		return err
