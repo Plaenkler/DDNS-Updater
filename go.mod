@@ -4,7 +4,7 @@ go 1.22.0
 toolchain go1.24.1
 
 require (
-	github.com/aliyun/alibaba-cloud-sdk-go v1.63.104
+	github.com/aliyun/alibaba-cloud-sdk-go v1.63.105
 	github.com/kardianos/service v1.2.2
 	github.com/pquerna/otp v1.4.0
 	golang.org/x/time v0.11.0
