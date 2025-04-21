@@ -1,65 +1,31 @@
 ---
 
+version: "2"
 run:
   timeout: 60s
 
 linters:
-  enable-all: true
+  default: all
   disable:
-    - golint
-    - interfacer
-    - maligned
-    - scopelint
-    - deadcode
-    - varcheck
-    - structcheck
     - cyclop
     - exhaustive
-    - exhaustivestruct
     - exhaustruct
     - forbidigo
     - funlen
     - gochecknoglobals
     - godot
     - err113
-    - gofmt
-    - gofumpt
-    - gomnd
     - lll
     - nakedret
     - nestif
-    - nlreturn
-    - tagliatelle
-    - varnamelen
-    - wsl
-    - nonamedreturns
-    - contextcheck
-    - gocognit
-    - gocyclo
-    - maintidx
-    - wrapcheck
-    - nolintlint
-    - errorlint
-    - noctx
-    - gochecknoinits
-    - prealloc
     - godox
     - dupl
     - goconst
-    - ifshort
     - nilerr
     - ireturn
     - nosprintfhostport
     - depguard
-    - gci
-    - nosnakecase
     - rowserrcheck
     - sqlclosecheck
-    - structcheck
     - wastedassign
-    - goimports
     - mnd
-
-linters-settings:
-  wsl:
-    allow-cuddle-declarations: true
