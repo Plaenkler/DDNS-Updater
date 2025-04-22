@@ -1,7 +1,6 @@
 module github.com/plaenkler/ddns-updater
 
-go 1.22.0
-toolchain go1.24.1
+go 1.23.8
 
 require (
 	github.com/aliyun/alibaba-cloud-sdk-go v1.63.106
