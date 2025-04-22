@@ -5,6 +5,8 @@ import (
 	"io"
 	"net/http"
 	"strings"
+
+	log "github.com/plaenkler/ddns-updater/pkg/logging"
 )
 
 type UpdateNoIPRequest struct {
@@ -28,7 +30,12 @@ func UpdateNoIP(request interface{}, ipAddr string) error {
 	if err != nil {
 		return err
 	}
-	defer resp.Body.Close()
+	defer func() {
+		err := resp.Body.Close()
+		if err != nil {
+			log.Errorf("error closing response body: %v\n", err)
+		}
+	}()
 	bytes, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return err

@@ -5,6 +5,8 @@ import (
 	"io"
 	"net/http"
 	"strings"
+
+	log "github.com/plaenkler/ddns-updater/pkg/logging"
 )
 
 type UpdateINWXRequest struct {
@@ -29,7 +31,12 @@ func UpdateINWX(request interface{}, ipAddr string) error {
 	if err != nil {
 		return err
 	}
-	defer resp.Body.Close()
+	defer func() {
+		err := resp.Body.Close()
+		if err != nil {
+			log.Errorf("error closing response body: %v\n", err)
+		}
+	}()
 	bodyBytes, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return err
