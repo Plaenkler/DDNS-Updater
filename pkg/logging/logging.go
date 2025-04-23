@@ -89,7 +89,7 @@ func trace() string {
 	if len(parts) > 0 {
 		origin = parts[len(parts)-1]
 	}
-	return fmt.Sprintf("origin:%v line:%v ", strings.Replace(origin, ".", "-", -1), line)
+	return fmt.Sprintf("origin:%v line:%v ", strings.ReplaceAll(origin, ".", "-"), line)
 }
 
 func GetEntries() ([]byte, error) {

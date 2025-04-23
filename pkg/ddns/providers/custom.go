@@ -19,7 +19,7 @@ func UpdateCustom(request interface{}, ipAddr string) error {
 	if !strings.Contains(r.Domain, "<ipv4>") {
 		return fmt.Errorf("no <ipv4> placeholder found in URL")
 	}
-	r.Domain = strings.Replace(r.Domain, "<ipv4>", ipAddr, -1)
+	r.Domain = strings.ReplaceAll(r.Domain, "<ipv4>", ipAddr)
 	resp, err := SendHTTPRequest(http.MethodGet, r.Domain, nil)
 	if err != nil {
 		return err
