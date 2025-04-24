@@ -50,7 +50,7 @@ func load() error {
 	if err != nil {
 		return err
 	}
-	log.ErrorClose(file)
+	defer log.ErrorClose(file)
 	instance := &Config{}
 	err = yaml.NewDecoder(file).Decode(instance)
 	if err != nil {

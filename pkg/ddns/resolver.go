@@ -48,7 +48,7 @@ func resolveIPAddress(url string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	log.ErrorClose(resp.Body)
+	defer log.ErrorClose(resp.Body)
 	bytes, err := io.ReadAll(io.LimitReader(resp.Body, 15))
 	if err != nil {
 		return "", err

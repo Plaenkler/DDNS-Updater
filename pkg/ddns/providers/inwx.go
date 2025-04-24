@@ -31,7 +31,7 @@ func UpdateINWX(request interface{}, ipAddr string) error {
 	if err != nil {
 		return err
 	}
-	log.ErrorClose(resp.Body)
+	defer log.ErrorClose(resp.Body)
 	bodyBytes, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return err
