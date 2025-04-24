@@ -30,12 +30,7 @@ func UpdateInfomaniak(request interface{}, ipAddr string) error {
 	if err != nil {
 		return err
 	}
-	defer func() {
-		err := resp.Body.Close()
-		if err != nil {
-			log.Errorf("error closing response body: %v\n", err)
-		}
-	}()
+	log.ErrorClose(resp.Body)
 	bytes, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return err

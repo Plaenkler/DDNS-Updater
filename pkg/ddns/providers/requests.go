@@ -27,12 +27,7 @@ func SendHTTPRequest(method string, url string, auth *url.Userinfo) (string, err
 	if err != nil {
 		return "", fmt.Errorf("failed to send HTTP request: %v", err)
 	}
-	defer func() {
-		err := resp.Body.Close()
-		if err != nil {
-			log.Errorf("error closing response body: %v\n", err)
-		}
-	}()
+	log.ErrorClose(resp.Body)
 	if resp.StatusCode != http.StatusOK {
 		return "", fmt.Errorf("HTTP request returned status code %d", resp.StatusCode)
 	}
