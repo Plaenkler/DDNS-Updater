@@ -50,12 +50,7 @@ func load() error {
 	if err != nil {
 		return err
 	}
-	defer func() {
-		err := file.Close()
-		if err != nil {
-			log.Errorf("failed to close config file: %v", err)
-		}
-	}()
+	defer log.ErrorClose(file)
 	instance := &Config{}
 	err = yaml.NewDecoder(file).Decode(instance)
 	if err != nil {

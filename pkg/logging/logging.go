@@ -75,6 +75,13 @@ func Fatalf(msg string, args ...interface{}) {
 	fileLogger.errorLogger.Fatalf(FATAL+trace()+"message:"+msg, args...)
 }
 
+func ErrorClose(c io.Closer) {
+	err := c.Close()
+	if err != nil {
+		Errorf("failed to close (%T): %v", c, err)
+	}
+}
+
 func trace() string {
 	pc, _, line, ok := runtime.Caller(2)
 	if !ok {
