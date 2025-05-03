@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 ## Build
-FROM golang:1.22 AS build
+FROM golang:1.24-bookworm AS build
 
 WORKDIR /app
 COPY . /app
@@ -9,7 +9,7 @@ COPY . /app
 RUN go mod tidy && go build -o /ddns-updater cmd/def/main.go
 
 ## Deploy
-FROM debian:stable-slim
+FROM debian:bookworm-slim
 
 WORKDIR /app
 
