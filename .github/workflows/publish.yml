@@ -24,6 +24,7 @@ jobs:
         uses: StephaneBour/actions-calver@master
         id: calver
         with:
+          name: " "
           pre: false
           release: true
           date_format: "%Y.%V"
