@@ -31,6 +31,7 @@ var updaters = map[string]provider{
 	"GoDaddy":      {Updater: providers.UpdateGoDaddy, Request: providers.UpdateGoDaddyRequest{}},
 	"Google":       {Updater: providers.UpdateGoogle, Request: providers.UpdateGoogleRequest{}},
 	"He":           {Updater: providers.UpdateHe, Request: providers.UpdateHeRequest{}},
+	"Hetzner":      {Updater: providers.UpdateHetzner, Request: providers.UpdateHetznerRequest{}},
 	"Infomaniak":   {Updater: providers.UpdateInfomaniak, Request: providers.UpdateInfomaniakRequest{}},
 	"INWX":         {Updater: providers.UpdateINWX, Request: providers.UpdateINWXRequest{}},
 	"Linode":       {Updater: providers.UpdateLinode, Request: providers.UpdateLinodeRequest{}},
