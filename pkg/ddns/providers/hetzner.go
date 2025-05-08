@@ -11,7 +11,7 @@ import (
 	log "github.com/plaenkler/ddns-updater/pkg/logging"
 )
 
-const hetznerBaseURL = "https://dns.hetzner.com/api/v1"
+const hetznerBaseURL = "https://dns.hetzner.com/api/v1/records/"
 
 type client struct {
 	APIToken string
@@ -75,7 +75,7 @@ func (c *client) updateRecord(record *Record) error {
 	if err != nil {
 		return err
 	}
-	url := fmt.Sprintf(hetznerBaseURL+"/records/%s", record.ID)
+	url := fmt.Sprintf(hetznerBaseURL+"%s", record.ID)
 	body, err := c.fetch(http.MethodPut, url, data)
 	if err != nil {
 		return err
@@ -110,7 +110,7 @@ func (c *client) createRecord(record *Record) error {
 	if err != nil {
 		return err
 	}
-	url := fmt.Sprintf(hetznerBaseURL + "/records")
+	url := fmt.Sprintf(hetznerBaseURL)
 	body, err := c.fetch(http.MethodPost, url, data)
 	if err != nil {
 		return err
@@ -127,7 +127,7 @@ func (c *client) createRecord(record *Record) error {
 }
 
 func (c *client) findRecord(zoneID, recordName string) (*Record, bool, error) {
-	url := fmt.Sprintf(hetznerBaseURL+"/records?zone_id=%s&name=%s", zoneID, recordName)
+	url := fmt.Sprintf(hetznerBaseURL+"?zone_id=%s&name=%s", zoneID, recordName)
 	body, err := c.fetch(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, false, err
