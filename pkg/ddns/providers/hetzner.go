@@ -161,7 +161,10 @@ func (c *client) findRecord(zoneID, recordName string) (*Record, bool, error) {
 }
 
 func (c *client) fetch(method string, url string, body []byte) ([]byte, error) {
-	req, _ := http.NewRequest(method, url, bytes.NewReader(body))
+	req, err := http.NewRequest(method, url, bytes.NewReader(body))
+	if err != nil {
+		return nil, err
+	}
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Auth-API-Token", c.APIToken)
 	resp, err := http.DefaultClient.Do(req)
