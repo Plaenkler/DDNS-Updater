@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/plaenkler/ddns-updater/pkg/config"
+	log "github.com/plaenkler/ddns-updater/pkg/logging"
 )
 
 const hetznerBaseURL = "https://dns.hetzner.com/api/v1"
@@ -34,7 +35,7 @@ type Record struct {
 	Error  string `json:"error,omitempty"`
 }
 
-func UpdateHetzner(request interface{}, ipAddr string) error {
+func UpdateHetzner(request any, ipAddr string) error {
 	r, ok := request.(*UpdateHetznerRequest)
 	if !ok {
 		return fmt.Errorf("invalid request type: %T", request)
@@ -42,12 +43,10 @@ func UpdateHetzner(request interface{}, ipAddr string) error {
 	c := &client{
 		APIToken: r.APIToken,
 	}
-
 	rec, found, err := c.findRecord(r.RecordZoneID, r.RecordName)
 	if err != nil {
 		return fmt.Errorf("failed to find record: %w", err)
 	}
-
 	if !found {
 		rec := &Record{
 			ZoneID: r.RecordZoneID,
@@ -56,14 +55,12 @@ func UpdateHetzner(request interface{}, ipAddr string) error {
 			TTL:    r.RecordTTL,
 			Value:  ipAddr,
 		}
-
 		err = c.createRecord(rec)
 		if err != nil {
 			return fmt.Errorf("failed to create record: %w", err)
 		}
 		return nil
 	}
-
 	rec.Value = ipAddr
 	rec.TTL = r.RecordTTL
 	err = c.updateRecord(rec)
@@ -83,16 +80,13 @@ func (c *client) updateRecord(record *Record) error {
 	if err != nil {
 		return err
 	}
-
 	var rec Record
 	if err := json.Unmarshal(body, &rec); err != nil {
 		return err
 	}
-
 	if rec.Error != "" {
 		return fmt.Errorf("failed to update record: %s", rec.Error)
 	}
-
 	return nil
 }
 
@@ -100,23 +94,18 @@ func (c *client) createRecord(record *Record) error {
 	if record.ZoneID == "" {
 		return fmt.Errorf("zone ID is required")
 	}
-
 	if record.Type == "" {
 		return fmt.Errorf("record type is required")
 	}
-
 	if record.Name == "" {
 		return fmt.Errorf("record name is required")
 	}
-
 	if record.Value == "" {
 		return fmt.Errorf("record value is required")
 	}
-
 	if record.TTL == 0 {
 		record.TTL = config.Get().Interval
 	}
-
 	data, err := json.Marshal(record)
 	if err != nil {
 		return err
@@ -127,14 +116,13 @@ func (c *client) createRecord(record *Record) error {
 		return err
 	}
 	var rec Record
-	if err := json.Unmarshal(body, &rec); err != nil {
+	err = json.Unmarshal(body, &rec)
+	if err != nil {
 		return err
 	}
-
 	if rec.Error != "" {
 		return fmt.Errorf("failed to create record: %s", rec.Error)
 	}
-
 	return nil
 }
 
@@ -148,7 +136,8 @@ func (c *client) findRecord(zoneID, recordName string) (*Record, bool, error) {
 		Records []Record `json:"records"`
 		Error   string   `json:"error"`
 	}
-	if err := json.Unmarshal(body, &records); err != nil {
+	err = json.Unmarshal(body, &records)
+	if err != nil {
 		return nil, false, err
 	}
 	if records.Error != "" {
@@ -174,6 +163,6 @@ func (c *client) fetch(method string, url string, body []byte) ([]byte, error) {
 	if resp.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("failed to fetch: %s", resp.Status)
 	}
-	defer resp.Body.Close()
+	defer log.ErrorClose(resp.Body)
 	return io.ReadAll(resp.Body)
 }
