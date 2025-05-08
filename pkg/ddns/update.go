@@ -1,6 +1,10 @@
 package ddns
 
-import "github.com/plaenkler/ddns-updater/pkg/ddns/providers"
+import (
+	"sort"
+
+	"github.com/plaenkler/ddns-updater/pkg/ddns/providers"
+)
 
 type updater func(request interface{}, ipAddr string) error
 
@@ -31,6 +35,7 @@ var updaters = map[string]provider{
 	"GoDaddy":      {Updater: providers.UpdateGoDaddy, Request: providers.UpdateGoDaddyRequest{}},
 	"Google":       {Updater: providers.UpdateGoogle, Request: providers.UpdateGoogleRequest{}},
 	"He":           {Updater: providers.UpdateHe, Request: providers.UpdateHeRequest{}},
+	"Hetzner":      {Updater: providers.UpdateHetzner, Request: providers.UpdateHetznerRequest{}},
 	"Infomaniak":   {Updater: providers.UpdateInfomaniak, Request: providers.UpdateInfomaniakRequest{}},
 	"INWX":         {Updater: providers.UpdateINWX, Request: providers.UpdateINWXRequest{}},
 	"Linode":       {Updater: providers.UpdateLinode, Request: providers.UpdateLinodeRequest{}},
@@ -53,6 +58,7 @@ func GetProviders() []string {
 	for k := range updaters {
 		p = append(p, k)
 	}
+	sort.Strings(p)
 	return p
 }
 
