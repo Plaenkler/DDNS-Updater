@@ -10,7 +10,7 @@ type UpdateServercowRequest struct {
 	Domain        string
 	Password      string
 	UseProviderIP bool
-	TTL           uint
+	TTL           uint `json:",string"`
 }
 
 func UpdateServercow(request interface{}, ipAddr string) error {

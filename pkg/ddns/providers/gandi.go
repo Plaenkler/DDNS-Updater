@@ -7,7 +7,7 @@ import (
 type UpdateGandiRequest struct {
 	Domain string
 	Host   string
-	TTL    int
+	TTL    int `json:",string"`
 	Key    string
 }
 

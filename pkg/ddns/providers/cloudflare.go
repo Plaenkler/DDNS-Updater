@@ -13,7 +13,7 @@ type UpdateCloudflareRequest struct {
 	UserServiceKey string
 	ZoneIdentifier string
 	Proxied        bool
-	TTL            uint
+	TTL            uint `json:",string"`
 }
 
 func UpdateCloudflare(request interface{}, ipAddr string) error {

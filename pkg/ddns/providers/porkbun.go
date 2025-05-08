@@ -7,7 +7,7 @@ import (
 type UpdatePorkbunRequest struct {
 	Domain       string
 	Host         string
-	TTL          uint
+	TTL          uint `json:",string"`
 	APIKey       string
 	SecretAPIKey string
 }
