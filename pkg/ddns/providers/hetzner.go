@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	hetznerBaseURL        = "https://dns.hetzner.com/api/v1/records/"
+	hetznerBaseURL        = "https://dns.hetzner.com/api/v1/records"
 	contentType           = "Content-Type"
 	contentTypeJSON       = "application/json"
 	headerAuthToken       = "Auth-API-Token"
@@ -75,7 +75,7 @@ func (c *client) updateRecord(record *Record) error {
 	if err != nil {
 		return fmt.Errorf("marshal update: %w", err)
 	}
-	url := hetznerBaseURL + record.ID
+	url := hetznerBaseURL + "/" + record.ID
 	body, err := c.fetch(http.MethodPut, url, data)
 	if err != nil {
 		return err
