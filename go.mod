@@ -5,11 +5,11 @@ go 1.24.2
 require (
 	github.com/aliyun/alibaba-cloud-sdk-go v1.63.107
 	github.com/kardianos/service v1.2.2
-	github.com/pquerna/otp v1.4.0
-	golang.org/x/time v0.11.0
+	github.com/pquerna/otp v1.5.0
+	golang.org/x/time v0.12.0
 	gopkg.in/yaml.v3 v3.0.1
-	gorm.io/driver/sqlite v1.5.7
-	gorm.io/gorm v1.26.1
+	gorm.io/driver/sqlite v1.6.0
+	gorm.io/gorm v1.30.0
 )
 
 require (
