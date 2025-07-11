@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"reflect"
 	"strconv"
 
 	"github.com/plaenkler/ddns-updater/pkg/cipher"
@@ -144,6 +143,6 @@ func verifyJobModel(provider, params string) error {
 	if !ok {
 		return fmt.Errorf("provider is not valid")
 	}
-	jobModel := reflect.New(reflect.TypeOf(updater.Request)).Interface()
-	return json.Unmarshal([]byte(params), &jobModel)
+	jobModel := updater.Factory()
+	return json.Unmarshal([]byte(params), jobModel)
 }

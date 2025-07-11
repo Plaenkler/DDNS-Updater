@@ -18,7 +18,7 @@ func GetInputs(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "provider is not valid", http.StatusBadRequest)
 		return
 	}
-	fields := updater.Request
+	fields := updater.Factory()
 	inputs, err := json.Marshal(fields)
 	if err != nil {
 		http.Error(w, "could not marshal fields", http.StatusInternalServerError)

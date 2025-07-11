@@ -2,7 +2,6 @@ package ddns
 
 import (
 	"encoding/json"
-	"reflect"
 	"sync"
 	"time"
 
@@ -89,8 +88,8 @@ func updateDDNSEntries(db *gorm.DB, jobs []model.SyncJob, a model.IPAddress) {
 			log.Errorf("failed to decrypt job params for job %v: %s", job.ID, err)
 			continue
 		}
-		request := reflect.New(reflect.TypeOf(updater.Request)).Interface()
-		err = json.Unmarshal(params, &request)
+		request := updater.Factory()
+		err = json.Unmarshal(params, request)
 		if err != nil {
 			log.Errorf("failed to unmarshal job params for job %v: %s", job.ID, err)
 			continue
