@@ -20,6 +20,7 @@ var updaters = map[string]provider{
 	"Dynu":         {Updater: providers.UpdateDynu, Request: providers.UpdateDynuRequest{}},
 	"Aliyun":       {Updater: providers.UpdateAliyun, Request: providers.UpdateAliyunRequest{}},
 	"AllInkl":      {Updater: providers.UpdateAllInkl, Request: providers.UpdateAllInklRequest{}},
+	"Checkdomain":  {Updater: providers.UpdateCheckdomain, Request: providers.UpdateCheckdomainRequest{}},
 	"Cloudflare":   {Updater: providers.UpdateCloudflare, Request: providers.UpdateCloudflareRequest{}},
 	"DD24":         {Updater: providers.UpdateDD24, Request: providers.UpdateDD24Request{}},
 	"DigitalOcean": {Updater: providers.UpdateDigitalOcean, Request: providers.UpdateDigitalOceanRequest{}},
