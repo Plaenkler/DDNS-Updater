@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
+	"sync"
 )
 
 const (
@@ -29,16 +30,32 @@ type Logger struct {
 	errorLogger *log.Logger
 }
 
+// LogEntry tracks the last logged message and count for deduplication
+type LogEntry struct {
+	message string
+	count   int
+}
+
+// LogMemory maintains memory of recent log messages to prevent duplicates
+type LogMemory struct {
+	mu      sync.Mutex
+	entries map[string]*LogEntry // key is log level + message content
+}
+
 var (
 	consoleLogger *Logger
 	fileLogger    *Logger
 	logFile       *os.File
+	logMemory     *LogMemory
 )
 
 func init() {
 	consoleLogger = createLogger(os.Stdout, os.Stderr)
 	openLogFile()
 	fileLogger = createLogger(logFile, logFile)
+	logMemory = &LogMemory{
+		entries: make(map[string]*LogEntry),
+	}
 }
 
 func openLogFile() {
@@ -60,17 +77,78 @@ func createLogger(infoOutput io.Writer, errorOutput io.Writer) *Logger {
 	}
 }
 
+// shouldLog checks if a message should be logged based on deduplication logic
+// Returns true if the message should be logged, false if it's a duplicate
+func (lm *LogMemory) shouldLog(level, message string) bool {
+	lm.mu.Lock()
+	defer lm.mu.Unlock()
+	
+	key := level + ":" + message
+	entry, exists := lm.entries[key]
+	
+	if !exists {
+		// First time seeing this message, log it
+		lm.entries[key] = &LogEntry{
+			message: message,
+			count:   1,
+		}
+		return true
+	}
+	
+	// Message exists, increment count but don't log duplicate
+	entry.count++
+	return false
+}
+
+// ClearDuplicateMemory clears the duplicate message memory and logs counts for any repeated messages
+// This can be called periodically to report on suppressed duplicate messages
+func ClearDuplicateMemory() {
+	logMemory.mu.Lock()
+	defer logMemory.mu.Unlock()
+	
+	for key, entry := range logMemory.entries {
+		if entry.count > 1 {
+			parts := strings.SplitN(key, ":", 2)
+			if len(parts) == 2 {
+				level := parts[0]
+				duplicateMsg := fmt.Sprintf("(message repeated %d times): %s", entry.count-1, entry.message)
+				
+				// Log the duplicate summary without going through deduplication
+				if level == INFO {
+					consoleLogger.infoLogger.Printf(INFOC+trace()+"message:"+duplicateMsg)
+					fileLogger.infoLogger.Printf(INFO+trace()+"message:"+duplicateMsg)
+				} else if level == ERROR {
+					consoleLogger.errorLogger.Printf(ERRORC+trace()+"message:"+duplicateMsg)
+					fileLogger.errorLogger.Printf(ERROR+trace()+"message:"+duplicateMsg)
+				}
+			}
+		}
+	}
+	
+	// Clear the memory
+	logMemory.entries = make(map[string]*LogEntry)
+}
+
 func Infof(msg string, args ...interface{}) {
-	consoleLogger.infoLogger.Printf(INFOC+trace()+"message:"+msg, args...)
-	fileLogger.infoLogger.Printf(INFO+trace()+"message:"+msg, args...)
+	formattedMsg := fmt.Sprintf(msg, args...)
+	
+	if logMemory.shouldLog(INFO, formattedMsg) {
+		consoleLogger.infoLogger.Printf(INFOC+trace()+"message:"+formattedMsg)
+		fileLogger.infoLogger.Printf(INFO+trace()+"message:"+formattedMsg)
+	}
 }
 
 func Errorf(msg string, args ...interface{}) {
-	consoleLogger.errorLogger.Printf(ERRORC+trace()+"message:"+msg, args...)
-	fileLogger.errorLogger.Printf(ERROR+trace()+"message:"+msg, args...)
+	formattedMsg := fmt.Sprintf(msg, args...)
+	
+	if logMemory.shouldLog(ERROR, formattedMsg) {
+		consoleLogger.errorLogger.Printf(ERRORC+trace()+"message:"+formattedMsg)
+		fileLogger.errorLogger.Printf(ERROR+trace()+"message:"+formattedMsg)
+	}
 }
 
 func Fatalf(msg string, args ...interface{}) {
+	// Fatal messages should always be logged, no deduplication
 	consoleLogger.errorLogger.Fatalf(FATALC+trace()+"message:"+msg, args...)
 	fileLogger.errorLogger.Fatalf(FATAL+trace()+"message:"+msg, args...)
 }
