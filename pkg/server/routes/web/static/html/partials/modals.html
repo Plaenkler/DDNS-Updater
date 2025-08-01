@@ -222,3 +222,57 @@
     </div>
 </div>
 {{end}}
+
+{{define "backup-modal"}}
+<div
+    class="modal fade dark-mode"
+    id="backup-modal"
+    tabindex="-1"
+    aria-labelledby="backup-modal-label"
+    aria-hidden="true"
+>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-dark text-light">
+            <div class="modal-header">
+                <h5 class="modal-title text-light" id="backup-modal-label">
+                    Backup & Restore
+                </h5>
+                <button
+                    type="button"
+                    class="btn-close btn-close-white"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                ></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-4">
+                    <h6 class="text-light mb-3">Export Configuration</h6>
+                    <p class="text-muted small">Download a complete backup of your system configuration and all DDNS jobs.</p>
+                    <button type="button" class="btn btn-primary" id="export-backup-btn">
+                        <i class="bi bi-download"></i> Download Backup
+                    </button>
+                </div>
+                <hr class="text-muted">
+                <div>
+                    <h6 class="text-light mb-3">Import Configuration</h6>
+                    <p class="text-muted small">Upload a backup file to restore your system configuration and DDNS jobs. This will replace all current data.</p>
+                    <form id="import-backup-form" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <input
+                                type="file"
+                                class="form-control bg-white text-dark"
+                                id="backup-file-input"
+                                accept=".json"
+                                required
+                            />
+                        </div>
+                        <button type="submit" class="btn btn-warning">
+                            <i class="bi bi-upload"></i> Restore Backup
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{end}}

@@ -78,3 +78,82 @@ document.getElementById('edit-form').addEventListener('submit', async (e) => {
   const url = `/api/job/update?ID=${id}&provider=${provider}&params=${JSON.stringify(data)}`;
   await sendRequest(url, 'POST');
 });
+
+// Handle backup export
+document.getElementById('export-backup-btn').addEventListener('click', async () => {
+  try {
+    const response = await fetch('/api/backup/export');
+    if (!response.ok) {
+      throw new Error('Failed to export backup');
+    }
+    
+    // Get filename from Content-Disposition header
+    const contentDisposition = response.headers.get('Content-Disposition');
+    let filename = 'ddns-backup.json';
+    if (contentDisposition) {
+      const filenameMatch = contentDisposition.match(/filename="(.+)"/);
+      if (filenameMatch) {
+        filename = filenameMatch[1];
+      }
+    }
+    
+    // Create download
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+    
+    // Close modal
+    bootstrap.Modal.getInstance(document.getElementById('backup-modal')).hide();
+  } catch (error) {
+    console.error('Export failed:', error);
+    alert('Failed to export backup. Please try again.');
+  }
+});
+
+// Handle backup import
+document.getElementById('import-backup-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  const fileInput = document.getElementById('backup-file-input');
+  const file = fileInput.files[0];
+  
+  if (!file) {
+    alert('Please select a backup file');
+    return;
+  }
+  
+  if (!confirm('This will replace all current jobs and configuration. Are you sure you want to continue?')) {
+    return;
+  }
+  
+  try {
+    const formData = new FormData();
+    formData.append('backup', file);
+    
+    const response = await fetch('/api/backup/import', {
+      method: 'POST',
+      body: formData
+    });
+    
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(errorText || 'Failed to import backup');
+    }
+    
+    const result = await response.json();
+    alert(result.message || 'Backup imported successfully');
+    
+    // Close modal and reload page
+    bootstrap.Modal.getInstance(document.getElementById('backup-modal')).hide();
+    window.location.reload();
+  } catch (error) {
+    console.error('Import failed:', error);
+    alert('Failed to import backup: ' + error.message);
+  }
+});

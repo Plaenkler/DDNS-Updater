@@ -57,6 +57,8 @@ func registerAPIRoutes(r *Router) {
 	r.HandleFunc("/api/job/update", api.UpdateJob)
 	r.HandleFunc("/api/job/delete", api.DeleteJob)
 	r.HandleFunc("/api/config/update", api.UpdateConfig)
+	r.HandleFunc("/api/backup/export", api.ExportBackup)
+	r.HandleFunc("/api/backup/import", api.ImportBackup)
 }
 
 func registerStaticFiles(r *Router) {
