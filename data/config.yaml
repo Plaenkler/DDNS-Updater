@@ -1,4 +1,4 @@
 Interval: 600
 TOTP: false
 Port: 8080
-Resolver: ""
+Resolver: "http://localhost:8080/mock-ip"

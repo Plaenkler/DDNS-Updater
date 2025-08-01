@@ -222,3 +222,68 @@
     </div>
 </div>
 {{end}}
+
+{{define "logs-modal"}}
+<div
+    class="modal fade dark-mode"
+    id="logs-modal"
+    tabindex="-1"
+    aria-labelledby="logs-modal-label"
+    aria-hidden="true"
+>
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content bg-dark text-light">
+            <div class="modal-header">
+                <h5 class="modal-title text-light" id="logs-modal-label">
+                    Application Logs
+                </h5>
+                <button
+                    type="button"
+                    class="btn-close btn-close-white"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                ></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3 d-flex justify-content-between align-items-center">
+                    <div>
+                        <button
+                            type="button"
+                            class="btn btn-sm btn-primary"
+                            id="refresh-logs-btn"
+                        >
+                            <i class="bi bi-arrow-clockwise"></i> Refresh
+                        </button>
+                        <button
+                            type="button"
+                            class="btn btn-sm btn-secondary"
+                            id="clear-logs-display-btn"
+                        >
+                            <i class="bi bi-eraser"></i> Clear Display
+                        </button>
+                    </div>
+                    <div class="form-check">
+                        <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="auto-refresh-logs"
+                        >
+                        <label class="form-check-label" for="auto-refresh-logs">
+                            Auto-refresh (5s)
+                        </label>
+                    </div>
+                </div>
+                <div 
+                    id="logs-container" 
+                    class="bg-black text-light p-3 rounded"
+                    style="height: 400px; overflow-y: auto; font-family: 'Courier New', monospace; font-size: 0.9em; white-space: pre-wrap;"
+                >
+                    <div class="text-center text-muted">
+                        Loading logs...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{end}}

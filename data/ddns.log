@@ -14,3 +14,27 @@
 2025/08/01 06:31:34 ERR origin:ddns-GetPublicIP line:37 message:resolver icanh failed: Get "https://icanhazip.com/": dial tcp: lookup icanhazip.com on 127.0.0.53:53: server misbehaving
 2025/08/01 06:31:34 ERR origin:ddns-GetPublicIP line:37 message:resolver ipify failed: Get "https://api.ipify.org": dial tcp: lookup api.ipify.org on 127.0.0.53:53: server misbehaving
 2025/08/01 06:31:34 ERR origin:ddns-GetPublicIP line:37 message:resolver my-ip failed: Get "https://api.my-ip.io/ip": dial tcp: lookup api.my-ip.io on 127.0.0.53:53: server misbehaving
+2025/08/01 06:35:12 INF origin:main-main line:16 message:started database connection
+2025/08/01 06:35:12 INF origin:main-main line:18 message:started ddns service
+2025/08/01 06:35:12 INF origin:main-main line:20 message:started session service
+2025/08/01 06:35:12 INF origin:main-main line:22 message:started webserver
+2025/08/01 06:35:43 ERR origin:ddns-GetPublicIP line:37 message:resolver ident failed: Get "https://ident.me/": dial tcp: lookup ident.me on 127.0.0.53:53: server misbehaving
+2025/08/01 06:35:43 ERR origin:ddns-GetPublicIP line:37 message:resolver ifconf failed: Get "https://ifconfig.me/ip": dial tcp: lookup ifconfig.me on 127.0.0.53:53: server misbehaving
+2025/08/01 06:35:43 ERR origin:ddns-GetPublicIP line:37 message:resolver icanh failed: Get "https://icanhazip.com/": dial tcp: lookup icanhazip.com on 127.0.0.53:53: server misbehaving
+2025/08/01 06:35:43 ERR origin:ddns-GetPublicIP line:37 message:resolver ipify failed: Get "https://api.ipify.org": dial tcp: lookup api.ipify.org on 127.0.0.53:53: server misbehaving
+2025/08/01 06:35:43 ERR origin:ddns-GetPublicIP line:37 message:resolver my-ip failed: Get "https://api.my-ip.io/ip": dial tcp: lookup api.my-ip.io on 127.0.0.53:53: server misbehaving
+2025/08/01 06:35:43 ERR origin:ddns-GetPublicIP line:37 message:resolver ipych failed: Get "https://api.ipy.ch": dial tcp: lookup api.ipy.ch on 127.0.0.53:53: server misbehaving
+2025/08/01 06:35:43 ERR origin:ddns-GetPublicIP line:37 message:resolver intel failed: Get "https://nms.intellitrend.de": dial tcp: lookup nms.intellitrend.de on 127.0.0.53:53: server misbehaving
+2025/08/01 06:39:25 INF origin:main-main line:16 message:started database connection
+2025/08/01 06:39:25 INF origin:main-main line:18 message:started ddns service
+2025/08/01 06:39:25 INF origin:main-main line:20 message:started session service
+2025/08/01 06:39:25 INF origin:main-main line:22 message:started webserver
+2025/08/01 06:39:47 INF origin:ddns-GetPublicIP line:31 message:http://localhost:8080/mock-ip succeeded: 
+2025/08/01 06:39:47 INF origin:ddns-GetPublicIP line:31 message:http://localhost:8080/mock-ip succeeded: 
+2025/08/01 06:39:47 ERR origin:web-ProvideIndex line:108 message:failed to write response: write tcp [::1]:8080->[::1]:35154: write: broken pipe
+2025/08/01 06:39:47 INF origin:ddns-GetPublicIP line:31 message:http://localhost:8080/mock-ip succeeded: 
+2025/08/01 06:39:47 ERR origin:web-ProvideIndex line:108 message:failed to write response: write tcp [::1]:8080->[::1]:35142: write: broken pipe
+2025/08/01 06:39:47 INF origin:ddns-GetPublicIP line:31 message:http://localhost:8080/mock-ip succeeded: 
+2025/08/01 06:39:47 ERR origin:web-ProvideIndex line:108 message:failed to write response: write tcp [::1]:8080->[::1]:35140: write: connection reset by peer
+2025/08/01 06:39:47 INF origin:ddns-GetPublicIP line:31 message:http://localhost:8080/mock-ip succeeded: 
+2025/08/01 06:39:47 ERR origin:web-ProvideIndex line:108 message:failed to write response: write tcp [::1]:8080->[::1]:35130: write: broken pipe
