@@ -1,0 +1,16 @@
+2025/08/01 06:30:06 INF origin:config-create line:86 message:created default configuration
+2025/08/01 06:30:06 INF origin:main-main line:16 message:started database connection
+2025/08/01 06:30:06 INF origin:main-main line:18 message:started ddns service
+2025/08/01 06:30:06 INF origin:main-main line:20 message:started session service
+2025/08/01 06:30:06 INF origin:main-main line:22 message:started webserver
+2025/08/01 06:31:03 INF origin:main-main line:16 message:started database connection
+2025/08/01 06:31:03 INF origin:main-main line:18 message:started ddns service
+2025/08/01 06:31:03 INF origin:main-main line:20 message:started session service
+2025/08/01 06:31:03 INF origin:main-main line:22 message:started webserver
+2025/08/01 06:31:34 ERR origin:ddns-GetPublicIP line:37 message:resolver ipych failed: Get "https://api.ipy.ch": dial tcp: lookup api.ipy.ch on 127.0.0.53:53: server misbehaving
+2025/08/01 06:31:34 ERR origin:ddns-GetPublicIP line:37 message:resolver intel failed: Get "https://nms.intellitrend.de": dial tcp: lookup nms.intellitrend.de on 127.0.0.53:53: server misbehaving
+2025/08/01 06:31:34 ERR origin:ddns-GetPublicIP line:37 message:resolver ident failed: Get "https://ident.me/": dial tcp: lookup ident.me on 127.0.0.53:53: server misbehaving
+2025/08/01 06:31:34 ERR origin:ddns-GetPublicIP line:37 message:resolver ifconf failed: Get "https://ifconfig.me/ip": dial tcp: lookup ifconfig.me on 127.0.0.53:53: server misbehaving
+2025/08/01 06:31:34 ERR origin:ddns-GetPublicIP line:37 message:resolver icanh failed: Get "https://icanhazip.com/": dial tcp: lookup icanhazip.com on 127.0.0.53:53: server misbehaving
+2025/08/01 06:31:34 ERR origin:ddns-GetPublicIP line:37 message:resolver ipify failed: Get "https://api.ipify.org": dial tcp: lookup api.ipify.org on 127.0.0.53:53: server misbehaving
+2025/08/01 06:31:34 ERR origin:ddns-GetPublicIP line:37 message:resolver my-ip failed: Get "https://api.my-ip.io/ip": dial tcp: lookup api.my-ip.io on 127.0.0.53:53: server misbehaving
