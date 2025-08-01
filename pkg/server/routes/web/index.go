@@ -38,12 +38,8 @@ func ProvideIndex(w http.ResponseWriter, r *http.Request) {
 	}
 	addr, err := ddns.GetPublicIP()
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		_, err = fmt.Fprintf(w, "could not get public IP address: %s", err.Error())
-		if err != nil {
-			log.Errorf("failed to write response: %v", err)
-		}
-		return
+		log.Errorf("could not get public IP address: %s", err.Error())
+		addr = "Unable to resolve IP"
 	}
 	img, err := totps.GetKeyAsQR()
 	if err != nil {
