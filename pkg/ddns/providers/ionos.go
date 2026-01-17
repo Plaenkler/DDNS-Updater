@@ -7,7 +7,7 @@ import (
 )
 
 type UpdateIONOSRequest struct {
-	UpdateURL string
+	UpdateURL string `json:"UpdateURL"`
 }
 
 func UpdateIONOS(request interface{}, ipAddr string) error {
