@@ -29,6 +29,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		Path:     "/",
 		SameSite: http.SameSiteNoneMode,
 		Secure:   true,
+		HttpOnly: true,
 	})
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
