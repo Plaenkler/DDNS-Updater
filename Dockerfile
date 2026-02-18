@@ -21,9 +21,13 @@ ARG CURL_VERSION=7.88.1*                    # https://packages.debian.org/bookwo
 RUN apt-get update && \
     apt-get install -y --no-install-recommends ca-certificates=${CA_CERTIFICATES_VERSION} curl=${CURL_VERSION}
 
+RUN useradd -m -u 1000 appuser
+
 HEALTHCHECK CMD curl --fail http://localhost:80
 
 #checkov:skip=CKV_DOCKER_3:Irrelevant
+
+USER appuser
 
 EXPOSE 80
 
