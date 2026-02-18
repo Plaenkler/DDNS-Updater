@@ -2,7 +2,8 @@
 
 ## Supported Versions
 
-I am dedicated to ensure the security of DDNS Updater. To achieve this, I follow the Calendar Versioning (CalVer) scheme, where revisions are in the format "yy/week of year/revision".
+I am dedicated to ensure the security of DDNS Updater.
+To achieve this, I follow the Calendar Versioning (CalVer) scheme, where revisions are in the format "yy.week.revision".
 I will only support the latest revision of each of the last three calendar weeks. Explanatory diagram:
 
 | Version      | Supported          |
