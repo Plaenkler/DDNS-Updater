@@ -30,7 +30,7 @@ The user-friendly interface allows for straightforward secure setup and manageme
 
 ## 🏷️ Supported providers
 
-`Strato` `DDNSS` `Dynu` `Aliyun` `NoIP` `DD24` `INWX` `Infomaniak` `Hetzner`
+`Strato` `DDNSS` `Dynu` `Aliyun` `NoIP` `DD24` `INWX` `Infomaniak` `Hetzner` `IONOS`
 
 > **Note:** If your DynDNS provider is not listed open an issue and I will integrate it.
 
