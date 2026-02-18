@@ -8,7 +8,7 @@ I will only support the latest revision of each of the last three calendar weeks
 | Version      | Supported          |
 | ------------ | ------------------ |
 | 2023.30.2    | :white_check_mark: |
-| 2023.30.1    | :x: |
+| 2023.30.1    | :x:                |
 | 2023.29.2    | :white_check_mark: |
 | 2023.28.4    | :white_check_mark: |
 | Older        | :x:                |
