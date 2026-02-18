@@ -21,7 +21,7 @@ const (
 	INFOC     = "\033[0;32mINF\033[0m "
 	ERRORC    = "\033[0;31mERR\033[0m "
 	FATALC    = "\033[0;31mFAT\033[0m "
-	UNKOWN    = "unknown-origin"
+	UNKNOWN   = "unknown-origin"
 )
 
 type Logger struct {
@@ -85,11 +85,11 @@ func ErrorClose(c io.Closer) {
 func trace() string {
 	pc, _, line, ok := runtime.Caller(2)
 	if !ok {
-		return UNKOWN
+		return UNKNOWN
 	}
 	f := runtime.FuncForPC(pc)
 	if f == nil {
-		return UNKOWN
+		return UNKNOWN
 	}
 	origin := f.Name()
 	parts := strings.Split(origin, "/")
