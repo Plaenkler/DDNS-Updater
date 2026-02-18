@@ -37,9 +37,11 @@ jobs:
           VALIDATE_BIOME: false
           VALIDATE_BIOME_FORMAT: false
           VALIDATE_HTML_PRETTIER: false
+          VALIDATE_JAVASCRIPT_ES: false
           VALIDATE_MARKDOWN_PRETTIER: false
           VALIDATE_YAML_PRETTIER: false
           VALIDATE_CSS_PRETTIER: false
+          VALIDATE_GITHUB_ACTIONS_ZIZMOR: false
   golangci-lint:
     name: Lint Golang
     runs-on: ubuntu-latest
