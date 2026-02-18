@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 ## Build
-FROM golang:1.25-bookworm AS build
+FROM golang:1.25-trixie AS build
 
 WORKDIR /app
 COPY . /app
@@ -9,7 +9,7 @@ COPY . /app
 RUN go mod tidy && go build -o /ddns-updater cmd/def/main.go
 
 ## Deploy
-FROM debian:bookworm-slim
+FROM debian:trixie-slim
 
 WORKDIR /app
 
@@ -17,8 +17,8 @@ COPY --from=build /ddns-updater /app/ddns-updater
 
 RUN chmod +x /app/ddns-updater
 
-ARG CA_CERTIFICATES_VERSION=20230311        # https://packages.debian.org/bookworm/ca-certificates
-ARG CURL_VERSION=7.88.1*                    # https://packages.debian.org/bookworm/curl
+ARG CA_CERTIFICATES_VERSION=20250419*       # https://packages.debian.org/trixie/ca-certificates
+ARG CURL_VERSION=8.14.1*                    # https://packages.debian.org/trixie/curl
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends ca-certificates=${CA_CERTIFICATES_VERSION} curl=${CURL_VERSION}
