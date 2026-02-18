@@ -34,6 +34,7 @@ jobs:
           VALIDATE_JSCPD: false
           VALIDATE_GO: false
           VALIDATE_GO_MODULES: false
+          VALIDATE_BIOME: false
           VALIDATE_BIOME_FORMAT: false
           VALIDATE_HTML_PRETTIER: false
           VALIDATE_MARKDOWN_PRETTIER: false
