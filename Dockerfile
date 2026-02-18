@@ -34,4 +34,4 @@ USER appuser
 
 EXPOSE 80
 
-ENTRYPOINT ["./ddns-updater"]
+ENTRYPOINT ["/app/ddns-updater"]
