@@ -1,31 +1,13 @@
 package providers
 
 import (
-	"bytes"
-	"encoding/json"
+	"context"
 	"fmt"
-	"io"
-	"net/http"
+	"math"
 
+	"github.com/hetznercloud/hcloud-go/v2/hcloud"
 	"github.com/plaenkler/ddns-updater/pkg/config"
-	log "github.com/plaenkler/ddns-updater/pkg/logging"
 )
-
-const (
-	hetznerBaseURL        = "https://dns.hetzner.com/api/v1/records"
-	contentType           = "Content-Type"
-	contentTypeJSON       = "application/json"
-	headerAuthToken       = "Auth-API-Token"
-	errInvalidRequestType = "invalid request type: %T"
-	errAPICreate          = "failed to create record: %s"
-	errAPIUpdate          = "failed to update record: %s"
-	errAPIFind            = "failed to find record: %s"
-	errAPIStatus          = "API returned status: %s"
-)
-
-type client struct {
-	APIToken string
-}
 
 type UpdateHetznerRequest struct {
 	APIToken     string
@@ -35,134 +17,75 @@ type UpdateHetznerRequest struct {
 	RecordTTL    uint32 `json:",string"`
 }
 
-type Record struct {
-	ID     string `json:"id"`
-	ZoneID string `json:"zone_id"`
-	Type   string `json:"type"`
-	Name   string `json:"name"`
-	Value  string `json:"value"`
-	TTL    uint32 `json:"ttl"`
-	Error  string `json:"error"`
-}
-
 func UpdateHetzner(request any, ipAddr string) error {
 	r, ok := request.(*UpdateHetznerRequest)
 	if !ok {
-		return fmt.Errorf(errInvalidRequestType, request)
+		return fmt.Errorf("invalid request type: %T", request)
 	}
-	c := &client{APIToken: r.APIToken}
-	rec, found, err := c.findRecord(r.RecordZoneID, r.RecordName)
+
+	ctx := context.Background()
+	c := hcloud.NewClient(hcloud.WithToken(r.APIToken))
+
+	zone, _, err := c.Zone.Get(ctx, r.RecordZoneID)
 	if err != nil {
-		return fmt.Errorf("find record: %w", err)
+		return fmt.Errorf("get zone: %w", err)
 	}
-	if !found {
-		newRecord := &Record{
-			ZoneID: r.RecordZoneID,
-			Type:   r.RecordType,
-			Name:   r.RecordName,
-			TTL:    r.RecordTTL,
-			Value:  ipAddr,
+	if zone == nil {
+		return fmt.Errorf("zone not found: %s", r.RecordZoneID)
+	}
+
+	rrsetType := hcloud.ZoneRRSetType(r.RecordType)
+	rrset, _, err := c.Zone.GetRRSetByNameAndType(ctx, zone, r.RecordName, rrsetType)
+	if err != nil {
+		return fmt.Errorf("find rrset: %w", err)
+	}
+
+	if rrset == nil {
+		ttl, err := recordTTL(r.RecordTTL)
+		if err != nil {
+			return err
 		}
-		return c.createRecord(newRecord)
+		result, _, err := c.Zone.CreateRRSet(ctx, zone, hcloud.ZoneRRSetCreateOpts{
+			Name:    r.RecordName,
+			Type:    rrsetType,
+			TTL:     &ttl,
+			Records: []hcloud.ZoneRRSetRecord{{Value: ipAddr}},
+		})
+		if err != nil {
+			return fmt.Errorf("create rrset: %w", err)
+		}
+		if result.Action != nil {
+			if err := c.Action.WaitFor(ctx, result.Action); err != nil {
+				return fmt.Errorf("wait for create rrset action: %w", err)
+			}
+		}
+		return nil
 	}
-	rec.Value = ipAddr
-	rec.TTL = r.RecordTTL
-	return c.updateRecord(rec)
-}
 
-func (c *client) updateRecord(record *Record) error {
-	data, err := json.Marshal(record)
+	action, _, err := c.Zone.SetRRSetRecords(ctx, rrset, hcloud.ZoneRRSetSetRecordsOpts{
+		Records: []hcloud.ZoneRRSetRecord{{Value: ipAddr}},
+	})
 	if err != nil {
-		return fmt.Errorf("marshal update: %w", err)
+		return fmt.Errorf("set rrset records: %w", err)
 	}
-	url := hetznerBaseURL + "/" + record.ID
-	body, err := c.fetch(http.MethodPut, url, data)
-	if err != nil {
-		return err
-	}
-	return c.handleAPIResponse(body, "update")
-}
-
-func (c *client) createRecord(record *Record) error {
-	if err := c.validateRecord(record); err != nil {
-		return err
-	}
-	if record.TTL == 0 {
-		record.TTL = config.Get().Interval
-	}
-	data, err := json.Marshal(record)
-	if err != nil {
-		return fmt.Errorf("marshal create: %w", err)
-	}
-	body, err := c.fetch(http.MethodPost, hetznerBaseURL, data)
-	if err != nil {
-		return err
-	}
-	return c.handleAPIResponse(body, "create")
-}
-
-func (c *client) findRecord(zoneID, recordName string) (*Record, bool, error) {
-	url := fmt.Sprintf("%s?zone_id=%s&name=%s", hetznerBaseURL, zoneID, recordName)
-	body, err := c.fetch(http.MethodGet, url, nil)
-	if err != nil {
-		return nil, false, err
-	}
-	var res struct {
-		Records []Record `json:"records"`
-		Error   string   `json:"error"`
-	}
-	if err := json.Unmarshal(body, &res); err != nil {
-		return nil, false, fmt.Errorf("unmarshal find: %w", err)
-	}
-	if res.Error != "" {
-		return nil, false, fmt.Errorf(errAPIFind, res.Error)
-	}
-	if len(res.Records) == 0 {
-		return nil, false, nil
-	}
-	return &res.Records[0], true, nil
-}
-
-func (c *client) fetch(method, url string, body []byte) ([]byte, error) {
-	req, err := http.NewRequest(method, url, bytes.NewReader(body))
-	if err != nil {
-		return nil, fmt.Errorf("new request: %w", err)
-	}
-	req.Header.Set(contentType, contentTypeJSON)
-	req.Header.Set(headerAuthToken, c.APIToken)
-	resp, err := http.DefaultClient.Do(req)
-	if err != nil {
-		return nil, fmt.Errorf("http request: %w", err)
-	}
-	defer log.ErrorClose(resp.Body)
-	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf(errAPIStatus, resp.Status)
-	}
-	return io.ReadAll(resp.Body)
-}
-
-func (c *client) validateRecord(r *Record) error {
-	switch {
-	case r.ZoneID == "":
-		return fmt.Errorf("zone ID is required")
-	case r.Type == "":
-		return fmt.Errorf("record type is required")
-	case r.Name == "":
-		return fmt.Errorf("record name is required")
-	case r.Value == "":
-		return fmt.Errorf("record value is required")
+	if action != nil {
+		if err := c.Action.WaitFor(ctx, action); err != nil {
+			return fmt.Errorf("wait for set rrset records action: %w", err)
+		}
 	}
 	return nil
 }
 
-func (c *client) handleAPIResponse(body []byte, action string) error {
-	var r Record
-	err := json.Unmarshal(body, &r)
-	if err != nil {
-		return fmt.Errorf("unmarshal %s response: %w", action, err)
+// recordTTL returns the TTL to use for a DNS record. When the configured TTL
+// is zero, the application update interval is used as a default. Values that
+// exceed the maximum safe signed 32-bit integer are rejected with an error to
+// prevent silent data corruption on 32-bit platforms.
+func recordTTL(configured uint32) (int, error) {
+	if configured == 0 {
+		configured = config.Get().Interval
 	}
-	if r.Error != "" {
-		return fmt.Errorf("API error during %s: %s", action, r.Error)
+	if configured > math.MaxInt32 {
+		return 0, fmt.Errorf("record TTL value %d exceeds maximum allowed (%d)", configured, math.MaxInt32)
 	}
-	return nil
+	return int(configured), nil
 }
