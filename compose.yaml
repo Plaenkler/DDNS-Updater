@@ -1,9 +1,5 @@
 ---
 
-# Local build
-
-version: '3.9'
-
 services:
   ddns:
     image: ddns-updater:latest
