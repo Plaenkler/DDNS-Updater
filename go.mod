@@ -4,7 +4,7 @@ go 1.25.7
 
 require (
 	github.com/aliyun/alibaba-cloud-sdk-go v1.63.107
-	github.com/kardianos/service v1.2.4
+	github.com/kardianos/service v1.3.0
 	github.com/pquerna/otp v1.5.0
 	golang.org/x/time v0.15.0
 	gopkg.in/yaml.v3 v3.0.1
