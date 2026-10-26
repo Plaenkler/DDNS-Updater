@@ -109,10 +109,6 @@ networks:
 
 ### 📄 Build from source
 
-DDNS Updater requires the following software to be installed on your system:
-
-- [Go](https://golang.org/dl/)
-
 **Windows Service**
 
 After cloning the repository, navigate to the root of the source tree and run the following command to build the executable file:
@@ -176,13 +172,11 @@ The following connections must be allowed for DDNS Updater to work properly:
 
 **Inbound**
 
-- `TCP 80` Web interface (configurable via `Port` or `DDNS_PORT`)
+- `TCP 80` HTTP
 
 **Outbound**
 
-- `TCP 853` DNS-over-TLS to `1.1.1.1` and `1.0.0.1` to determine the public IP address
-- `TCP 443` HTTPS to the fallback IP resolvers and the DDNS providers
-- `TCP 80` HTTP to the NoIP update server
-- `UDP/TCP 53` DNS to the local resolver for name resolution
-
-> **Note:** A custom provider or custom resolver may require additional ports depending on the configured URL.
+- `TCP 80` HTTP
+- `TCP 853` DoT
+- `TCP 443` HTTPS
+- `UDP 53` DNS
