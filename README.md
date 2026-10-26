@@ -3,7 +3,6 @@
 [![License](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 [![Release](https://img.shields.io/badge/Calver-YY.WW.REVISION-22bfda.svg)](https://calver.org/)
 [![Linters](https://github.com/plaenkler/ddns-updater/actions/workflows/linters.yml/badge.svg)](https://github.com/plaenkler/ddns-updater/actions/workflows/linters.yml)
-[![Go Report](https://goreportcard.com/badge/github.com/plaenkler/ddns-updater)](https://goreportcard.com/report/github.com/plaenkler/ddns-updater)
 [![CQL](https://github.com/plaenkler/ddns-updater/workflows/CodeQL/badge.svg)](https://github.com/plaenkler/ddns-updater)
 [![Support me](https://img.shields.io/badge/Support%20me%20%E2%98%95-orange.svg)](https://www.buymeacoffee.com/Plaenkler)
 
@@ -113,7 +112,6 @@ networks:
 DDNS Updater requires the following software to be installed on your system:
 
 - [Go](https://golang.org/dl/)
-- [CGO](https://gist.github.com/Plaenkler/0c319b89fbc884a928612b7fdef97fbd)
 
 **Windows Service**
 
@@ -171,3 +169,20 @@ DDNS_TOTP=false
 DDNS_PORT=80
 DDNS_RESOLVER=ipv4.example.com
 ```
+
+### 🔌 Network
+
+The following connections must be allowed for DDNS Updater to work properly:
+
+**Inbound**
+
+- `TCP 80` Web interface (configurable via `Port` or `DDNS_PORT`)
+
+**Outbound**
+
+- `TCP 853` DNS-over-TLS to `1.1.1.1` and `1.0.0.1` to determine the public IP address
+- `TCP 443` HTTPS to the fallback IP resolvers and the DDNS providers
+- `TCP 80` HTTP to the NoIP update server
+- `UDP/TCP 53` DNS to the local resolver for name resolution
+
+> **Note:** A custom provider or custom resolver may require additional ports depending on the configured URL.
