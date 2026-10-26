@@ -3,7 +3,6 @@
 [![License](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 [![Release](https://img.shields.io/badge/Calver-YY.WW.REVISION-22bfda.svg)](https://calver.org/)
 [![Linters](https://github.com/plaenkler/ddns-updater/actions/workflows/linters.yml/badge.svg)](https://github.com/plaenkler/ddns-updater/actions/workflows/linters.yml)
-[![Go Report](https://goreportcard.com/badge/github.com/plaenkler/ddns-updater)](https://goreportcard.com/report/github.com/plaenkler/ddns-updater)
 [![CQL](https://github.com/plaenkler/ddns-updater/workflows/CodeQL/badge.svg)](https://github.com/plaenkler/ddns-updater)
 [![Support me](https://img.shields.io/badge/Support%20me%20%E2%98%95-orange.svg)](https://www.buymeacoffee.com/Plaenkler)
 
@@ -110,11 +109,6 @@ networks:
 
 ### 📄 Build from source
 
-DDNS Updater requires the following software to be installed on your system:
-
-- [Go](https://golang.org/dl/)
-- [CGO](https://gist.github.com/Plaenkler/0c319b89fbc884a928612b7fdef97fbd)
-
 **Windows Service**
 
 After cloning the repository, navigate to the root of the source tree and run the following command to build the executable file:
@@ -137,7 +131,7 @@ To build the standalone application, run the following command:
 go build -o ddns-updater cmd/def/main.go
 ```
 
-### ⚙️ Configuration
+## ⚙️ Configuration
 
 Depending on personal preferences, there are several ways to configure DDNS Updater. Users can select from three different methods:
 
@@ -171,3 +165,18 @@ DDNS_TOTP=false
 DDNS_PORT=80
 DDNS_RESOLVER=ipv4.example.com
 ```
+
+## 🔌 Network
+
+The following connections must be allowed for DDNS Updater to work properly:
+
+**Inbound**
+
+- `TCP 80` HTTP
+
+**Outbound**
+
+- `TCP 80` HTTP
+- `TCP 853` DoT
+- `TCP 443` HTTPS
+- `UDP 53` DNS
