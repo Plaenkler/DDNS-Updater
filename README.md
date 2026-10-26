@@ -131,7 +131,7 @@ To build the standalone application, run the following command:
 go build -o ddns-updater cmd/def/main.go
 ```
 
-### ⚙️ Configuration
+## ⚙️ Configuration
 
 Depending on personal preferences, there are several ways to configure DDNS Updater. Users can select from three different methods:
 
@@ -166,7 +166,7 @@ DDNS_PORT=80
 DDNS_RESOLVER=ipv4.example.com
 ```
 
-### 🔌 Network
+## 🔌 Network
 
 The following connections must be allowed for DDNS Updater to work properly:
 
