@@ -5,9 +5,9 @@ import (
 	"path/filepath"
 	"sync"
 
+	"github.com/glebarez/sqlite"
 	"github.com/plaenkler/ddns-updater/pkg/database/model"
 	log "github.com/plaenkler/ddns-updater/pkg/logging"
-	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
 
