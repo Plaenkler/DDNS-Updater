@@ -7,7 +7,7 @@
     aria-labelledby="config-modal-label"
     aria-hidden="true"
 >
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
         <div class="modal-content bg-dark text-light">
             <div class="modal-header">
                 <h5 class="modal-title text-light" id="config-modal-label">
@@ -37,7 +37,7 @@
                         >
                         <input
                             type="number"
-                            class="form-control bg-white text-dark"
+                            class="form-control"
                             id="port-input"
                             name="port"
                             min="1"
@@ -54,7 +54,7 @@
                         >
                         <input
                             type="number"
-                            class="form-control bg-white text-dark"
+                            class="form-control"
                             id="interval-input"
                             name="interval"
                             min="10"
@@ -70,7 +70,7 @@
                         >
                         <input
                             type="text"
-                            class="form-control bg-white text-dark"
+                            class="form-control"
                             id="resolver-input"
                             name="resolver"
                             value="{{.Config.Resolver}}"
@@ -82,7 +82,7 @@
                         >
                         <input
                             type="password"
-                            class="form-control bg-white text-dark"
+                            class="form-control"
                             id="otp-input"
                             name="otp"
                             placeholder="123456"
@@ -108,7 +108,7 @@
     aria-labelledby="add-modal-label"
     aria-hidden="true"
 >
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
         <div class="modal-content bg-dark text-light">
             <div class="modal-header">
                 <h5 class="modal-title" id="add-modal-label">Add Job</h5>
@@ -121,20 +121,29 @@
             </div>
             <div class="modal-body">
                 <div class="mb-3">
-                    <label for="add-provider-select" class="form-label"
-                        >Provider</label
+                    <div class="form-label">Provider</div>
+                    <div
+                        class="row row-cols-2 row-cols-sm-3 g-2"
+                        id="add-provider-tiles"
                     >
-                    <select
-                        class="form-select bg-white text-dark"
-                        id="add-provider-select"
-                        name="provider"
-                        required
-                    >
-                        <option selected disabled hidden>Please select</option>
                         {{range .Providers}}
-                        <option value="{{.}}">{{.}}</option>
+                        <div class="col">
+                            <input
+                                type="radio"
+                                class="btn-check"
+                                id="add-provider-{{.}}"
+                                name="provider"
+                                value="{{.}}"
+                                autocomplete="off"
+                            />
+                            <label
+                                for="add-provider-{{.}}"
+                                class="btn btn-outline-light w-100"
+                                >{{.}}</label
+                            >
+                        </div>
                         {{end}}
-                    </select>
+                    </div>
                 </div>
                 <form id="add-form" action="/api/job/create" method="POST">
                     <div id="add-inputs-container"></div>
@@ -160,7 +169,7 @@
     aria-labelledby="edit-modal-label"
     aria-hidden="true"
 >
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
         <div class="modal-content bg-dark text-light">
             <div class="modal-header">
                 <h5 class="modal-title" id="edit-modal-label">Edit Job</h5>
@@ -184,7 +193,7 @@
                         >Provider</label
                     >
                     <select
-                        class="form-select bg-white text-dark"
+                        class="form-select"
                         id="edit-provider-select"
                         name="provider"
                         required
