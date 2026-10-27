@@ -6,7 +6,7 @@ function encodeTextContent(text) {
 }
 
 // Append inputs to form create job
-document.getElementById('add-provider-select').addEventListener('change', async (e) => {
+document.getElementById('add-provider-tiles').addEventListener('change', async (e) => {
   try {
     const inputs = await (await fetch(`/api/inputs?provider=${e.target.value}`)).json();
     let html = '';
@@ -19,6 +19,7 @@ document.getElementById('add-provider-select').addEventListener('change', async 
       `;
     }
     document.getElementById('add-inputs-container').innerHTML = html;
+    document.getElementById('add-inputs-container').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   } catch (error) {
     console.error(error);
   }
@@ -63,7 +64,9 @@ document.getElementById('add-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const formData = new FormData(e.target);
   const data = Object.fromEntries(formData.entries());
-  const provider = document.getElementById('add-provider-select').value;
+  const checked = document.querySelector('#add-provider-tiles input:checked');
+  if (!checked) return;
+  const provider = checked.value;
   const url = `/api/job/create?provider=${provider}&params=${JSON.stringify(data)}`;
   await sendRequest(url, 'POST');
 });
@@ -77,4 +80,9 @@ document.getElementById('edit-form').addEventListener('submit', async (e) => {
   const id = document.getElementById('edit-id').value;
   const url = `/api/job/update?ID=${id}&provider=${provider}&params=${JSON.stringify(data)}`;
   await sendRequest(url, 'POST');
+});
+
+// Release focus before a modal hides
+document.addEventListener('hide.bs.modal', () => {
+  document.activeElement.blur();
 });
