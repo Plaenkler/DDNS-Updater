@@ -22,6 +22,7 @@ const (
 	ERRORC    = "\033[0;31mERR\033[0m "
 	FATALC    = "\033[0;31mFAT\033[0m "
 	UNKNOWN   = "unknown-origin"
+	maxLines  = 500
 )
 
 type Logger struct {
@@ -104,7 +105,11 @@ func GetEntries() ([]byte, error) {
 	if err != nil {
 		return nil, fmt.Errorf("could not read log file: %v", err)
 	}
-	entries, err := json.Marshal(strings.Split(string(file), "\n"))
+	lines := strings.Split(strings.TrimSpace(string(file)), "\n")
+	if len(lines) > maxLines {
+		lines = lines[len(lines)-maxLines:]
+	}
+	entries, err := json.Marshal(lines)
 	if err != nil {
 		return nil, fmt.Errorf("could not marshal JSON: %v", err)
 	}
