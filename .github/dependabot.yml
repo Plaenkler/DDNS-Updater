@@ -5,6 +5,7 @@ multi-ecosystem-groups:
   dependencies:
     schedule:
       interval: "daily"
+    target-branch: "dependencies"
     assignees:
       - "Plaenkler"
 updates:
@@ -13,16 +14,13 @@ updates:
     patterns:
       - "*"
     multi-ecosystem-group: "dependencies"
-    target-branch: "dependencies"
   - package-ecosystem: "github-actions"
     directory: "/"
     patterns:
       - "*"
     multi-ecosystem-group: "dependencies"
-    target-branch: "dependencies"
   - package-ecosystem: "docker"
     directory: "/"
     patterns:
       - "*"
     multi-ecosystem-group: "dependencies"
-    target-branch: "dependencies"
