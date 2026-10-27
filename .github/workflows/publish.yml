@@ -25,11 +25,18 @@ jobs:
         id: calver
         with:
           pre: false
-          release: true
+          release: false
           date_format: "%Y.%V"
           release_branch: main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create Release
+        run: gh release create "$VERSION" --target main --title "$VERSION" --notes "$CHANGELOG"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          VERSION: ${{ steps.calver.outputs.release }}
+          CHANGELOG: ${{ steps.calver.outputs.changelog }}
   publish:
     name: Publish
     needs: release
