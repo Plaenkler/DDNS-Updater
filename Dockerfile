@@ -23,16 +23,17 @@ ARG CA_CERTIFICATES_VERSION=20250419*       # https://packages.debian.org/trixie
 ARG CURL_VERSION=8.14.1*                    # https://packages.debian.org/trixie/curl
 
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends ca-certificates=${CA_CERTIFICATES_VERSION} curl=${CURL_VERSION}
+    apt-get install -y --no-install-recommends ca-certificates=${CA_CERTIFICATES_VERSION} curl=${CURL_VERSION} && \
+    rm -rf /var/lib/apt/lists/*
 
 RUN useradd -m -u 1000 appuser && \
     chown appuser:appuser /app/ddns-updater
 
-HEALTHCHECK CMD curl --fail http://localhost:80
+HEALTHCHECK CMD ["curl", "--fail", "http://localhost:80"]
 
 #checkov:skip=CKV_DOCKER_3:Irrelevant
 
-USER appuser
+USER 1000
 
 EXPOSE 80
 
