@@ -93,6 +93,50 @@ document.getElementById('config-modal').addEventListener('hidden.bs.modal', () =
   document.getElementById('totp-qr').classList.add('d-none');
 });
 
+// Create log line with colored level like the CLI
+function createLogLine(entry) {
+  const line = document.createElement('div');
+  const match = entry.match(/^(\S+ \S+ )(INF|ERR|FAT)( .*)$/);
+  if (!match) {
+    line.textContent = entry;
+    return line;
+  }
+  const level = document.createElement('span');
+  level.textContent = match[2];
+  level.classList.add(match[2] === 'INF' ? 'text-success' : 'text-danger');
+  line.append(match[1], level, match[3]);
+  return line;
+}
+
+// Load log entries into modal logs
+async function loadLogs(scrollToEnd) {
+  try {
+    const entries = await (await fetch('/api/logs')).json();
+    const container = document.getElementById('logs-container');
+    const atBottom = container.scrollHeight - container.scrollTop - container.clientHeight < 10;
+    container.replaceChildren();
+    for (const entry of entries) {
+      container.appendChild(createLogLine(entry));
+    }
+    if (!scrollToEnd && !atBottom) return;
+    container.scrollTop = container.scrollHeight;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Refresh logs periodically while modal is open
+let logsInterval;
+document.getElementById('logs-modal').addEventListener('shown.bs.modal', () => {
+  loadLogs(true);
+  logsInterval = setInterval(loadLogs, 5000);
+});
+
+// Stop refreshing logs when modal closes
+document.getElementById('logs-modal').addEventListener('hidden.bs.modal', () => {
+  clearInterval(logsInterval);
+});
+
 // Release focus before a modal hides
 document.addEventListener('hide.bs.modal', () => {
   document.activeElement.blur();

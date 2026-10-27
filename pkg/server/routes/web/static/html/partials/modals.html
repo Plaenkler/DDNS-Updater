@@ -1,4 +1,33 @@
 <!-- htmlhint doctype-first:false -->
+{{define "logs-modal"}}
+<div
+    class="modal fade dark-mode"
+    id="logs-modal"
+    tabindex="-1"
+    aria-labelledby="logs-modal-label"
+    aria-hidden="true"
+>
+    <div
+        class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl modal-fullscreen-lg-down"
+    >
+        <div class="modal-content bg-dark text-light">
+            <div class="modal-header">
+                <h5 class="modal-title" id="logs-modal-label">Logs</h5>
+                <button
+                    type="button"
+                    class="btn-close btn-close-white"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                ></button>
+            </div>
+            <div
+                class="modal-body logs-container font-monospace small"
+                id="logs-container"
+            ></div>
+        </div>
+    </div>
+</div>
+{{end}}
 {{define "config-modal"}}
 <div
     class="modal fade dark-mode"

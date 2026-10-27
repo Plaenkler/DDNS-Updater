@@ -18,3 +18,8 @@
   width: 2.75rem;
   height: 1.5rem;
 }
+
+.logs-container {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
