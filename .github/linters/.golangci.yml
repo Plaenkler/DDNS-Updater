@@ -10,6 +10,7 @@ linters:
     - cyclop
     - exhaustive
     - exhaustruct
+    - exhaustruct_v5
     - forbidigo
     - funlen
     - gochecknoglobals
@@ -29,3 +30,5 @@ linters:
     - sqlclosecheck
     - wastedassign
     - mnd
+    - wsl
+    - gomodguard

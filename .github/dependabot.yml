@@ -1,22 +1,28 @@
 ---
 
 version: 2
+multi-ecosystem-groups:
+  dependencies:
+    schedule:
+      interval: "daily"
+    assignees:
+      - "Plaenkler"
 updates:
   - package-ecosystem: "gomod"
     directory: "/"
-    schedule:
-      interval: "daily"
+    patterns:
+      - "*"
+    multi-ecosystem-group: "dependencies"
     target-branch: "dependencies"
-    assignees:
-      - "Plaenkler"
-    reviewers:
-      - "Plaenkler"
   - package-ecosystem: "github-actions"
     directory: "/"
-    schedule:
-      interval: "daily"
+    patterns:
+      - "*"
+    multi-ecosystem-group: "dependencies"
     target-branch: "dependencies"
-    assignees:
-      - "Plaenkler"
-    reviewers:
-      - "Plaenkler"
+  - package-ecosystem: "docker"
+    directory: "/"
+    patterns:
+      - "*"
+    multi-ecosystem-group: "dependencies"
+    target-branch: "dependencies"
