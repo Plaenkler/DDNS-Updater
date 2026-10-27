@@ -77,6 +77,21 @@
                             value="{{.Config.Resolver}}"
                         />
                     </div>
+                    <div
+                        class="form-check form-switch d-flex align-items-center gap-2 mb-3 ps-0"
+                    >
+                        <input
+                            type="checkbox"
+                            class="form-check-input m-0"
+                            id="trustproxy-input"
+                            name="trustproxy"
+                            role="switch"
+                            {{if .Config.TrustProxy}}checked{{end}}
+                        />
+                        <label for="trustproxy-input" class="form-check-label"
+                            >Trust proxy headers</label
+                        >
+                    </div>
                     <div class="mb-3">
                         <label for="otp-input" class="form-label text-light"
                             >Turn TOTP on/off</label

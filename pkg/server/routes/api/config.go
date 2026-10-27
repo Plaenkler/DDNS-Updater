@@ -48,10 +48,11 @@ func UpdateConfig(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	cfg := &config.Config{
-		Port:     port,
-		Interval: interval,
-		Resolver: resolver,
-		UseTOTP:  config.Get().UseTOTP,
+		Port:       port,
+		Interval:   interval,
+		Resolver:   resolver,
+		UseTOTP:    config.Get().UseTOTP,
+		TrustProxy: r.FormValue("trustproxy") == "on",
 	}
 	if totps.Verify(r.FormValue("otp")) {
 		cfg.UseTOTP = !cfg.UseTOTP
@@ -63,5 +64,5 @@ func UpdateConfig(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	http.Redirect(w, r, r.Header.Get("Referer"), http.StatusTemporaryRedirect)
+	http.Redirect(w, r, r.Header.Get("Referer"), http.StatusSeeOther)
 }

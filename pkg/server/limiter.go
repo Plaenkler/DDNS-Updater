@@ -3,6 +3,7 @@ package server
 import (
 	"fmt"
 	"net/http"
+	"sync"
 
 	"golang.org/x/time/rate"
 )
@@ -12,13 +13,18 @@ type ipLimiter struct {
 	address string
 }
 
-var ipLimiters = map[string]ipLimiter{}
+var (
+	ipLimiters = map[string]ipLimiter{}
+	mu         sync.Mutex
+)
 
 func isOverLimit(r *http.Request) error {
 	addr, err := getRealClientIP(r)
 	if err != nil {
 		return fmt.Errorf("could not get client ip address")
 	}
+	mu.Lock()
+	defer mu.Unlock()
 	iplm, ok := ipLimiters[addr]
 	if !ok {
 		iplm = ipLimiter{
