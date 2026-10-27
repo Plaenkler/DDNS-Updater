@@ -14,10 +14,11 @@ import (
 )
 
 type Config struct {
-	Interval uint32 `yaml:"Interval"`
-	UseTOTP  bool   `yaml:"TOTP"`
-	Port     uint16 `yaml:"Port"`
-	Resolver string `yaml:"Resolver"`
+	Interval   uint32 `yaml:"Interval"`
+	UseTOTP    bool   `yaml:"TOTP"`
+	Port       uint16 `yaml:"Port"`
+	Resolver   string `yaml:"Resolver"`
+	TrustProxy bool   `yaml:"TrustProxy"`
 }
 
 const (
@@ -66,10 +67,11 @@ func load() error {
 
 func create() error {
 	config := Config{
-		Interval: 600,
-		UseTOTP:  false,
-		Port:     80,
-		Resolver: "",
+		Interval:   600,
+		UseTOTP:    false,
+		Port:       80,
+		Resolver:   "",
+		TrustProxy: false,
 	}
 	err := os.MkdirAll(filepath.Dir(pathToConfig), dirPerm)
 	if err != nil {
@@ -121,6 +123,13 @@ func loadFromEnv() error {
 	}
 	if resolver != "" {
 		config.Resolver = resolver
+	}
+	trustProxy, err := parseBoolEnv("DDNS_TRUST_PROXY")
+	if err != nil && err.Error() != "not set" {
+		return err
+	}
+	if err == nil {
+		config.TrustProxy = trustProxy
 	}
 	return nil
 }

@@ -4,6 +4,8 @@ import (
 	"net"
 	"net/http"
 	"strings"
+
+	"github.com/plaenkler/ddns-updater/pkg/config"
 )
 
 const (
@@ -13,17 +15,20 @@ const (
 )
 
 func getRealClientIP(r *http.Request) (string, error) {
-	rAddr := r.Header.Get(xRealIP)
-	if rAddr != "" {
-		return rAddr, nil
-	}
-	rAddr = crawlForwardedIPs(r)
-	if rAddr != "" {
-		return rAddr, nil
-	}
 	rAddr, _, err := net.SplitHostPort(r.RemoteAddr)
 	if err != nil {
 		return "", err
+	}
+	if !config.Get().TrustProxy {
+		return rAddr, nil
+	}
+	pAddr := r.Header.Get(xRealIP)
+	if pAddr != "" {
+		return pAddr, nil
+	}
+	pAddr = crawlForwardedIPs(r)
+	if pAddr != "" {
+		return pAddr, nil
 	}
 	return rAddr, nil
 }

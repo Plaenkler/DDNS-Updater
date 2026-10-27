@@ -13,3 +13,8 @@
 .table-hover tbody tr:hover {
   cursor: pointer;
 }
+
+.form-switch .form-check-input {
+  width: 2.75rem;
+  height: 1.5rem;
+}

@@ -5,10 +5,15 @@ import (
 	"html/template"
 	"net/http"
 
+	"github.com/plaenkler/ddns-updater/pkg/config"
 	log "github.com/plaenkler/ddns-updater/pkg/logging"
 )
 
 func ProvideLogin(w http.ResponseWriter, r *http.Request) {
+	if !config.Get().UseTOTP {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
 	tpl, err := template.New("login").ParseFS(static,
 		"static/html/pages/login.html",
 		"static/html/partials/include.html",

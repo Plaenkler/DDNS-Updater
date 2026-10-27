@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/plaenkler/ddns-updater/pkg/config"
 	"github.com/plaenkler/ddns-updater/pkg/server/session"
 )
 
@@ -27,6 +28,10 @@ func controlCache(next http.Handler) http.Handler {
 
 func authenticate(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if !config.Get().UseTOTP {
+			next.ServeHTTP(w, r)
+			return
+		}
 		allowedPrefixes := []string{
 			"/css/",
 			"/img/",

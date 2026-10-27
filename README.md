@@ -105,7 +105,7 @@ networks:
           gateway: "10.10.10.1"
 ```
 
-> **Note:** DDNS Updater can also be deployed behind a proxy like [Traefik](https://doc.traefik.io/traefik/) or [NGINX](https://www.nginx.com/).
+> **Note:** DDNS Updater can also be deployed behind a proxy like [Traefik](https://doc.traefik.io/traefik/) or [NGINX](https://www.nginx.com/). In this case enable `TrustProxy` so that the client IP address is taken from the `X-Real-IP` or `X-Forwarded-For` header. Only enable it if DDNS Updater is reachable exclusively through the proxy, otherwise clients can spoof their IP address.
 
 ### 📄 Build from source
 
@@ -138,7 +138,7 @@ Depending on personal preferences, there are several ways to configure DDNS Upda
 **1. User Interface (Frontend)**
 
 The easiest way to configure DDNS Updater is to use the integrated web interface. This can be accessed via the browser at `http://host-ip`.
-Changes to the interval take effect immediately. The program must be restarted for the other settings to take effect.
+Changes to the interval, TOTP and trusting proxy headers take effect immediately. The program must be restarted for the other settings to take effect.
 
 **2. Configuration File**
 
@@ -153,6 +153,8 @@ TOTP: false
 Port: 80
 # Custom IP resolver returns IPv4 address in plain text
 Resolver: ""
+# Trust client IP headers set by a reverse proxy
+TrustProxy: false
 ```
 
 **3. Environment Variables**
@@ -164,6 +166,7 @@ DDNS_INTERVAL=600
 DDNS_TOTP=false
 DDNS_PORT=80
 DDNS_RESOLVER=ipv4.example.com
+DDNS_TRUST_PROXY=false
 ```
 
 ## 🔌 Network

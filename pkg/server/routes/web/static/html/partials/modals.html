@@ -22,7 +22,8 @@
             </div>
             <div class="modal-body">
                 <div
-                    class="d-flex justify-content-center align-items-center mb-3"
+                    class="d-flex d-none justify-content-center align-items-center mb-3"
+                    id="totp-qr"
                 >
                     <img
                         src="data:image/png;base64,{{.TOTPQR}}"
@@ -76,6 +77,21 @@
                             value="{{.Config.Resolver}}"
                         />
                     </div>
+                    <div
+                        class="form-check form-switch d-flex align-items-center gap-2 mb-3 ps-0"
+                    >
+                        <input
+                            type="checkbox"
+                            class="form-check-input m-0"
+                            id="trustproxy-input"
+                            name="trustproxy"
+                            role="switch"
+                            {{if .Config.TrustProxy}}checked{{end}}
+                        />
+                        <label for="trustproxy-input" class="form-check-label"
+                            >Trust proxy headers</label
+                        >
+                    </div>
                     <div class="mb-3">
                         <label for="otp-input" class="form-label text-light"
                             >Turn TOTP on/off</label
@@ -92,7 +108,26 @@
                             autocomplete="off"
                         />
                     </div>
-                    <button type="submit" class="btn btn-primary">Save</button>
+                    <div
+                        class="d-flex justify-content-between align-items-center"
+                    >
+                        <button type="submit" class="btn btn-primary">
+                            Save
+                        </button>
+                        <div
+                            class="form-check form-switch d-flex align-items-center gap-2 mb-0 ps-0"
+                        >
+                            <input
+                                type="checkbox"
+                                class="form-check-input m-0"
+                                id="totp-qr-switch"
+                                role="switch"
+                            />
+                            <label for="totp-qr-switch" class="form-check-label"
+                                >Show TOTP</label
+                            >
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>

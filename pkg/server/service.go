@@ -40,17 +40,13 @@ func initializeRouter() {
 
 func registerMiddlewares(r *Router) {
 	r.Use(limitRequests)
-	if config.Get().UseTOTP {
-		r.Use(authenticate)
-	}
+	r.Use(authenticate)
 }
 
 func registerAPIRoutes(r *Router) {
 	r.HandleFunc("/", web.ProvideIndex)
-	if config.Get().UseTOTP {
-		r.HandleFunc("/login", web.ProvideLogin)
-		r.HandleFunc("/api/login", api.Login)
-	}
+	r.HandleFunc("/login", web.ProvideLogin)
+	r.HandleFunc("/api/login", api.Login)
 	r.HandleFunc("/api/logs", api.GetLogs)
 	r.HandleFunc("/api/inputs", api.GetInputs)
 	r.HandleFunc("/api/job/create", api.CreateJob)

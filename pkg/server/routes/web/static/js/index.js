@@ -82,6 +82,17 @@ document.getElementById('edit-form').addEventListener('submit', async (e) => {
   await sendRequest(url, 'POST');
 });
 
+// Toggle visibility of TOTP QR code
+document.getElementById('totp-qr-switch').addEventListener('change', (e) => {
+  document.getElementById('totp-qr').classList.toggle('d-none', !e.target.checked);
+});
+
+// Hide TOTP QR code when settings close
+document.getElementById('config-modal').addEventListener('hidden.bs.modal', () => {
+  document.getElementById('totp-qr-switch').checked = false;
+  document.getElementById('totp-qr').classList.add('d-none');
+});
+
 // Release focus before a modal hides
 document.addEventListener('hide.bs.modal', () => {
   document.activeElement.blur();
