@@ -1,6 +1,6 @@
 # DDNS Updater
 
-> This project was built before AI was a thing for me. Today it helps with troubleshooting and dependency updates. Whether that is a mark of quality or the opposite is up to you.
+> This project was built before AI was a thing for me. Today it helps with troubleshooting, dependency updates and docs. Whether that is a mark of quality or the opposite is up to you.
 
 [![License](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 [![Release](https://img.shields.io/badge/Calver-YY.WW.REVISION-22bfda.svg)](https://calver.org/)
