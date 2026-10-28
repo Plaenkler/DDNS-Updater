@@ -2,7 +2,7 @@
                  |
                  v
  +----------------------------------+   over limit
- |  Rate limit per client IP        |----------------> 429 Too Many Requests
+ |  Rate limit per client IP        |--------------> 429 Too Many Requests
  |  1 request/s, burst of 10        |
  |  X-Real-IP / X-Forwarded-For     |
  |  only with TrustProxy            |
@@ -10,38 +10,29 @@
                  |
                  v
  +----------------------------------+   no
- |  TOTP enabled?                   |----------------> handle request
+ |  TOTP enabled?                   |--------------> handle request
  +---------------+------------------+
                  | yes
                  v
  +----------------------------------+   yes
- |  Public path?                    |----------------> handle request
+ |  Public path?                    |--------------> handle request
  |  /login, /api/login, /css, /img  |
  +---------------+------------------+
                  | no
                  v
  +----------------------------------+   no
- |  Valid session cookie?           |----------------> redirect to /login
- +---------------+------------------+
-                 | yes, session extended by 5 minutes
-                 v
-          handle request
-
-
-  Login
-
- +----------------------------------+   invalid
- |  POST /api/login                 |----------------> redirect to /login
- |  verify TOTP code                |
- +---------------+------------------+
-                 | valid
-                 v
- +----------------------------------+
- |  Create session token            |
- |  32 random bytes                 |
- |  HttpOnly, SameSite=Strict       |
- |  Secure on HTTPS                 |
- +---------------+------------------+
-                 |
-                 v
-           redirect to /
+ |  Valid session cookie?           |--------------> redirect to /login
+ +---------------+------------------+                        |
+                 |                                           v
+                 | yes, session           +-------------------------------+   invalid
+                 | extended by 5 min      |  POST /api/login              |----------> /login
+                 v                        |  verify TOTP code             |
+          handle request                  +---------------+---------------+
+                                                          | valid
+                                                          v
+                                          +-------------------------------+
+                                          |  Set session cookie           |
+                                          |  32 random bytes, HttpOnly,   |
+                                          |  SameSite=Strict, Secure on   |
+                                          |  HTTPS, then redirect to /    |
+                                          +-------------------------------+

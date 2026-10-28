@@ -1,6 +1,6 @@
 # DDNS Updater
 
-> This project was originally designed and written by hand, long before AI assistants became part of everyday development.
+> This project was built before AI was a thing for me. Today it helps with troubleshooting and dependency updates. Whether that is a mark of quality or the opposite is up to you.
 
 [![License](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 [![Release](https://img.shields.io/badge/Calver-YY.WW.REVISION-22bfda.svg)](https://calver.org/)
@@ -24,20 +24,16 @@ Update jobs and settings are managed in a web interface, so there is no need to 
 
 ## Features
 
-- Web interface to create, edit and delete update jobs
-- Optional login protected by TOTP
-- Job parameters are stored encrypted, passwords and tokens are masked in the interface
-- Scheduled update service that only contacts a provider when the IP address has changed
-- Public IP address via Cloudflare DNS over TLS, with HTTP resolvers as fallback or a resolver of your own
-- Log view in the browser
+- Web interface for jobs, settings and logs
+- Optional TOTP login and encrypted job parameters
+- Updates only when the IP address has changed
 - Runs as Docker container, standalone application or Windows service
-- Custom update URL for providers that are not supported out of the box
 
 ## Supported providers
 
 `Aliyun` `DD24` `DDNSS` `Dynu` `Hetzner` `INWX` `Infomaniak` `IONOS` `MaxiHoster` `NoIP` `Strato`
 
-If your provider is missing, open an issue and it will be added.
+> If your provider is missing, open an issue and it will be added.
 
 ### Custom provider
 
@@ -196,30 +192,28 @@ The diagrams below show how DDNS Updater works internally and which connections 
 
 ### Overview and network
 
-DDNS Updater accepts connections on the web interface port and only opens outbound connections for the update service.
-
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset=".github/assets/overview-dark.png">
-  <img src=".github/assets/overview-light.png" width="775" alt="Overview of the components, the data directory and the required network connections">
+  <img src=".github/assets/overview-light.png" width="857" alt="Overview of the components, the data directory and the required network connections">
 </picture>
 
 ### Update cycle
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset=".github/assets/update-dark.png">
-  <img src=".github/assets/update-light.png" width="619" alt="Flow of a scheduled update run">
+  <img src=".github/assets/update-light.png" width="857" alt="Flow of a scheduled update run">
 </picture>
 
 ### IP address resolution
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset=".github/assets/resolver-dark.png">
-  <img src=".github/assets/resolver-light.png" width="643" alt="Order in which the resolvers are queried">
+  <img src=".github/assets/resolver-light.png" width="857" alt="Order in which the resolvers are queried">
 </picture>
 
 ### Requests and login
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset=".github/assets/request-dark.png">
-  <img src=".github/assets/request-light.png" width="701" alt="Handling of incoming requests and the TOTP login">
+  <img src=".github/assets/request-light.png" width="857" alt="Handling of incoming requests and the TOTP login">
 </picture>
