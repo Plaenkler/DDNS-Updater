@@ -1,0 +1,25 @@
+                  +-------------------------------+
+                  |  Resolver configured?         |
+                  +-------+---------------+-------+
+                          |               |
+                      yes |               | no
+                          v               v
+  +-----------------------+--+   +--------+-------------------------+
+  |  Custom resolver         |   |  Cloudflare DNS over TLS         |
+  |  HTTP GET, plain text    |   |  1.1.1.1:853, 1.0.0.1:853        |
+  |  no fallback             |   |  TXT whoami.cloudflare (CHAOS)   |
+  +------------+-------------+   +--------+-------------------------+
+               |                          |
+               |                          | both failed
+               |                          v
+               |                 +--------+-------------------------+
+               |                 |  HTTP resolvers                  |
+               |                 |  ipify, icanhazip, AWS, ...      |
+               |                 |  tried one after another         |
+               |                 +--------+-------------------------+
+               |                          |
+               v                          v
+  +------------+--------------------------+-------------------------+
+  |  Accept only a valid public IP address                          |
+  |  not private, loopback, multicast or unspecified                |
+  +-----------------------------------------------------------------+

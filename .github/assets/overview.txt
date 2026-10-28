@@ -1,0 +1,31 @@
+  Browser                          DDNS Updater
+
+ +----------+   TCP 80 inbound   +--------------------------+
+ |  Web UI  |------------------->|  Web server              |
+ +----------+                    |  rate limit, auth, API   |
+                                 +------------+-------------+
+                                              |
+                                    jobs, config, logs
+                                              |
+                                 +------------v-------------+
+                                 |  ./data                  |
+                                 |                          |
+                                 |  config.yaml  settings   |
+                                 |  ddns.db      jobs, IPs  |
+                                 |  ddns.log     log        |
+                                 |  AESGCMKey    job params |
+                                 |  TOTPSecret   login      |
+                                 +------------^-------------+
+                                              |
+                                     jobs, IP addresses
+                                              |
+                                 +------------+-------------+
+                                 |  Update service          |
+                                 |  runs every Interval     |
+                                 +------------+-------------+
+                                              |
+                                              |  outbound
+                                              +--> TCP 853  DNS over TLS resolvers
+                                              +--> TCP 443  HTTP resolvers, providers
+                                              +--> TCP 80   providers without TLS
+                                              +--> UDP 53   hostname lookups

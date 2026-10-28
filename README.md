@@ -1,52 +1,59 @@
-# 🌐 DDNS Updater
+# DDNS Updater
+
+> This project was originally designed and written by hand, long before AI assistants became part of everyday development.
 
 [![License](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 [![Release](https://img.shields.io/badge/Calver-YY.WW.REVISION-22bfda.svg)](https://calver.org/)
 [![Linters](https://github.com/plaenkler/ddns-updater/actions/workflows/linters.yml/badge.svg)](https://github.com/plaenkler/ddns-updater/actions/workflows/linters.yml)
 [![CQL](https://github.com/plaenkler/ddns-updater/workflows/CodeQL/badge.svg)](https://github.com/plaenkler/ddns-updater)
-[![Support me](https://img.shields.io/badge/Support%20me%20%E2%98%95-orange.svg)](https://www.buymeacoffee.com/Plaenkler)
+[![Support me](https://img.shields.io/badge/Support%20me-orange.svg)](https://www.buymeacoffee.com/Plaenkler)
 
-DDNS Updater provides a straightforward way to update dynamic DNS records without messing with the command-line or a file.
-The user-friendly interface allows for straightforward secure setup and management.
+DDNS Updater keeps your dynamic DNS records in sync with your public IPv4 address.
+Update jobs and settings are managed in a web interface, so there is no need to edit files or work on the command line.
 
 <table>
   <tr>
-    <td><img src="https://user-images.githubusercontent.com/60503970/219900612-b4d7d3c4-7e0a-4dca-bc73-63c4822c5133.png" width="480" alt="DDNS Updater Dashboard"/></td>
-    <td><img src="https://user-images.githubusercontent.com/60503970/219900611-dfaa9c4b-13ac-4fc4-b7ca-1cdae47961a9.png" width="480" alt="DDNS Updater add Job"/></td>
+    <td><img src=".github/assets/dashboard.png" width="480" alt="Dashboard with update jobs"/></td>
+    <td><img src=".github/assets/add-job.png" width="480" alt="Adding a new update job"/></td>
+  </tr>
+  <tr>
+    <td><img src=".github/assets/settings.png" width="480" alt="Settings"/></td>
+    <td><img src=".github/assets/logs.png" width="480" alt="Log view"/></td>
   </tr>
 </table>
 
-## 🎯 Noteworthy features
+## Features
 
-- [x] Simple & User friendly UI
-- [x] Secure authentication with TOTP
-- [x] Encryption of sensitive data
-- [x] Scheduled update service
-- [x] Supports multiple IP resolvers
-- [x] Deploy as Windows Service
-- [x] Available as Docker Container
-- [x] Custom update URL with check
+- Web interface to create, edit and delete update jobs
+- Optional login protected by TOTP
+- Job parameters are stored encrypted, passwords and tokens are masked in the interface
+- Scheduled update service that only contacts a provider when the IP address has changed
+- Public IP address via Cloudflare DNS over TLS, with HTTP resolvers as fallback or a resolver of your own
+- Log view in the browser
+- Runs as Docker container, standalone application or Windows service
+- Custom update URL for providers that are not supported out of the box
 
-## 🏷️ Supported providers
+## Supported providers
 
-`Strato` `DDNSS` `Dynu` `Aliyun` `NoIP` `DD24` `INWX` `Infomaniak` `Hetzner` `IONOS`
+`Aliyun` `DD24` `DDNSS` `Dynu` `Hetzner` `INWX` `Infomaniak` `IONOS` `MaxiHoster` `NoIP` `Strato`
 
-> **Note:** If your DynDNS provider is not listed open an issue and I will integrate it.
+If your provider is missing, open an issue and it will be added.
 
 ### Custom provider
 
-Select the provider **Custom** from the provider list.
-Then enter the user-defined URL in the **URL** field.
-Use the placeholder `<ipv4>` at the point where the IPv4 address is to be inserted.
-In the **“Check”** field, enter a string that will be used for checking to ensure that the update server's response is successful.
+Every provider that offers an update URL can be used with the provider **Custom**:
 
-## 📜 Installation guide
+1. Enter the update URL in the **URL** field and put the placeholder `<ipv4>` where the IP address belongs.
+2. Enter a text in the **Check** field that the provider's response contains when the update was successful.
 
-### 🐋 Deploy with Docker
+## Installation
 
-It is recommended to use [Compose](https://docs.docker.com/compose/) as it is very convenient. The following examples show simple deployment options:
+### Docker
 
-#### Bridge network
+[Compose](https://docs.docker.com/compose/) is the most convenient way to run DDNS Updater.
+All data is stored in `/app/data`, so mount it as a volume to keep it across updates.
+
+**Bridge network**
 
 ```yaml
 ---
@@ -72,7 +79,7 @@ networks:
     external: false
 ```
 
-#### Macvlan network
+**Macvlan network**
 
 ```yaml
 ---
@@ -105,81 +112,114 @@ networks:
           gateway: "10.10.10.1"
 ```
 
-> **Note:** DDNS Updater can also be deployed behind a proxy like [Traefik](https://doc.traefik.io/traefik/) or [NGINX](https://www.nginx.com/). In this case enable `TrustProxy` so that the client IP address is taken from the `X-Real-IP` or `X-Forwarded-For` header. Only enable it if DDNS Updater is reachable exclusively through the proxy, otherwise clients can spoof their IP address.
+**Reverse proxy**
 
-### 📄 Build from source
+DDNS Updater can run behind a reverse proxy like [Traefik](https://doc.traefik.io/traefik/) or [NGINX](https://nginx.org/).
+Enable `TrustProxy` so that the client IP address is taken from the `X-Real-IP` or `X-Forwarded-For` header.
+Only do this if DDNS Updater is reachable exclusively through the proxy, otherwise clients can spoof their IP address.
 
-**Windows Service**
+### Build from source
 
-After cloning the repository, navigate to the root of the source tree and run the following command to build the executable file:
-
-```text
-go build -o ddns-updater.exe cmd/svc/main.go
-```
-
-The program can then be stored in any file path and set up as a service using the CMD:
-
-```text
-sc create DDNS-Updater binPath=[INSTALL_DIR]\ddns-updater.exe type=share start=auto DisplayName=DDNS-Updater
-```
+Building requires [Go](https://go.dev/dl/) 1.27 or newer, a C compiler is not needed.
+Clone the repository and run the following commands from its root.
 
 **Standalone application**
-
-To build the standalone application, run the following command:
 
 ```text
 go build -o ddns-updater cmd/def/main.go
 ```
 
-## ⚙️ Configuration
+**Windows service**
 
-Depending on personal preferences, there are several ways to configure DDNS Updater. Users can select from three different methods:
+```text
+go build -o ddns-updater.exe cmd/svc/main.go
+```
 
-**1. User Interface (Frontend)**
+Copy the executable to a folder of your choice and register it as a service:
 
-The easiest way to configure DDNS Updater is to use the integrated web interface. This can be accessed via the browser at `http://host-ip`.
-Changes to the interval, TOTP and trusting proxy headers take effect immediately. The program must be restarted for the other settings to take effect.
+```text
+sc create DDNS-Updater binPath=[INSTALL_DIR]\ddns-updater.exe type=share start=auto DisplayName=DDNS-Updater
+```
 
-**2. Configuration File**
+### Data directory
 
-A config.yaml file is provided to store all settings. In the absence of this file, the program generates one. Users have the option to directly modify settings within this file. It is important to note that changes made here will only take effect upon restarting the program. Default settings within the file are as follows:
+All state is kept in the folder `data` next to the working directory:
+
+| File          | Content                                |
+| ------------- | -------------------------------------- |
+| `config.yaml` | Settings                               |
+| `ddns.db`     | Update jobs and known IP addresses     |
+| `ddns.log`    | Log                                    |
+| `AESGCMKey`   | Key that encrypts the job parameters   |
+| `TOTPSecret`  | Secret for the TOTP login              |
+
+Back up the whole folder.
+Without `AESGCMKey` the stored jobs can no longer be decrypted.
+
+## Configuration
+
+There are three ways to configure DDNS Updater:
+
+1. **Web interface:** Open `http://host-ip` and click the gear icon. Changes are written to `config.yaml`. A new port requires a restart, all other settings take effect without one.
+2. **Configuration file:** Edit `data/config.yaml`. It is created with default values on first start, and changes apply after a restart.
+3. **Environment variables:** They are read on start and take precedence over the configuration file.
+
+| Setting    | Environment variable | Default | Description                                                          |
+| ---------- | -------------------- | ------- | -------------------------------------------------------------------- |
+| Interval   | `DDNS_INTERVAL`      | `600`   | Seconds between two checks of the IP address                         |
+| TOTP       | `DDNS_TOTP`          | `false` | Require a TOTP login for the web interface                           |
+| Port       | `DDNS_PORT`          | `80`    | Port of the web interface                                            |
+| Resolver   | `DDNS_RESOLVER`      | empty   | URL of a custom resolver that returns the IPv4 address in plain text |
+| TrustProxy | `DDNS_TRUST_PROXY`   | `false` | Take the client IP address from headers set by a reverse proxy       |
+
+The default `config.yaml` looks like this:
 
 ```yaml
-# How often the IP address is checked in seconds
 Interval: 600
-# Enable TOTP authentication
 TOTP: false
-# Port for the web interface
 Port: 80
-# Custom IP resolver returns IPv4 address in plain text
 Resolver: ""
-# Trust client IP headers set by a reverse proxy
 TrustProxy: false
 ```
 
-**3. Environment Variables**
+### Enable TOTP
 
-An alternative to the configuration file are environment variables. During the program start these are read they are superordinate to the configuration file.
+1. Open the settings and turn on **Show TOTP**.
+2. Scan the QR code with an authenticator app.
+3. Enter the current code in the field **Turn TOTP on/off** and save.
 
-```text
-DDNS_INTERVAL=600
-DDNS_TOTP=false
-DDNS_PORT=80
-DDNS_RESOLVER=ipv4.example.com
-DDNS_TRUST_PROXY=false
-```
+Entering a valid code again turns TOTP off.
 
-## 🔌 Network
+## How it works
 
-The following connections must be allowed for DDNS Updater to work properly:
+The diagrams below show how DDNS Updater works internally and which connections it needs.
 
-**Inbound**
+### Overview and network
 
-- `TCP 80` HTTP
+DDNS Updater accepts connections on the web interface port and only opens outbound connections for the update service.
 
-**Outbound**
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/assets/overview-dark.png">
+  <img src=".github/assets/overview-light.png" width="775" alt="Overview of the components, the data directory and the required network connections">
+</picture>
 
-- `TCP 80` HTTP
-- `TCP 853` DoT
-- `TCP 443` HTTPS
-- `UDP 53` DNS
+### Update cycle
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/assets/update-dark.png">
+  <img src=".github/assets/update-light.png" width="619" alt="Flow of a scheduled update run">
+</picture>
+
+### IP address resolution
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/assets/resolver-dark.png">
+  <img src=".github/assets/resolver-light.png" width="643" alt="Order in which the resolvers are queried">
+</picture>
+
+### Requests and login
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/assets/request-dark.png">
+  <img src=".github/assets/request-light.png" width="701" alt="Handling of incoming requests and the TOTP login">
+</picture>
