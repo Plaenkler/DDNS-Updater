@@ -53,6 +53,7 @@ func UpdateConfig(w http.ResponseWriter, r *http.Request) {
 		Resolver:   resolver,
 		UseTOTP:    config.Get().UseTOTP,
 		TrustProxy: r.FormValue("trustproxy") == "on",
+		LogSize:    config.Get().LogSize,
 	}
 	if totps.Verify(r.FormValue("otp")) {
 		cfg.UseTOTP = !cfg.UseTOTP
