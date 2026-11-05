@@ -146,6 +146,7 @@ All state is kept in the folder `data` next to the working directory:
 | `config.yaml` | Settings                               |
 | `ddns.db`     | Update jobs and known IP addresses     |
 | `ddns.log`    | Log                                    |
+| `ddns.log.1`  | Previous log after reaching `LogSize`  |
 | `AESGCMKey`   | Key that encrypts the job parameters   |
 | `TOTPSecret`  | Secret for the TOTP login              |
 
@@ -156,7 +157,7 @@ Without `AESGCMKey` the stored jobs can no longer be decrypted.
 
 There are three ways to configure DDNS Updater:
 
-1. **Web interface:** Open `http://host-ip` and click the gear icon. Changes are written to `config.yaml`. A new port requires a restart, all other settings take effect without one.
+1. **Web interface:** Open `http://host-ip` and click the gear icon. Changes are written to `config.yaml`. A new port requires a restart, all other settings take effect without one. `LogSize` can only be set in the configuration file or as environment variable.
 2. **Configuration file:** Edit `data/config.yaml`. It is created with default values on first start, and changes apply after a restart.
 3. **Environment variables:** They are read on start and take precedence over the configuration file.
 
@@ -167,6 +168,7 @@ There are three ways to configure DDNS Updater:
 | Port       | `DDNS_PORT`          | `80`    | Port of the web interface                                            |
 | Resolver   | `DDNS_RESOLVER`      | empty   | URL of a custom resolver that returns the IPv4 address in plain text |
 | TrustProxy | `DDNS_TRUST_PROXY`   | `false` | Take the client IP address from headers set by a reverse proxy       |
+| LogSize    | `DDNS_LOG_SIZE`      | `100`   | Maximum size of the log in MB, older entries move to ddns.log.1      |
 
 The default `config.yaml` looks like this:
 
@@ -176,6 +178,7 @@ TOTP: false
 Port: 80
 Resolver: ""
 TrustProxy: false
+LogSize: 100
 ```
 
 ### Enable TOTP
