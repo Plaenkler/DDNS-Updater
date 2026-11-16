@@ -4,8 +4,7 @@ version: 2
 multi-ecosystem-groups:
   dependencies:
     schedule:
-      interval: "daily"
-    target-branch: "dependencies"
+      interval: "weekly"
     assignees:
       - "Plaenkler"
 updates:
