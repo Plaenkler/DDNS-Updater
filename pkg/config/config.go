@@ -19,6 +19,7 @@ type Config struct {
 	Port       uint16 `yaml:"Port"`
 	Resolver   string `yaml:"Resolver"`
 	TrustProxy bool   `yaml:"TrustProxy"`
+	LogSize    uint32 `yaml:"LogSize"`
 }
 
 const (
@@ -62,6 +63,10 @@ func load() error {
 	if err != nil {
 		return err
 	}
+	if config.LogSize == 0 {
+		config.LogSize = 100
+	}
+	log.SetMaxSize(config.LogSize)
 	return nil
 }
 
@@ -72,6 +77,7 @@ func create() error {
 		Port:       80,
 		Resolver:   "",
 		TrustProxy: false,
+		LogSize:    100,
 	}
 	err := os.MkdirAll(filepath.Dir(pathToConfig), dirPerm)
 	if err != nil {
@@ -131,6 +137,16 @@ func loadFromEnv() error {
 	if err == nil {
 		config.TrustProxy = trustProxy
 	}
+	logSize, err := parseUintEnv("DDNS_LOG_SIZE")
+	if err != nil {
+		return err
+	}
+	if logSize > uint64(math.MaxUint32) {
+		return fmt.Errorf("log size value exceeds uint32 maximum")
+	}
+	if logSize != 0 {
+		config.LogSize = uint32(logSize)
+	}
 	return nil
 }
 
@@ -182,6 +198,7 @@ func Update(updatedConfig *Config) error {
 	mutex.Lock()
 	defer mutex.Unlock()
 	config = updatedConfig
+	log.SetMaxSize(config.LogSize)
 	return nil
 }
 

@@ -23,6 +23,7 @@ const (
 	FATALC    = "\033[0;31mFAT\033[0m "
 	UNKNOWN   = "unknown-origin"
 	maxLines  = 500
+	tailSize  = 256 << 10
 )
 
 type Logger struct {
@@ -33,7 +34,7 @@ type Logger struct {
 var (
 	consoleLogger *Logger
 	fileLogger    *Logger
-	logFile       *os.File
+	logFile       *rotatingFile
 )
 
 func init() {
@@ -47,7 +48,7 @@ func openLogFile() {
 	if err != nil {
 		log.Fatalf("could not open log: %v", err)
 	}
-	file, err := os.OpenFile(pathToLog, os.O_CREATE|os.O_WRONLY|os.O_APPEND, filePerm)
+	file, err := openRotatingFile()
 	if err != nil {
 		log.Fatalf("could not open log: %v", err)
 	}
@@ -101,11 +102,25 @@ func trace() string {
 }
 
 func GetEntries() ([]byte, error) {
-	file, err := os.ReadFile(pathToLog)
+	file, err := os.Open(pathToLog)
+	if err != nil {
+		return nil, fmt.Errorf("could not open log file: %v", err)
+	}
+	defer ErrorClose(file)
+	info, err := file.Stat()
+	if err != nil {
+		return nil, fmt.Errorf("could not stat log file: %v", err)
+	}
+	offset := max(info.Size()-tailSize, 0)
+	tail := make([]byte, info.Size()-offset)
+	_, err = file.ReadAt(tail, offset)
 	if err != nil {
 		return nil, fmt.Errorf("could not read log file: %v", err)
 	}
-	lines := strings.Split(strings.TrimSpace(string(file)), "\n")
+	lines := strings.Split(strings.TrimSpace(string(tail)), "\n")
+	if offset > 0 {
+		lines = lines[1:]
+	}
 	if len(lines) > maxLines {
 		lines = lines[len(lines)-maxLines:]
 	}
