@@ -6,6 +6,7 @@ import (
 
 type Router struct {
 	*http.ServeMux
+
 	middlewares []func(http.Handler) http.Handler
 }
 

@@ -1,7 +1,7 @@
 package config
 
 import (
-	"fmt"
+	"errors"
 	"math"
 	"net/url"
 	"os"
@@ -101,7 +101,7 @@ func loadFromEnv() error {
 		return err
 	}
 	if interval > uint64(math.MaxUint32) {
-		return fmt.Errorf("interval value exceeds uint32 maximum")
+		return errors.New("interval value exceeds uint32 maximum")
 	}
 	if interval != 0 {
 		config.Interval = uint32(interval)
@@ -118,7 +118,7 @@ func loadFromEnv() error {
 		return err
 	}
 	if port > uint64(math.MaxUint16) {
-		return fmt.Errorf("port value exceeds uint16 maximum")
+		return errors.New("port value exceeds uint16 maximum")
 	}
 	if port != 0 {
 		config.Port = uint16(port)
@@ -142,7 +142,7 @@ func loadFromEnv() error {
 		return err
 	}
 	if logSize > uint64(math.MaxUint32) {
-		return fmt.Errorf("log size value exceeds uint32 maximum")
+		return errors.New("log size value exceeds uint32 maximum")
 	}
 	if logSize != 0 {
 		config.LogSize = uint32(logSize)
@@ -165,7 +165,7 @@ func parseUintEnv(envName string) (uint64, error) {
 func parseBoolEnv(envName string) (bool, error) {
 	valueStr, ok := os.LookupEnv(envName)
 	if !ok {
-		return false, fmt.Errorf("not set")
+		return false, errors.New("not set")
 	}
 	value, err := strconv.ParseBool(valueStr)
 	if err != nil {

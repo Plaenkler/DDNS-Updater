@@ -1,6 +1,7 @@
 package server
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 	"sync"
@@ -21,7 +22,7 @@ var (
 func isOverLimit(r *http.Request) error {
 	addr, err := getRealClientIP(r)
 	if err != nil {
-		return fmt.Errorf("could not get client ip address")
+		return errors.New("could not get client ip address")
 	}
 	mu.Lock()
 	defer mu.Unlock()

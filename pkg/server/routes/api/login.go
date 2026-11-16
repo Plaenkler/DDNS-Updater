@@ -27,7 +27,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
 	}
-	http.SetCookie(w, &http.Cookie{
+	http.SetCookie(w, &http.Cookie{ //nolint:gosec // Secure only on HTTPS so login also works over HTTP
 		Name:     "ddns-updater-token",
 		Value:    token,
 		Expires:  time.Now().Add(10 * time.Minute),

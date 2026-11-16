@@ -2,7 +2,9 @@ package providers
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -15,7 +17,7 @@ const (
 	hetznerBaseURL        = "https://dns.hetzner.com/api/v1/records"
 	contentType           = "Content-Type"
 	contentTypeJSON       = "application/json"
-	headerAuthToken       = "Auth-API-Token"
+	headerAuthToken       = "Auth-Api-Token" //nolint:gosec // header name, not a credential
 	errInvalidRequestType = "invalid request type: %T"
 	errAPICreate          = "failed to create record: %s"
 	errAPIUpdate          = "failed to update record: %s"
@@ -84,7 +86,8 @@ func (c *client) updateRecord(record *Record) error {
 }
 
 func (c *client) createRecord(record *Record) error {
-	if err := c.validateRecord(record); err != nil {
+	err := c.validateRecord(record)
+	if err != nil {
 		return err
 	}
 	if record.TTL == 0 {
@@ -111,7 +114,8 @@ func (c *client) findRecord(zoneID, recordName string) (*Record, bool, error) {
 		Records []Record `json:"records"`
 		Error   string   `json:"error"`
 	}
-	if err := json.Unmarshal(body, &res); err != nil {
+	err = json.Unmarshal(body, &res)
+	if err != nil {
 		return nil, false, fmt.Errorf("unmarshal find: %w", err)
 	}
 	if res.Error != "" {
@@ -124,7 +128,7 @@ func (c *client) findRecord(zoneID, recordName string) (*Record, bool, error) {
 }
 
 func (c *client) fetch(method, url string, body []byte) ([]byte, error) {
-	req, err := http.NewRequest(method, url, bytes.NewReader(body))
+	req, err := http.NewRequestWithContext(context.Background(), method, url, bytes.NewReader(body))
 	if err != nil {
 		return nil, fmt.Errorf("new request: %w", err)
 	}
@@ -144,13 +148,13 @@ func (c *client) fetch(method, url string, body []byte) ([]byte, error) {
 func (c *client) validateRecord(r *Record) error {
 	switch {
 	case r.ZoneID == "":
-		return fmt.Errorf("zone ID is required")
+		return errors.New("zone ID is required")
 	case r.Type == "":
-		return fmt.Errorf("record type is required")
+		return errors.New("record type is required")
 	case r.Name == "":
-		return fmt.Errorf("record name is required")
+		return errors.New("record name is required")
 	case r.Value == "":
-		return fmt.Errorf("record value is required")
+		return errors.New("record value is required")
 	}
 	return nil
 }

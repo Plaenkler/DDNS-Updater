@@ -116,7 +116,7 @@ Only do this if DDNS Updater is reachable exclusively through the proxy, otherwi
 
 ### Build from source
 
-Building requires [Go](https://go.dev/dl/) 1.27 or newer, a C compiler is not needed.
+Building requires [Go](https://go.dev/dl/) 1.26 or newer, a C compiler is not needed.
 Clone the repository and run the following commands from its root.
 
 **Standalone application**

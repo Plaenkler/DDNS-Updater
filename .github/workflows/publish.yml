@@ -9,17 +9,33 @@ on:
       - '*.md'
       - '.github/**'
 
+# Two releases computed at the same time would get the same version.
+concurrency:
+  group: publish
+  cancel-in-progress: false
+
 permissions:
-  contents: write
-  packages: write
-  statuses: write
+  contents: read
 
 jobs:
+  linters:
+    name: Linters
+    uses: ./.github/workflows/linters.yml
+    permissions:
+      contents: read
+      packages: read
+      statuses: write
   release:
     name: Release
+    needs: linters
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Checkout Code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - name: Calver Release
         uses: StephaneBour/actions-calver@a9d6843abbe165bcc6497584cc08c3a42bb0c188 # master
         id: calver
@@ -41,9 +57,14 @@ jobs:
     name: Publish
     needs: release
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
-      - name: Checkout
+      - name: Checkout Code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0

@@ -38,7 +38,7 @@ func Start() {
 }
 
 func createDBDir() error {
-	err := os.MkdirAll(filepath.Dir(pathToDB), 0755)
+	err := os.MkdirAll(filepath.Dir(pathToDB), 0750)
 	if err != nil {
 		return err
 	}

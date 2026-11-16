@@ -16,7 +16,7 @@ import (
 const (
 	dirPerm     = 0755
 	filePerm    = 0644
-	secretPath  = "./data/TOTPSecret"
+	secretPath  = "./data/TOTPSecret" //nolint:gosec // path to the secret file, not a credential
 	issuer      = "DDNS-Updater"
 	accountName = "Administrator"
 )

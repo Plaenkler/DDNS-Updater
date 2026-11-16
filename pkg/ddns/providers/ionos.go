@@ -1,6 +1,7 @@
 package providers
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -16,7 +17,7 @@ func UpdateIONOS(request interface{}, ipAddr string) error {
 		return fmt.Errorf("invalid request type: %T", request)
 	}
 	if r.UpdateURL == "" {
-		return fmt.Errorf("UpdateURL is required")
+		return errors.New("UpdateURL is required")
 	}
 	_, err := url.ParseRequestURI(r.UpdateURL)
 	if err != nil {

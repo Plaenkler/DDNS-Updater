@@ -1,6 +1,7 @@
 package providers
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"net/http"
@@ -22,7 +23,7 @@ func UpdateINWX(request interface{}, ipAddr string) error {
 	}
 	urlStr := fmt.Sprintf("https://dyndns.inwx.com/nic/update?hostname=%s&myip=%s", r.Domain, ipAddr)
 	client := &http.Client{}
-	req, err := http.NewRequest(http.MethodGet, urlStr, nil)
+	req, err := http.NewRequestWithContext(context.Background(), http.MethodGet, urlStr, nil)
 	if err != nil {
 		return err
 	}

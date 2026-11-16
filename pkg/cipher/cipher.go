@@ -16,7 +16,7 @@ const (
 	dirPerm    = 0755
 	filePerm   = 0644
 	keyLength  = 16
-	secretPath = "./data/AESGCMKey"
+	secretPath = "./data/AESGCMKey" //nolint:gosec // path to the key file, not a credential
 )
 
 var (

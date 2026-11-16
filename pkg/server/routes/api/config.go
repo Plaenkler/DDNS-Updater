@@ -65,5 +65,5 @@ func UpdateConfig(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	http.Redirect(w, r, r.Header.Get("Referer"), http.StatusSeeOther)
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }

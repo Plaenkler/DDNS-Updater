@@ -23,4 +23,9 @@ updates:
     directory: "/"
     patterns:
       - "*"
+    # The golangci-lint bundled with Super-Linter does not support Go 1.27 yet.
+    ignore:
+      - dependency-name: "golang"
+        update-types:
+          - "version-update:semver-minor"
     multi-ecosystem-group: "dependencies"

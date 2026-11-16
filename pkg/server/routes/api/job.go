@@ -2,7 +2,7 @@ package api
 
 import (
 	"encoding/json"
-	"fmt"
+	"errors"
 	"net/http"
 	"reflect"
 	"strconv"
@@ -52,7 +52,7 @@ func CreateJob(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}
-	http.Redirect(w, r, r.Header.Get("Referer"), http.StatusSeeOther)
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 	log.Infof("created job with ID %d", job.ID)
 }
 
@@ -102,7 +102,7 @@ func UpdateJob(w http.ResponseWriter, r *http.Request) {
 		log.Errorf("could not update job: %s", err)
 		return
 	}
-	http.Redirect(w, r, r.Header.Get("Referer"), http.StatusSeeOther)
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 	log.Infof("updated job with ID %d", job.ID)
 }
 
@@ -130,19 +130,20 @@ func DeleteJob(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}
-	if err := db.Unscoped().Delete(&job).Error; err != nil {
+	err = db.Unscoped().Delete(&job).Error
+	if err != nil {
 		log.Errorf("could not delete job: %s", err)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}
-	http.Redirect(w, r, r.Header.Get("Referer"), http.StatusSeeOther)
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 	log.Infof("deleted job with ID %d", job.ID)
 }
 
 func verifyJobModel(provider, params string) error {
 	updater, ok := ddns.GetUpdaters()[provider]
 	if !ok {
-		return fmt.Errorf("provider is not valid")
+		return errors.New("provider is not valid")
 	}
 	jobModel := reflect.New(reflect.TypeOf(updater.Request)).Interface()
 	return json.Unmarshal([]byte(params), &jobModel)

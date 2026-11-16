@@ -6,6 +6,7 @@ import (
 
 type SyncJob struct {
 	gorm.Model
+
 	Provider    string    `gorm:"not null"`
 	Params      string    `gorm:"not null"`
 	IPAddress   IPAddress `gorm:"foreignKey:IPAddressID"`
@@ -14,5 +15,6 @@ type SyncJob struct {
 
 type IPAddress struct {
 	gorm.Model
+
 	Address string `gorm:"not null;unique"`
 }

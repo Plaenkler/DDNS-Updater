@@ -1,6 +1,7 @@
 package providers
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 	"strings"
@@ -17,7 +18,7 @@ func UpdateCustom(request interface{}, ipAddr string) error {
 		return fmt.Errorf("invalid request type: %T", request)
 	}
 	if !strings.Contains(r.Domain, "<ipv4>") {
-		return fmt.Errorf("no <ipv4> placeholder found in URL")
+		return errors.New("no <ipv4> placeholder found in URL")
 	}
 	r.Domain = strings.ReplaceAll(r.Domain, "<ipv4>", ipAddr)
 	resp, err := SendHTTPRequest(http.MethodGet, r.Domain, nil)

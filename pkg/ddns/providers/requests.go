@@ -2,6 +2,7 @@ package providers
 
 import (
 	"bytes"
+	"context"
 	"fmt"
 	"io"
 	"net/http"
@@ -15,7 +16,7 @@ func SendHTTPRequest(method string, url string, auth *url.Userinfo) (string, err
 	httpClient := &http.Client{
 		Timeout: time.Second * 10,
 	}
-	req, err := http.NewRequest(method, url, nil)
+	req, err := http.NewRequestWithContext(context.Background(), method, url, nil)
 	if err != nil {
 		return "", fmt.Errorf("failed to create HTTP request: %v", err)
 	}

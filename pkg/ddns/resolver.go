@@ -1,8 +1,10 @@
 package ddns
 
 import (
+	"context"
 	"crypto/tls"
 	"encoding/binary"
+	"errors"
 	"fmt"
 	"io"
 	"net"
@@ -63,12 +65,16 @@ func GetPublicIP() (string, error) {
 		log.Infof("%s succeeded: %s", r, addr)
 		return addr, nil
 	}
-	return "", fmt.Errorf("all resolvers failed")
+	return "", errors.New("all resolvers failed")
 }
 
 func resolveIPAddressHTTP(url string) (string, error) {
 	client := &http.Client{Timeout: 5 * time.Second}
-	resp, err := client.Get(url)
+	req, err := http.NewRequestWithContext(context.Background(), http.MethodGet, url, nil)
+	if err != nil {
+		return "", err
+	}
+	resp, err := client.Do(req)
 	if err != nil {
 		return "", err
 	}
@@ -99,7 +105,7 @@ func resolveIPAddressDNS(server string) (string, error) {
 			return addr, nil
 		}
 	}
-	return "", fmt.Errorf("no valid IP address in response")
+	return "", errors.New("no valid IP address in response")
 }
 
 func exchangeDNS(server string) (*dnsmessage.Message, error) {
@@ -113,14 +119,17 @@ func exchangeDNS(server string) (*dnsmessage.Message, error) {
 	if err != nil {
 		return nil, err
 	}
-	binary.BigEndian.PutUint16(req, uint16(len(req)-2))
+	binary.BigEndian.PutUint16(req, uint16(len(req)-2)) //nolint:gosec // a single question is far below 64 KiB
 	deadline := time.Now().Add(5 * time.Second)
-	dialer := &net.Dialer{Deadline: deadline}
-	tlsConfig := &tls.Config{
-		ServerName: "cloudflare-dns.com",
-		MinVersion: tls.VersionTLS12,
+	ctx, cancel := context.WithDeadline(context.Background(), deadline)
+	defer cancel()
+	dialer := &tls.Dialer{
+		Config: &tls.Config{
+			ServerName: "cloudflare-dns.com",
+			MinVersion: tls.VersionTLS12,
+		},
 	}
-	conn, err := tls.DialWithDialer(dialer, "tcp4", server, tlsConfig)
+	conn, err := dialer.DialContext(ctx, "tcp4", server)
 	if err != nil {
 		return nil, err
 	}

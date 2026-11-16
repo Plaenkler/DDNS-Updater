@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 ## Build
-FROM golang:1.27-trixie AS build
+FROM golang:1.26-trixie AS build
 
 ENV CGO_ENABLED=0
 

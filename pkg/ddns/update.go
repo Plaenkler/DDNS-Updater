@@ -29,7 +29,7 @@ var updaters = map[string]provider{
 }
 
 func GetProviders() []string {
-	var p []string
+	p := make([]string, 0, len(updaters))
 	for k := range updaters {
 		p = append(p, k)
 	}

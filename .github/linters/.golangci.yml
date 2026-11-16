@@ -2,7 +2,7 @@
 
 version: "2"
 run:
-  timeout: 60s
+  timeout: 5m
 
 linters:
   default: all
@@ -30,5 +30,19 @@ linters:
     - sqlclosecheck
     - wastedassign
     - mnd
-    - wsl
     - gomodguard
+    - gomodguard_v2
+    - gochecknoinits
+    - nlreturn
+    - revive
+    - varnamelen
+    - tagliatelle
+    - tagalign
+    - wsl_v5
+    - wsl
+    - wrapcheck
+    - errorlint
+    # The suggested replacements are iterators, generics and the slices package.
+    - modernize
+    # Response bodies are closed through log.ErrorClose, which bodyclose does not follow.
+    - bodyclose

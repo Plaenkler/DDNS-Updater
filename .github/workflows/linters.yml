@@ -7,21 +7,27 @@ on:
     branches: main
   pull_request:
     branches: main
+  # Publish runs the linters itself and only releases when they pass.
+  workflow_call:
 
 permissions:
   contents: read
   packages: read
-  statuses: write
 
 jobs:
   super-linter:
     name: Lint Multiple
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
+      statuses: write
     steps:
       - name: Checkout Code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
+          persist-credentials: false
       - name: Lint Code Base
         uses: super-linter/super-linter/slim@2da136927bd4a73596db63044b504547c62cb854 # v9.0.0
         env:
@@ -32,7 +38,6 @@ jobs:
           VALIDATE_JAVASCRIPT_PRETTIER: false
           VALIDATE_JSCPD: false
           VALIDATE_GO: false
-          VALIDATE_GO_MODULES: false
           VALIDATE_BIOME_FORMAT: false
           VALIDATE_BIOME_LINT: false
           VALIDATE_HTML_PRETTIER: false
@@ -41,21 +46,6 @@ jobs:
           VALIDATE_YAML_PRETTIER: false
           VALIDATE_CSS_PRETTIER: false
           VALIDATE_GITHUB_ACTIONS_ZIZMOR: false
-  golangci-lint:
-    name: Lint Golang
-    runs-on: ubuntu-latest
-    steps:
-      - name: Setup Go
-        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
-        with:
-          go-version: 1.27
-      - name: Checkout Code
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          fetch-depth: 0
-      - name: Install dependencies
-        run: go mod tidy
-      - name: Run golangci-lint
-        uses: golangci/golangci-lint-action@ba0d7d2ec06a0ea1cb5fa41b2e4a3ab91d21278a # v9.3.0
-        with:
-          args: --timeout=3m
+          VALIDATE_GIT_COMMITLINT: false
+          VALIDATE_PYTHON_BLACK: false
+          SAVE_SUPER_LINTER_SUMMARY: true
